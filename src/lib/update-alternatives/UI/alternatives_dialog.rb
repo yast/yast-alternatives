@@ -21,7 +21,6 @@ require "ui/dialog"
 
 Yast.import "UI"
 
-
 module UpdateAlternatives
 
   class AlternativesDialog < UI::Dialog

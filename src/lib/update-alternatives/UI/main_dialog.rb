@@ -19,6 +19,7 @@
 require "yast"
 require "ui/dialog"
 require "update-alternatives/UI/alternatives_dialog"
+
 Yast.import "UI"
 
 module UpdateAlternatives
@@ -26,8 +27,8 @@ module UpdateAlternatives
   class MainDialog < UI::Dialog
 
     def dialog_options
-     Opt(:decorated, :defaultsize)
-   end
+      Opt(:decorated, :defaultsize)
+    end
 
     def dialog_content
       VBox(
@@ -48,11 +49,10 @@ module UpdateAlternatives
         Id(:alternatives_table),
         Header(_("Name"), _("Actual alternative")),
         [
-          Item(Id(:java), _("java"), "/usr/lib64/jvm/jre-1.8.0-openjdk/bin/java"),
-          Item(Id(:an_alternative_name), _("an alternative name"), "Alternative_path")
+          Item(Id(:java), "java", "/usr/lib64/jvm/jre-1.8.0-openjdk/bin/java"),
+          Item(Id(:an_alternative_name), "an alternative name", "Alternative_path")
         ]
       )
     end
-
   end
 end
