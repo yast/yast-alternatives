@@ -28,10 +28,16 @@ module UpdateAlternatives
     def dialog_content
       VBox(
         create_alternatives_table,
+        create_slaves_table,
         HBox(
+          PushButton(Id(:set), _("Set alternative")),
           PushButton(Id(:cancel), _("Cancel"))
         )
       )
+    end
+
+    def set_handler
+      finish_dialog()
     end
 
     def create_alternatives_table
@@ -40,8 +46,19 @@ module UpdateAlternatives
         Header(_("Alternative"), _("Priority")),
         [
           Item(Id(:java18), "/usr/lib64/jvm/jre-1.8.0-openjdk/bin/java", "1805"),
-          Item(Id(:java17), "/usr/lib64/jvm/jre-1.7.0-openjdk/bin/java", "1705"),
+          Item(Id(:java17), "/usr/lib64/jvm/jre-1.7.0-openjdk/bin/java", "1705")
         ]
+      )
+    end
+
+    def create_slaves_table
+      Table(
+      Id(:alternatives_table),
+      Header(_("Slave name"), _("Slave alternave")),
+      [
+        Item(Id(:slave1), "slave1", "path/to/slave1/alternative/for/1.8"),
+        Item(Id(:slave2), "slave2", "path/to/slave2/alternative/for/1.8")
+      ]
       )
     end
   end
