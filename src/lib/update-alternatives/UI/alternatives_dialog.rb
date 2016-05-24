@@ -25,13 +25,20 @@ module UpdateAlternatives
 
   class AlternativesDialog < UI::Dialog
 
+    MIN_WIDTH = 60
+    MIN_HEIGHT = 20
+
     def dialog_content
-      VBox(
-        create_alternatives_table,
-        create_slaves_table,
-        HBox(
+      MinSize(
+        MIN_WIDTH,
+        MIN_HEIGHT,
+        VBox(
+          create_alternatives_table,
+          create_slaves_table,
+          HBox(
           PushButton(Id(:set), _("Set alternative")),
           PushButton(Id(:cancel), _("Cancel"))
+          )
         )
       )
     end
