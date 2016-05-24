@@ -35,9 +35,14 @@ module UpdateAlternatives
         create_table,
         HBox(
           PushButton(Id(:show), _("Show alternatives")),
+          PushButton(Id(:auto), _("Set automatic mode")),
           PushButton(Id(:cancel), _("Cancel"))
         )
       )
+    end
+
+    def auto_handler
+      log.info("You have use the \"Set automatic mode\" button")
     end
 
     def show_handler
@@ -47,10 +52,10 @@ module UpdateAlternatives
     def create_table
       Table(
         Id(:alternatives_table),
-        Header(_("Name"), _("Actual alternative")),
+        Header(_("Name"), _("Actual alternative"), _("Status")),
         [
-          Item(Id(:java), "java", "/usr/lib64/jvm/jre-1.8.0-openjdk/bin/java"),
-          Item(Id(:an_alternative_name), "an alternative name", "Alternative_path")
+          Item(Id(:java), "java", "/usr/lib64/jvm/jre-1.8.0-openjdk/bin/java", _("auto")),
+          Item(Id(:an_alternative_name), "an alternative name", "Alternative_path", _("manual"))
         ]
       )
     end
