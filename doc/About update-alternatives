@@ -1,0 +1,61 @@
+About update-alternatives:
+
+The next command create a new group of alternatives if not exist yet, or add an
+alternative to a group of alternatives if exist.
+
+	update-alternatives --install link name path priority
+
+	for example create a new group:
+	update-alternatives --install /usr/bin/test-alternative name-test-alternative /usr/bin/vim 100
+
+where:
+	/usr/bin/test-alternative is man says: "link is the generic name for the master link"
+	man about master link: "The alternative link in a link group which determines how
+	the other links in the group are configured."
+
+	name-test-alternative is the name of the symlink in the alternatives directory
+
+	/usr/bin/nano is the alternative that we are going to set to test-alternative
+
+	100 is the priority of the alternative (/usr/bin/nano)
+
+We can add a new alternative to this group:
+	update-alternatives --install /usr/bin/test-alternative name-test-alternative /usr/bin/nano 20
+
+To view information about a group "update-alternatives --display name-test-alternative"
+or "update-alternatives --query name-test-alternative"
+
+
+Add a new alternative with some slave:
+	update-alternatives --install /usr/bin/test-alternative name-test-alternative /usr/bin/ls 200
+	--slave /usr/bin/ls-slave name-ls-slave /usr/bin/pwd
+
+now if we type ls-slave in the terminal, pwd will be executed.
+
+if we change the alternative using for example
+	update-alternative --set name-test-alternative /usr/bin/nano
+the ls-slave no longer exists, until we set ls alternative again.
+
+or we can add more slaves:
+	update-alternatives --install /usr/bin/test-alternative name-test-alternative /usr/bin/ls 200
+	--slave /usr/bin/ls-slave name-ls-slave /usr/bin/pwd
+	--slave /usr/bin/ls-second-slave name-ls-second-slave /usr/bin/cat
+
+It is possible remove an the slave, reinstalling the alternative without the slave:
+	update-alternatives --install /usr/bin/test-alternative name-test-alternative /usr/bin/ls 200
+	--slave /usr/bin/ls-second-slave name-ls-second-slave /usr/bin/cat
+
+To remove an alternative
+	update-alternatives --remove name-test-alternative /usr/bin/ls
+
+To remove this group of alternatives:
+	update-alternatives --remove-all name-test-alternative
+
+Others commands:
+
+To manually change an alternative:
+	update-alternatives --set name-test-alternative /usr/bin/nano
+	this change the group to manual mode.
+
+To set the group in auto mode (the system use the alternative with more priority):
+	update-alternatives --auto name-test-alternative
