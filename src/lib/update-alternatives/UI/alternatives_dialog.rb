@@ -29,7 +29,16 @@ module UpdateAlternatives
     MIN_HEIGHT = 20
 
     def initialize
-      @alternative_slaves = "No alternative selected."
+      @alternative_slaves = "Plsease select an alternative to view his slaves."
+      @mock_slaves = {
+        :ed => %!<pre>editor.1.gz /usr/share/man/man1/ed.1.gz</pre>!,
+        :vim => %!<pre>editor.1.gz /usr/share/man/man1/vim.1.
+editor.fr.1.gz /usr/share/man/fr/man1/vim.1.gz
+editor.it.1.gz /usr/share/man/it/man1/vim.1.gz
+editor.pl.1.gz /usr/share/man/pl/man1/vim.1.gz
+editor.ru.1.gz /usr/share/man/ru/man1/vim.1.gz
+</pre>!
+      }
     end
 
     def dialog_content
@@ -40,8 +49,8 @@ module UpdateAlternatives
           create_alternatives_table,
           RichText(Id(:slaves), @alternative_slaves),
           HBox(
-          PushButton(Id(:set), _("Set alternative")),
-          PushButton(Id(:cancel), _("Cancel"))
+            PushButton(Id(:set), _("Set alternative")),
+            PushButton(Id(:cancel), _("Cancel"))
           )
         )
       )
@@ -51,13 +60,19 @@ module UpdateAlternatives
       finish_dialog()
     end
 
+    def alternatives_handler
+      selected_alternative = Yast::UI.QueryWidget(Id(:alternatives), :CurrentItem)
+      Yast::UI.ChangeWidget(Id(:slaves), :Value, @mock_slaves[selected_alternative])
+    end
+
     def create_alternatives_table
       Table(
-        Id(:alternatives_table),
+        Id(:alternatives),
+        Opt(:notify, :immediate),
         Header(_("Alternative"), _("Priority")),
         [
-          Item(Id(:java18), "/usr/lib64/jvm/jre-1.8.0-openjdk/bin/java", "1805"),
-          Item(Id(:java17), "/usr/lib64/jvm/jre-1.7.0-openjdk/bin/java", "1705")
+          Item(Id(:vim), "/usr/bin/vim.basic", "50"),
+          Item(Id(:ed), "/bin/ed", "-100")
         ]
       )
     end
