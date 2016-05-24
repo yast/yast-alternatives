@@ -28,13 +28,17 @@ module UpdateAlternatives
     MIN_WIDTH = 60
     MIN_HEIGHT = 20
 
+    def initialize
+      @alternative_slaves = "No alternative selected."
+    end
+
     def dialog_content
       MinSize(
         MIN_WIDTH,
         MIN_HEIGHT,
         VBox(
           create_alternatives_table,
-          create_slaves_table,
+          RichText(Id(:slaves), @alternative_slaves),
           HBox(
           PushButton(Id(:set), _("Set alternative")),
           PushButton(Id(:cancel), _("Cancel"))
@@ -55,17 +59,6 @@ module UpdateAlternatives
           Item(Id(:java18), "/usr/lib64/jvm/jre-1.8.0-openjdk/bin/java", "1805"),
           Item(Id(:java17), "/usr/lib64/jvm/jre-1.7.0-openjdk/bin/java", "1705")
         ]
-      )
-    end
-
-    def create_slaves_table
-      Table(
-      Id(:alternatives_table),
-      Header(_("Slave name"), _("Slave alternave")),
-      [
-        Item(Id(:slave1), "slave1", "path/to/slave1/alternative/for/1.8"),
-        Item(Id(:slave2), "slave2", "path/to/slave2/alternative/for/1.8")
-      ]
       )
     end
   end
