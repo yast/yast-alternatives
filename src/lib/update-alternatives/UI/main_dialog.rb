@@ -35,14 +35,9 @@ module UpdateAlternatives
         create_table,
         HBox(
           PushButton(Id(:show), _("Show alternatives")),
-          PushButton(Id(:auto), _("Set automatic mode")),
           PushButton(Id(:cancel), _("Cancel"))
         )
       )
-    end
-
-    def auto_handler
-      log.info("You have use the \"Set automatic mode\" button")
     end
 
     def show_handler

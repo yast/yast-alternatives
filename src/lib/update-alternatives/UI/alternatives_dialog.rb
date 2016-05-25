@@ -50,6 +50,7 @@ editor.ru.1.gz /usr/share/man/ru/man1/vim.1.gz
           RichText(Id(:slaves), @alternative_slaves),
           HBox(
             PushButton(Id(:set), _("Set alternative")),
+            PushButton(Id(:auto), _("Set automatic mode")),
             PushButton(Id(:cancel), _("Cancel"))
           )
         )
@@ -57,6 +58,11 @@ editor.ru.1.gz /usr/share/man/ru/man1/vim.1.gz
     end
 
     def set_handler
+      finish_dialog()
+    end
+
+    def auto_handler
+      log.info("You have use the \"Set automatic mode\" button")
       finish_dialog()
     end
 
