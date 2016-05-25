@@ -44,9 +44,14 @@ module UpdateAlternatives
       AlternativesDialog.new.run
     end
 
+    def alternatives_table_handler
+      AlternativesDialog.new.run
+    end
+
     def create_table
       Table(
         Id(:alternatives_table),
+        Opt(:notify),
         Header(_("Name"), _("Actual alternative"), _("Status")),
         [
           Item(Id(:java), "java", "/usr/lib64/jvm/jre-1.8.0-openjdk/bin/java", _("auto")),
