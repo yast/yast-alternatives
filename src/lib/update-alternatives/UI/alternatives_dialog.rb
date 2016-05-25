@@ -29,7 +29,6 @@ module UpdateAlternatives
     MIN_HEIGHT = 20
 
     def initialize
-      @alternative_slaves = "Plsease select an alternative to view his slaves."
       @mock_slaves = {
         :ed => %!<pre>editor.1.gz /usr/share/man/man1/ed.1.gz</pre>!,
         :vim => %!<pre>editor.1.gz /usr/share/man/man1/vim.1.
@@ -47,12 +46,8 @@ editor.ru.1.gz /usr/share/man/ru/man1/vim.1.gz
         MIN_HEIGHT,
         VBox(
           create_alternatives_table,
-          RichText(Id(:slaves), @alternative_slaves),
-          HBox(
-            PushButton(Id(:set), _("Set alternative")),
-            PushButton(Id(:auto), _("Set automatic mode")),
-            PushButton(Id(:cancel), _("Cancel"))
-          )
+          RichText(Id(:slaves), _("Please select an alternative to view his slaves.")),
+          footer
         )
       )
     end
@@ -80,6 +75,14 @@ editor.ru.1.gz /usr/share/man/ru/man1/vim.1.gz
           Item(Id(:vim), "/usr/bin/vim.basic", "50"),
           Item(Id(:ed), "/bin/ed", "-100")
         ]
+      )
+    end
+
+    def footer
+      HBox(
+        PushButton(Id(:set), _("Set alternative")),
+        PushButton(Id(:auto), _("Set automatic mode")),
+        PushButton(Id(:cancel), _("Cancel"))
       )
     end
   end

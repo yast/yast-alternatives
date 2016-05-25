@@ -33,10 +33,7 @@ module UpdateAlternatives
     def dialog_content
       VBox(
         create_table,
-        HBox(
-          PushButton(Id(:show), _("Show alternatives")),
-          PushButton(Id(:cancel), _("Cancel"))
-        )
+        footer
       )
     end
 
@@ -57,6 +54,13 @@ module UpdateAlternatives
           Item(Id(:java), "java", "/usr/lib64/jvm/jre-1.8.0-openjdk/bin/java", _("auto")),
           Item(Id(:an_alternative_name), "an alternative name", "Alternative_path", _("manual"))
         ]
+      )
+    end
+
+    def footer
+      HBox(
+        PushButton(Id(:show), _("Show alternatives")),
+        PushButton(Id(:cancel), _("Cancel"))
       )
     end
   end
