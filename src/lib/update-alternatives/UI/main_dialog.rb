@@ -23,9 +23,8 @@ require "update-alternatives/UI/alternatives_dialog"
 Yast.import "UI"
 
 module UpdateAlternatives
-
+  # Dialog where all alternatives groups in the system are listed.
   class MainDialog < UI::Dialog
-
     def dialog_options
       Opt(:decorated, :defaultsize)
     end
@@ -33,10 +32,7 @@ module UpdateAlternatives
     def dialog_content
       VBox(
         create_table,
-        HBox(
-          PushButton(Id(:show), _("Show alternatives")),
-          PushButton(Id(:cancel), _("Cancel"))
-        )
+        footer
       )
     end
 
@@ -44,14 +40,26 @@ module UpdateAlternatives
       AlternativesDialog.new.run
     end
 
+    def alternatives_table_handler
+      AlternativesDialog.new.run
+    end
+
     def create_table
       Table(
         Id(:alternatives_table),
-        Header(_("Name"), _("Actual alternative")),
+        Opt(:notify),
+        Header(_("Name"), _("Actual alternative"), _("Status")),
         [
-          Item(Id(:java), "java", "/usr/lib64/jvm/jre-1.8.0-openjdk/bin/java"),
-          Item(Id(:an_alternative_name), "an alternative name", "Alternative_path")
+          Item(Id(:java), "java", "/usr/lib64/jvm/jre-1.8.0-openjdk/bin/java", _("auto")),
+          Item(Id(:an_alternative_name), "an alternative name", "Alternative_path", _("manual"))
         ]
+      )
+    end
+
+    def footer
+      HBox(
+        PushButton(Id(:show), _("Show alternatives")),
+        PushButton(Id(:cancel), Yast::Label.CancelButton)
       )
     end
   end

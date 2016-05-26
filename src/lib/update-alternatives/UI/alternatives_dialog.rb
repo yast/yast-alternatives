@@ -20,13 +20,24 @@ require "yast"
 require "ui/dialog"
 
 Yast.import "UI"
+Yast.import "Label"
 
 module UpdateAlternatives
-
+  # Dialog for displaying possible alternatives for one particular group.
   class AlternativesDialog < UI::Dialog
-
     MIN_WIDTH = 60
     MIN_HEIGHT = 20
+
+    def initialize
+      @mock_slaves = {
+        ed:  "<pre>editor.1.gz /usr/share/man/man1/ed.1.gz</pre>",
+        vim: "<pre>editor.1.gz /usr/share/man/man1/vim.1.gz\n" \
+             "editor.fr.1.gz /usr/share/man/fr/man1/vim.1.gz\n" \
+             "editor.it.1.gz /usr/share/man/it/man1/vim.1.gz\n" \
+             "editor.pl.1.gz /usr/share/man/pl/man1/vim.1.gz\n" \
+             "editor.ru.1.gz /usr/share/man/ru/man1/vim.1.gz</pre>"
+      }
+    end
 
     def dialog_content
       MinSize(
@@ -34,38 +45,45 @@ module UpdateAlternatives
         MIN_HEIGHT,
         VBox(
           create_alternatives_table,
-          create_slaves_table,
-          HBox(
-          PushButton(Id(:set), _("Set alternative")),
-          PushButton(Id(:cancel), _("Cancel"))
-          )
+          RichText(Id(:slaves), _("Please select an alternative to view his slaves.")),
+          footer
         )
       )
     end
 
     def set_handler
-      finish_dialog()
+      selected_alternative = Yast::UI.QueryWidget(Id(:alternatives), :CurrentItem)
+      log.info("User selected the alternative: #{selected_alternative}")
+      finish_dialog
+    end
+
+    def auto_handler
+      log.info("User selected \"Set automatic mode\" button")
+      finish_dialog
+    end
+
+    def alternatives_handler
+      selected_alternative = Yast::UI.QueryWidget(Id(:alternatives), :CurrentItem)
+      Yast::UI.ChangeWidget(Id(:slaves), :Value, @mock_slaves[selected_alternative])
     end
 
     def create_alternatives_table
       Table(
-        Id(:alternatives_table),
+        Id(:alternatives),
+        Opt(:notify, :immediate),
         Header(_("Alternative"), _("Priority")),
         [
-          Item(Id(:java18), "/usr/lib64/jvm/jre-1.8.0-openjdk/bin/java", "1805"),
-          Item(Id(:java17), "/usr/lib64/jvm/jre-1.7.0-openjdk/bin/java", "1705")
+          Item(Id(:vim), "/usr/bin/vim.basic", "50"),
+          Item(Id(:ed), "/bin/ed", "-100")
         ]
       )
     end
 
-    def create_slaves_table
-      Table(
-      Id(:alternatives_table),
-      Header(_("Slave name"), _("Slave alternave")),
-      [
-        Item(Id(:slave1), "slave1", "path/to/slave1/alternative/for/1.8"),
-        Item(Id(:slave2), "slave2", "path/to/slave2/alternative/for/1.8")
-      ]
+    def footer
+      HBox(
+        PushButton(Id(:set), _("Set alternative")),
+        PushButton(Id(:auto), _("Set automatic mode")),
+        PushButton(Id(:cancel), Yast::Label.CancelButton)
       )
     end
   end
