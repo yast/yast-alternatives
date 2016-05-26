@@ -59,7 +59,7 @@ module UpdateAlternatives
     def footer
       HBox(
         PushButton(Id(:show), _("Show alternatives")),
-        PushButton(Id(:cancel), _("Cancel"))
+        PushButton(Id(:cancel), Yast::Label.CancelButton)
       )
     end
   end

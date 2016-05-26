@@ -20,6 +20,7 @@ require "yast"
 require "ui/dialog"
 
 Yast.import "UI"
+Yast.import "Label"
 
 module UpdateAlternatives
   # List all alternatives for an alternative group.
@@ -30,12 +31,11 @@ module UpdateAlternatives
     def initialize
       @mock_slaves = {
         ed:  "<pre>editor.1.gz /usr/share/man/man1/ed.1.gz</pre>",
-        vim: "<pre>editor.1.gz /usr/share/man/man1/vim.1.
-editor.fr.1.gz /usr/share/man/fr/man1/vim.1.gz
-editor.it.1.gz /usr/share/man/it/man1/vim.1.gz
-editor.pl.1.gz /usr/share/man/pl/man1/vim.1.gz
-editor.ru.1.gz /usr/share/man/ru/man1/vim.1.gz
-</pre>"
+        vim: "<pre>editor.1.gz /usr/share/man/man1/vim.1.gz\n" \
+             "editor.fr.1.gz /usr/share/man/fr/man1/vim.1.gz\n" \
+             "editor.it.1.gz /usr/share/man/it/man1/vim.1.gz\n" \
+             "editor.pl.1.gz /usr/share/man/pl/man1/vim.1.gz\n" \
+             "editor.ru.1.gz /usr/share/man/ru/man1/vim.1.gz</pre>"
       }
     end
 
@@ -52,6 +52,8 @@ editor.ru.1.gz /usr/share/man/ru/man1/vim.1.gz
     end
 
     def set_handler
+      selected_alternative = Yast::UI.QueryWidget(Id(:alternatives), :CurrentItem)
+      log.info("You have set the alternative: #{selected_alternative}")
       finish_dialog
     end
 
@@ -81,7 +83,7 @@ editor.ru.1.gz /usr/share/man/ru/man1/vim.1.gz
       HBox(
         PushButton(Id(:set), _("Set alternative")),
         PushButton(Id(:auto), _("Set automatic mode")),
-        PushButton(Id(:cancel), _("Cancel"))
+        PushButton(Id(:cancel), Yast::Label.CancelButton)
       )
     end
   end
