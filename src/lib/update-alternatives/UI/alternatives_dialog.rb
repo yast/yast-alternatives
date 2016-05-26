@@ -23,7 +23,7 @@ Yast.import "UI"
 Yast.import "Label"
 
 module UpdateAlternatives
-  # List all alternatives for an alternative group.
+  # Dialog for displaying possible alternatives for one particular group.
   class AlternativesDialog < UI::Dialog
     MIN_WIDTH = 60
     MIN_HEIGHT = 20
@@ -53,12 +53,12 @@ module UpdateAlternatives
 
     def set_handler
       selected_alternative = Yast::UI.QueryWidget(Id(:alternatives), :CurrentItem)
-      log.info("You have set the alternative: #{selected_alternative}")
+      log.info("User selected the alternative: #{selected_alternative}")
       finish_dialog
     end
 
     def auto_handler
-      log.info("You have use the \"Set automatic mode\" button")
+      log.info("User selected \"Set automatic mode\" button")
       finish_dialog
     end
 
