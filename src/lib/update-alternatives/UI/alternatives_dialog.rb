@@ -22,21 +22,20 @@ require "ui/dialog"
 Yast.import "UI"
 
 module UpdateAlternatives
-
+  # List all alternatives for an alternative group.
   class AlternativesDialog < UI::Dialog
-
     MIN_WIDTH = 60
     MIN_HEIGHT = 20
 
     def initialize
       @mock_slaves = {
-        :ed => %!<pre>editor.1.gz /usr/share/man/man1/ed.1.gz</pre>!,
-        :vim => %!<pre>editor.1.gz /usr/share/man/man1/vim.1.
+        ed:  "<pre>editor.1.gz /usr/share/man/man1/ed.1.gz</pre>",
+        vim: "<pre>editor.1.gz /usr/share/man/man1/vim.1.
 editor.fr.1.gz /usr/share/man/fr/man1/vim.1.gz
 editor.it.1.gz /usr/share/man/it/man1/vim.1.gz
 editor.pl.1.gz /usr/share/man/pl/man1/vim.1.gz
 editor.ru.1.gz /usr/share/man/ru/man1/vim.1.gz
-</pre>!
+</pre>"
       }
     end
 
@@ -53,12 +52,12 @@ editor.ru.1.gz /usr/share/man/ru/man1/vim.1.gz
     end
 
     def set_handler
-      finish_dialog()
+      finish_dialog
     end
 
     def auto_handler
       log.info("You have use the \"Set automatic mode\" button")
-      finish_dialog()
+      finish_dialog
     end
 
     def alternatives_handler

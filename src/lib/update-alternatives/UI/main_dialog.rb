@@ -23,9 +23,8 @@ require "update-alternatives/UI/alternatives_dialog"
 Yast.import "UI"
 
 module UpdateAlternatives
-
+  # Dialog where all alternatives groups in the system are listed.
   class MainDialog < UI::Dialog
-
     def dialog_options
       Opt(:decorated, :defaultsize)
     end
