@@ -9,10 +9,10 @@ module UpdateAlternatives
     attr_reader :choices
 
     def initialize(name, status, value, choices)
-  		@name = name
-  		@status = status
-  		@value = value
-  		@choices = choices
+      @name = name
+      @status = status
+      @value = value
+      @choices = choices
     end
 
     def self.all_names
@@ -21,12 +21,11 @@ module UpdateAlternatives
     end
 
     def self.all
-      list = self.all_names
-      list.map { |name| query(name)}
+      list = all_names
+      list.map { |name| query(name) }
     end
 
     def self.query(name)
-
       raw_data = Cheetah.run("update-alternatives", "--query", name, stdout: :capture).lines
 
       name = raw_data.grep(/Name: /) { |line| line.split.last }.first
@@ -38,7 +37,7 @@ module UpdateAlternatives
       slaves = ""
 
       choice = UpdateAlternatives::Choice.new(alternative, priority, slaves)
-      choice_map = { alternative => choice}
+      choice_map = { alternative => choice }
       UpdateAlternatives::Alternative.new name, status, value, choice_map
     end
   end
