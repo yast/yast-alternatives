@@ -32,6 +32,23 @@ def alternatives_pip_stub
   )
 end
 
+def alternatives_pip_with_two_choices_stub
+  allow(Cheetah).to receive(:run).and_return(
+    "pip                            auto     /usr/bin/pip3.4\n",
+    "Name: pip\n" \
+      "Link: /usr/bin/pip\n" \
+      "Status: auto\n" \
+      "Best: /usr/bin/pip3.4\n" \
+      "Value: /usr/bin/pip3.4\n" \
+      "\n" \
+      "Alternative: /usr/bin/pip2.7\n" \
+      "Priority: 20\n" \
+      "\n" \
+      "Alternative: /usr/bin/pip3.4\n" \
+      "Priority: 30\n"
+  )
+end
+
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true

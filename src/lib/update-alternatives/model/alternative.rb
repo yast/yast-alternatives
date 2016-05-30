@@ -28,21 +28,25 @@ module UpdateAlternatives
     def self.query(name)
       raw_data = Cheetah.run("update-alternatives", "--query", name, stdout: :capture).lines
 
-      name = filter(raw_data, /Name: /)
-      status = filter(raw_data, /Status: /)
-      value = filter(raw_data, /Value: /)
+      name = filter(raw_data, /Name: /).first
+      status = filter(raw_data, /Status: /).first
+      value = filter(raw_data, /Value: /).first
 
-      alternative = filter(raw_data, /Alternative: /)
-      priority = filter(raw_data, /Priority: /)
-      slaves = ""
+      alternatives = filter(raw_data, /Alternative: /)
+      priorities = filter(raw_data, /Priority: /)
 
-      choice = UpdateAlternatives::Choice.new(alternative, priority, slaves)
-      choice_map = { alternative => choice }
-      UpdateAlternatives::Alternative.new name, status, value, choice_map
+      choice_map = {}
+
+      until alternatives.empty?
+        choice = UpdateAlternatives::Choice.new(alternatives.pop, priorities.pop, "")
+        choice_map[choice.path] = choice
+      end
+
+      UpdateAlternatives::Alternative.new(name, status, value, choice_map)
     end
 
     def self.filter(text, regular_expresion)
-      text.grep(regular_expresion) { |line| line.split.last }.first
+      text.grep(regular_expresion) { |line| line.split.last }
     end
   end
 end
