@@ -22,10 +22,10 @@ module UpdateAlternatives
 
     def self.all
       list = all_names
-      list.map { |name| query(name) }
+      list.map { |name| load(name) }
     end
 
-    def self.query(name)
+    def self.load(name)
       raw_data = Cheetah.run("update-alternatives", "--query", name, stdout: :capture).lines
 
       name = filter(raw_data, /Name: /).first

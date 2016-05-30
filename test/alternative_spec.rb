@@ -1,6 +1,4 @@
-require_relative "../src/lib/update-alternatives/model/alternative"
-require_relative "../src/lib/update-alternatives/model/choice"
-require "cheetah"
+require_relative "../spec/spec_helper.rb"
 
 describe "An alternative" do
 

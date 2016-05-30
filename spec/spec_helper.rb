@@ -4,9 +4,13 @@ ENV["Y2DIR"] = SRC_PATH
 
 require "yast"
 require "yast/rspec"
+require "update-alternatives/model/alternative"
+require "update-alternatives/model/choice"
 
 def alternatives_names_stub
-  allow(Cheetah).to receive(:run).and_return(
+  allow(Cheetah).to receive(:run).with(
+    "update-alternatives", "--get-selections", stdout: :capture
+  ).and_return(
     "pilconvert                     auto     /usr/bin/pilconvert-2.7\n" \
     "pip                            auto     /usr/bin/pip3.4\n" \
     "rake                           auto     /usr/bin/rake.ruby.ruby2.1\n" \
@@ -19,8 +23,14 @@ def alternatives_names_stub
 end
 
 def alternatives_pip_stub
-  allow(Cheetah).to receive(:run).and_return(
-    "pip                            auto     /usr/bin/pip3.4\n",
+  allow(Cheetah).to receive(:run).with(
+    "update-alternatives", "--get-selections", stdout: :capture
+  ).and_return(
+    "pip                            auto     /usr/bin/pip3.4\n"
+  )
+  allow(Cheetah).to receive(:run).with(
+    "update-alternatives", "--query", "pip", stdout: :capture
+  ).and_return(
     "Name: pip\n" \
 	    "Link: /usr/bin/pip\n" \
 	    "Status: auto\n" \
@@ -33,27 +43,24 @@ def alternatives_pip_stub
 end
 
 def alternatives_pip_with_two_choices_stub
-  allow(Cheetah).to receive(:run).and_return(
-    "pip                            auto     /usr/bin/pip3.4\n",
-    "Name: pip\n" \
-      "Link: /usr/bin/pip\n" \
-      "Status: auto\n" \
-      "Best: /usr/bin/pip3.4\n" \
-      "Value: /usr/bin/pip3.4\n" \
-      "\n" \
-      "Alternative: /usr/bin/pip2.7\n" \
-      "Priority: 20\n" \
-      "\n" \
-      "Alternative: /usr/bin/pip3.4\n" \
-      "Priority: 30\n"
+  allow(Cheetah).to receive(:run).with(
+    "update-alternatives", "--get-selections", stdout: :capture
+  ).and_return(
+    "pip                            auto     /usr/bin/pip3.4\n"
   )
-end
-
-RSpec.configure do |config|
-  config.expect_with :rspec do |expectations|
-    expectations.include_chain_clauses_in_custom_matcher_descriptions = true
-  end
-  config.mock_with :rspec do |mocks|
-    mocks.verify_partial_doubles = true
-  end
+  allow(Cheetah).to receive(:run).with(
+    "update-alternatives", "--query", "pip", stdout: :capture
+  ).and_return(
+    "Name: pip\n" \
+	    "Link: /usr/bin/pip\n" \
+	    "Status: auto\n" \
+	    "Best: /usr/bin/pip3.4\n" \
+	    "Value: /usr/bin/pip3.4\n" \
+	    "\n" \
+	    "Alternative: /usr/bin/pip2.7\n" \
+	    "Priority: 20\n" \
+	    "\n" \
+	    "Alternative: /usr/bin/pip3.4\n" \
+	    "Priority: 30\n"
+  )
 end
