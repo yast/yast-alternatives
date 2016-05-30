@@ -12,7 +12,8 @@ describe "An alternative" do
       "rdoc                           auto     /usr/bin/rdoc.ruby.ruby2.1\n" \
       "rdoc.ruby2.1                   auto     /usr/bin/rdoc.ruby.ruby2.1\n" \
       "ri                             auto     /usr/bin/ri.ruby.ruby2.1\n" \
-      "ri.ruby2.1                     auto     /usr/bin/ri.ruby.ruby2.1\n")
+      "ri.ruby2.1                     auto     /usr/bin/ri.ruby.ruby2.1\n"
+    )
   end
 
   context "when we get all alternatives names" do
