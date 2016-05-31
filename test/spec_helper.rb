@@ -31,13 +31,13 @@ def alternatives_pip_stub
     "update-alternatives", "--query", "pip", stdout: :capture
   ).and_return(
     "Name: pip\n" \
-	    "Link: /usr/bin/pip\n" \
-	    "Status: auto\n" \
-	    "Best: /usr/bin/pip3.4\n" \
-	    "Value: /usr/bin/pip3.4\n" \
-	    "\n" \
-	    "Alternative: /usr/bin/pip3.4\n" \
-	    "Priority: 30\n" \
+      "Link: /usr/bin/pip\n" \
+      "Status: auto\n" \
+      "Best: /usr/bin/pip3.4\n" \
+      "Value: /usr/bin/pip3.4\n" \
+      "\n" \
+      "Alternative: /usr/bin/pip3.4\n" \
+      "Priority: 30\n" \
   )
 end
 
@@ -51,15 +51,15 @@ def alternatives_pip_with_two_choices_stub
     "update-alternatives", "--query", "pip", stdout: :capture
   ).and_return(
     "Name: pip\n" \
-	    "Link: /usr/bin/pip\n" \
-	    "Status: auto\n" \
-	    "Best: /usr/bin/pip3.4\n" \
-	    "Value: /usr/bin/pip3.4\n" \
-	    "\n" \
-	    "Alternative: /usr/bin/pip2.7\n" \
-	    "Priority: 20\n" \
-	    "\n" \
-	    "Alternative: /usr/bin/pip3.4\n" \
-	    "Priority: 30\n"
+      "Link: /usr/bin/pip\n" \
+      "Status: auto\n" \
+      "Best: /usr/bin/pip3.4\n" \
+      "Value: /usr/bin/pip3.4\n" \
+      "\n" \
+      "Alternative: /usr/bin/pip2.7\n" \
+      "Priority: 20\n" \
+      "\n" \
+      "Alternative: /usr/bin/pip3.4\n" \
+      "Priority: 30\n"
   )
 end
