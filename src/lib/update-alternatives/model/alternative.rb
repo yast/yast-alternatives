@@ -7,6 +7,7 @@ module UpdateAlternatives
     attr_reader :status
     attr_reader :value
     attr_reader :choices
+    Choice = Struct.new(:path, :priority, :slaves)
 
     def initialize(name, status, value, choices)
       @name = name
@@ -38,7 +39,7 @@ module UpdateAlternatives
       choice_map = {}
 
       until alternatives.empty?
-        choice = UpdateAlternatives::Choice.new(alternatives.pop, priorities.pop, "")
+        choice = Choice.new(alternatives.pop, priorities.pop, "")
         choice_map[choice.path] = choice
       end
 

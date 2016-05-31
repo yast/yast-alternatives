@@ -5,7 +5,6 @@ ENV["Y2DIR"] = SRC_PATH
 require "yast"
 require "yast/rspec"
 require "update-alternatives/model/alternative"
-require "update-alternatives/model/choice"
 
 def alternatives_names_stub
   allow(Cheetah).to receive(:run).with(
