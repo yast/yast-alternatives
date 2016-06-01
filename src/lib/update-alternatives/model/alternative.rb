@@ -22,33 +22,46 @@ module UpdateAlternatives
     end
 
     def self.all
-      list = all_names
-      list.map { |name| load(name) }
+      all_names.map { |name| load(name) }
     end
 
     def self.load(name)
       raw_data = Cheetah.run("update-alternatives", "--query", name, stdout: :capture).lines
 
-      name = filter(raw_data, /Name: /).first
-      status = filter(raw_data, /Status: /).first
-      value = filter(raw_data, /Value: /).first
+      split = raw_data.find_index("\n")
+      alternative_data = raw_data[0...split]
+      choices = raw_data[split + 1..raw_data.length]
 
-      alternatives = filter(raw_data, /Alternative: /)
-      priorities = filter(raw_data, /Priority: /)
+      alternative = parse_alternative_data(alternative_data)
+      choices_map = parse_choices(choices)
+      new(alternative["Name:"], alternative["Status:"], alternative["Value:"], choices_map)
+    end
 
-      choice_map = {}
-
-      until alternatives.empty?
-        choice = Choice.new(alternatives.pop, priorities.pop, "")
-        choice_map[choice.path] = choice
+    def self.parse_alternative_data(alternative_data)
+      alternative = {}
+      alternative_data.each do |line|
+        alternative[line.split.first] = line.split.last
       end
-
-      UpdateAlternatives::Alternative.new(name, status, value, choice_map)
+      alternative
     end
 
-    def self.filter(text, regular_expresion)
-      text.grep(regular_expresion) { |line| line.split.last }
+    def self.parse_choices(choices)
+      choices_map = {}
+      choice = {}
+      choices.each do |line|
+        if line == "\n"
+          choices_map[choice["Alternative:"]] = Choice.new(
+            choice["Alternative:"], choice["Priority:"], ""
+          )
+        else
+          choice[line.split.first] = line.split.last
+        end
+      end
+      choices_map[choice["Alternative:"]] = Choice.new(
+        choice["Alternative:"], choice["Priority:"], ""
+      )
+      choices_map
     end
-    private_class_method :all_names
+    private_class_method :all_names, :parse_choices, :parse_alternative_data
   end
 end
