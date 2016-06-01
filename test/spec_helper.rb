@@ -4,7 +4,6 @@ ENV["Y2DIR"] = SRC_PATH
 
 require "yast"
 require "yast/rspec"
-require "update-alternatives/model/alternative"
 
 if ENV["COVERAGE"]
   require "simplecov"

@@ -1,4 +1,5 @@
 require_relative "spec_helper.rb"
+require "update-alternatives/model/alternative"
 
 describe UpdateAlternatives::Alternative do
 
