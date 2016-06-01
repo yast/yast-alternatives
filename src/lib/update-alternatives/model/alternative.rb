@@ -49,5 +49,6 @@ module UpdateAlternatives
     def self.filter(text, regular_expresion)
       text.grep(regular_expresion) { |line| line.split.last }
     end
+    private_class_method :all_names
   end
 end
