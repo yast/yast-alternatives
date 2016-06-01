@@ -1,6 +1,6 @@
 require_relative "spec_helper.rb"
 
-describe "UpdateAlternatives::Alternative" do
+describe UpdateAlternatives::Alternative do
 
   describe ".all" do
     subject { UpdateAlternatives::Alternative.all }
@@ -8,11 +8,11 @@ describe "UpdateAlternatives::Alternative" do
     it "returns an array of Alternative objects" do
       alternatives_pip_with_two_choices_stub
       expect(subject.class).to eq Array
-      expect(subject.all? { |e| e.is_a?(UpdateAlternatives::Alternative) }).to eq true
+      subject.all? { |e| expect(e).to be_a(UpdateAlternatives::Alternative) }
     end
 
     context "alternative with one choice" do
-      it "is loaded correctly" do
+      it "produce an Alternative object with single choice in choices" do
         alternatives_pip_stub
         choice = UpdateAlternatives::Alternative::Choice.new("/usr/bin/pip3.4", "30", "")
         expected_choices = { "/usr/bin/pip3.4" => choice }
@@ -23,7 +23,7 @@ describe "UpdateAlternatives::Alternative" do
       end
     end
     context "alternative with two choices" do
-      it "is loaded correctly" do
+      it "produce an Alternative object with two choices in choices" do
         alternatives_pip_with_two_choices_stub
 
         choice_one = UpdateAlternatives::Alternative::Choice.new("/usr/bin/pip3.4", "30", "")
