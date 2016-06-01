@@ -6,6 +6,25 @@ require "yast"
 require "yast/rspec"
 require "update-alternatives/model/alternative"
 
+if ENV["COVERAGE"]
+  require "simplecov"
+  SimpleCov.start do
+    add_filter "/test/"
+  end
+
+  # for coverage we need to load all ruby files
+  Dir["#{SRC_PATH}/lib/**/**/*.rb"].each { |f| require_relative f }
+
+  # use coveralls for on-line code coverage reporting at Travis CI
+  if ENV["TRAVIS"]
+    require "coveralls"
+    SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+      SimpleCov::Formatter::HTMLFormatter,
+      Coveralls::SimpleCov::Formatter
+    ]
+  end
+end
+
 def alternatives_names_stub
   allow(Cheetah).to receive(:run).with(
     "update-alternatives", "--get-selections", stdout: :capture
