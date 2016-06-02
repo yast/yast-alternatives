@@ -41,11 +41,6 @@ end
 
 def alternatives_pip_stub
   allow(Cheetah).to receive(:run).with(
-    "update-alternatives", "--get-selections", stdout: :capture
-  ).and_return(
-    "pip                            auto     /usr/bin/pip3.4\n"
-  )
-  allow(Cheetah).to receive(:run).with(
     "update-alternatives", "--query", "pip", stdout: :capture
   ).and_return(
     "Name: pip\n" \
@@ -79,5 +74,13 @@ def alternatives_pip_with_two_choices_stub
       "\n" \
       "Alternative: /usr/bin/pip3.4\n" \
       "Priority: 30\n"
+  )
+end
+
+def zero_alternatives_stub
+  allow(Cheetah).to receive(:run).with(
+    "update-alternatives", "--get-selections", stdout: :capture
+  ).and_return(
+    ""
   )
 end
