@@ -27,15 +27,17 @@ module UpdateAlternatives
 
     def self.load(name)
       raw_data = Cheetah.run("update-alternatives", "--query", name, stdout: :capture).lines
-
-      alternative_data = raw_data[0...empty_line_index_in(raw_data)]
-      choices_data = raw_data[empty_line_index_in(raw_data) + 1..raw_data.length]
-
-      alternative = parse_alternative_data(alternative_data)
-      new(alternative["Name:"], alternative["Status:"], alternative["Value:"], load_choices_from(choices_data))
+      alternative = parse_to_map(raw_data.slice(0..raw_data.find_index("\n")))
+      choices = raw_data.slice(raw_data.find_index("\n") + 1..raw_data.length)
+      new(
+        alternative["Name:"],
+        alternative["Status:"],
+        alternative["Value:"],
+        load_choices_from(choices)
+      )
     end
 
-    def self.parse_alternative_data(alternative_data)
+    def self.parse_to_map(alternative_data)
       alternative = {}
       alternative_data.each do |line|
         alternative[line.split.first] = line.split.last
@@ -45,19 +47,29 @@ module UpdateAlternatives
 
     def self.load_choices_from(data)
       choices_list = []
-      while empty_line_index_in(data) != nil
-        choices_list << create_choice(data.slice!(0..empty_line_index_in(data)))
+      while more_than_one_choice?(data)
+        choices_list << load_choice(data.slice!(0..data.find_index("\n")))
       end
-      choices_list << create_choice(data)
+      choices_list << load_choice(data)
     end
 
-    def self.create_choice(choice)
-      Choice.new(choice[0].split.last, choice[1].split.last, "")
+    def self.more_than_one_choice?(data)
+      !data.find_index("\n").nil?
     end
 
-    def self.empty_line_index_in(array)
-      array.find_index("\n")
+    def self.load_choice(data)
+      map = to_map(data)
+      Choice.new(map[:path], map[:priority], "")
     end
-    private_class_method :all_names, :load_choices_from, :parse_alternative_data
+
+    def self.to_map(choice_data)
+      {
+        path:     choice_data[0].split.last,
+        priority: choice_data[1].split.last
+      }
+    end
+
+    private_class_method :all_names, :load_choices_from, :parse_to_map
+    private_class_method :more_than_one_choice?, :load_choice, :to_map
   end
 end
