@@ -28,13 +28,11 @@ module UpdateAlternatives
     def self.load(name)
       raw_data = Cheetah.run("update-alternatives", "--query", name, stdout: :capture).lines
 
-      split = raw_data.find_index("\n")
-      alternative_data = raw_data[0...split]
-      choices = raw_data[split + 1..raw_data.length]
+      alternative_data = raw_data[0...empty_line_index_in(raw_data)]
+      choices_data = raw_data[empty_line_index_in(raw_data) + 1..raw_data.length]
 
       alternative = parse_alternative_data(alternative_data)
-      choices_map = parse_choices(choices)
-      new(alternative["Name:"], alternative["Status:"], alternative["Value:"], choices_map)
+      new(alternative["Name:"], alternative["Status:"], alternative["Value:"], load_choices_from(choices_data))
     end
 
     def self.parse_alternative_data(alternative_data)
@@ -45,23 +43,21 @@ module UpdateAlternatives
       alternative
     end
 
-    def self.parse_choices(choices)
-      choices_map = {}
-      choice = {}
-      choices.each do |line|
-        if line == "\n"
-          choices_map[choice["Alternative:"]] = Choice.new(
-            choice["Alternative:"], choice["Priority:"], ""
-          )
-        else
-          choice[line.split.first] = line.split.last
-        end
+    def self.load_choices_from(data)
+      choices_list = []
+      while empty_line_index_in(data) != nil
+        choices_list << create_choice(data.slice!(0..empty_line_index_in(data)))
       end
-      choices_map[choice["Alternative:"]] = Choice.new(
-        choice["Alternative:"], choice["Priority:"], ""
-      )
-      choices_map
+      choices_list << create_choice(data)
     end
-    private_class_method :all_names, :parse_choices, :parse_alternative_data
+
+    def self.create_choice(choice)
+      Choice.new(choice[0].split.last, choice[1].split.last, "")
+    end
+
+    def self.empty_line_index_in(array)
+      array.find_index("\n")
+    end
+    private_class_method :all_names, :load_choices_from, :parse_alternative_data
   end
 end
