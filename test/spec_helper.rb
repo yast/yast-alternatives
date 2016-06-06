@@ -84,3 +84,49 @@ def zero_alternatives_stub
     ""
   )
 end
+
+def some_alternatives_stub
+  allow(Cheetah).to receive(:run).with(
+    "update-alternatives", "--get-selections", stdout: :capture
+  ).and_return(
+    "pip                            auto     /usr/bin/pip3.4\n" \
+    "rake                           auto     /usr/bin/rake.ruby.ruby2.1\n" \
+    "rubocop.ruby2.1                auto     /usr/bin/rubocop.ruby2.1-0.29.1\n" \
+  )
+  allow(Cheetah).to receive(:run).with(
+    "update-alternatives", "--query", "pip", stdout: :capture
+  ).and_return(
+    "Name: pip\n" \
+      "Link: /usr/bin/pip\n" \
+      "Status: auto\n" \
+      "Best: /usr/bin/pip3.4\n" \
+      "Value: /usr/bin/pip3.4\n" \
+      "\n" \
+      "Alternative: /usr/bin/pip3.4\n" \
+      "Priority: 30\n"
+  )
+  allow(Cheetah).to receive(:run).with(
+    "update-alternatives", "--query", "rake", stdout: :capture
+  ).and_return(
+    "Name: rake\n" \
+      "Link: /usr/bin/rake\n" \
+      "Status: auto\n" \
+      "Best: /usr/bin/rake.ruby.ruby2.1\n" \
+      "Value: /usr/bin/rake.ruby.ruby2.1\n" \
+      "\n" \
+      "Alternative: /usr/bin/rake.ruby.ruby2.1\n" \
+      "Priority: 2\n"
+  )
+  allow(Cheetah).to receive(:run).with(
+    "update-alternatives", "--query", "rubocop.ruby2.1", stdout: :capture
+  ).and_return(
+    "Name: rubocop.ruby2.1\n" \
+      "Link: /usr/bin/rubocop.ruby2.1\n" \
+      "Status: auto\n" \
+      "Best: /usr/bin/rubocop.ruby2.1-0.29.1\n" \
+      "Value: /usr/bin/rubocop.ruby2.1-0.29.1\n" \
+      "\n" \
+      "Alternative: /usr/bin/rubocop.ruby2.1-0.29.1\n" \
+      "Priority: 2901\n"
+  )
+end

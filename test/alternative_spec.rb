@@ -20,7 +20,18 @@ describe UpdateAlternatives::Alternative do
     context "with one alternative" do
       it "produce an array with one alternative" do
         alternatives_pip_with_two_choices_stub
+        expect(all_alternatives.first.name).to eq "pip"
         expect(all_alternatives.length).to eq 1
+      end
+    end
+    context "with three alternatives" do
+      it "produce an array with the three alternatives" do
+        some_alternatives_stub
+        expected_alternatives_names = ["pip", "rake", "rubocop.ruby2.1"]
+        alternatives_names = all_alternatives.map { |alternative| alternative.name }
+
+        expect(alternatives_names).to eq expected_alternatives_names
+        expect(all_alternatives.length).to eq 3
       end
     end
   end
