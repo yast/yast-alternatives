@@ -27,10 +27,7 @@ describe UpdateAlternatives::Alternative do
     context "with three alternatives" do
       it "produce an array with the three alternatives" do
         some_alternatives_stub
-        expected_alternatives_names = ["pip", "rake", "rubocop.ruby2.1"]
-        alternatives_names = all_alternatives.map { |alternative| alternative.name }
-
-        expect(alternatives_names).to eq expected_alternatives_names
+        expect(all_alternatives.map(&:name)).to eq ["pip", "rake", "rubocop.ruby2.1"]
         expect(all_alternatives.length).to eq 3
       end
     end
