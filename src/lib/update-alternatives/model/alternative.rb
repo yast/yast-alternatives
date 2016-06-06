@@ -7,8 +7,15 @@ module UpdateAlternatives
     attr_reader :status
     attr_reader :value
     attr_reader :choices
+    # Represents a Choice of an alternative.
     Choice = Struct.new(:path, :priority, :slaves)
 
+    # Creates a new Alternative with the given parameters.
+    #
+    # @param name [String] Name of the alternative.
+    # @param status [String] Status of the alternative, it can be auto or manual.
+    # @param value [String] Path of the actual choice.
+    # @param choices [Array<Choice>] Contains all Alternative's Choices.
     def initialize(name, status, value, choices)
       @name = name
       @status = status
@@ -16,15 +23,19 @@ module UpdateAlternatives
       @choices = choices
     end
 
+    # Read all names of the alternatives on the system.
     def self.all_names
       raw_data = Cheetah.run("update-alternatives", "--get-selections", stdout: :capture).lines
       raw_data.map { |string| string.split.first }
     end
 
+    # Load all alternatives that exist in the system.
     def self.all
       all_names.map { |name| load(name) }
     end
 
+    # Load an alternative.
+    # @param name [String] The name of the alternative to be loaded.
     def self.load(name)
       raw_data = Cheetah.run("update-alternatives", "--query", name, stdout: :capture).lines
       alternative = parse_to_map(raw_data.slice(0..raw_data.find_index("\n")))
