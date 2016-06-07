@@ -41,18 +41,18 @@ module UpdateAlternatives
       @choices = choices
     end
 
-    # Read all names of the alternatives on the system.
+    # @return [Array<String>] an array with the names of the alternatives.
     def self.all_names
       raw_data = Cheetah.run("update-alternatives", "--get-selections", stdout: :capture).lines
       raw_data.map { |string| string.split.first }
     end
 
-    # Load all alternatives that exist in the system.
+    # @return [Array<Alternative>] an array with all alternatives.
     def self.all
       all_names.map { |name| load(name) }
     end
 
-    # Load an alternative.
+    # @return [Alternative] an alternative with the given name.
     # @param name [String] The name of the alternative to be loaded.
     def self.load(name)
       raw_data = Cheetah.run("update-alternatives", "--query", name, stdout: :capture).lines
