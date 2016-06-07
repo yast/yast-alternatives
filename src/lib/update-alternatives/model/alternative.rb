@@ -75,15 +75,7 @@ module UpdateAlternatives
     end
 
     def self.load_choices_from(data)
-      choices_list = []
-      while more_than_one_choice?(data)
-        choices_list << load_choice(data.slice!(0..data.find_index("\n")))
-      end
-      choices_list << load_choice(data)
-    end
-
-    def self.more_than_one_choice?(data)
-      !data.find_index("\n").nil?
+      data.slice_before(/\AAlternative:/).map { |choice| load_choice(choice) }
     end
 
     def self.load_choice(data)
@@ -99,6 +91,6 @@ module UpdateAlternatives
     end
 
     private_class_method :all_names, :load_choices_from, :parse_to_map
-    private_class_method :more_than_one_choice?, :load_choice, :to_map
+    private_class_method :load_choice, :to_map
   end
 end
