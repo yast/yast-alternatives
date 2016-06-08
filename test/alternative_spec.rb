@@ -18,6 +18,12 @@ describe UpdateAlternatives::Alternative do
       )
     end
 
+    it "initializes choices as an array of Choice objects" do
+      alternatives_pip_with_two_choices_stub
+      expect(loaded_alternative.choices.class).to eq Array
+      expect(loaded_alternative.choices).to all(be_a(UpdateAlternatives::Alternative::Choice))
+    end
+
     it "initializes the path and priority for every choice" do
       alternatives_pip_with_two_choices_stub
       choice_one = UpdateAlternatives::Alternative::Choice.new("/usr/bin/pip2.7", "20", "")
@@ -26,6 +32,13 @@ describe UpdateAlternatives::Alternative do
       expect(loaded_alternative).to have_attributes(
         choices: expected_choices
       )
+    end
+
+    context "if there are a choice without slaves" do
+      it "initializes his slaves attribute to the empty string" do
+        alternatives_pip_with_two_choices_stub
+        expect(loaded_alternative.choices).to all(have_attributes(slaves: ""))
+      end
     end
   end
 
