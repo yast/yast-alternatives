@@ -21,19 +21,18 @@ require "cheetah"
 module UpdateAlternatives
   # Represents an alternative
   class Alternative
+    # @return [String] name of the alternative.
     attr_reader :name
+    # @return [String] Status of the alternative, it can be auto or manual.
     attr_reader :status
+    # @return [String] Path of the actual choice.
     attr_reader :value
+    # @return [Array<Choice>] Contains all Alternative's Choices.
     attr_reader :choices
     # Represents a Choice of an alternative.
     Choice = Struct.new(:path, :priority, :slaves)
 
     # Creates a new Alternative with the given parameters.
-    #
-    # @param name [String] Name of the alternative.
-    # @param status [String] Status of the alternative, it can be auto or manual.
-    # @param value [String] Path of the actual choice.
-    # @param choices [Array<Choice>] Contains all Alternative's Choices.
     def initialize(name, status, value, choices)
       @name = name
       @status = status
