@@ -18,7 +18,6 @@
 
 require "yast"
 require "ui/dialog"
-require "update-alternatives/model/alternative"
 
 Yast.import "UI"
 Yast.import "Label"
@@ -30,7 +29,7 @@ module UpdateAlternatives
     MIN_HEIGHT = 20
 
     def initialize(alternative)
-      @alternative = UpdateAlternatives::Alternative.load(alternative)
+      @alternative = alternative
       @mock_slaves = {
         ed:  "<pre>editor.1.gz /usr/share/man/man1/ed.1.gz</pre>",
         vim: "<pre>editor.1.gz /usr/share/man/man1/vim.1.gz\n" \
@@ -79,9 +78,9 @@ module UpdateAlternatives
     end
 
     def choices_list
-      @alternative.choices.map { |choice|
+      @alternative.choices.map do |choice|
         Item(Id(choice.path), choice.path, choice.priority)
-      }
+      end
     end
 
     def footer

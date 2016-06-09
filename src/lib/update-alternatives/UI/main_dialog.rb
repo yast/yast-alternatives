@@ -26,6 +26,10 @@ Yast.import "UI"
 module UpdateAlternatives
   # Dialog where all alternatives groups in the system are listed.
   class MainDialog < UI::Dialog
+    def initialize
+      @alternatives_list = UpdateAlternatives::Alternative.all
+    end
+
     def dialog_options
       Opt(:decorated, :defaultsize)
     end
@@ -42,8 +46,8 @@ module UpdateAlternatives
     end
 
     def alternatives_table_handler
-      selected_alternative = Yast::UI.QueryWidget(Id(:alternatives_table), :CurrentItem)
-      AlternativesDialog.new(selected_alternative).run
+      alternative_index = Yast::UI.QueryWidget(Id(:alternatives_table), :CurrentItem)
+      AlternativesDialog.new(@alternatives_list[alternative_index]).run
     end
 
     def create_table
@@ -56,8 +60,13 @@ module UpdateAlternatives
     end
 
     def map_alternatives_items
-      UpdateAlternatives::Alternative.all.map do |alternative|
-        Item(Id(alternative.name), alternative.name, alternative.value, _(alternative.status))
+      @alternatives_list.map do |alternative|
+        Item(
+          Id(@alternatives_list.find_index(alternative)),
+          alternative.name,
+          alternative.value,
+          _(alternative.status)
+        )
       end
     end
 
