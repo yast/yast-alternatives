@@ -19,6 +19,7 @@
 require "yast"
 require "ui/dialog"
 require "update-alternatives/UI/alternatives_dialog"
+require "update-alternatives/model/alternative"
 
 Yast.import "UI"
 
@@ -49,11 +50,14 @@ module UpdateAlternatives
         Id(:alternatives_table),
         Opt(:notify),
         Header(_("Name"), _("Actual alternative"), _("Status")),
-        [
-          Item(Id(:java), "java", "/usr/lib64/jvm/jre-1.8.0-openjdk/bin/java", _("auto")),
-          Item(Id(:an_alternative_name), "an alternative name", "Alternative_path", _("manual"))
-        ]
+        map_alternatives_items
       )
+    end
+
+    def map_alternatives_items
+      UpdateAlternatives::Alternative.all.map do |alternative|
+        Item(Id(:test), alternative.name, alternative.value, _(alternative.status))
+      end
     end
 
     def footer
