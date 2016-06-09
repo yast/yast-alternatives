@@ -42,7 +42,8 @@ module UpdateAlternatives
     end
 
     def alternatives_table_handler
-      AlternativesDialog.new.run
+      selected_alternative = Yast::UI.QueryWidget(Id(:alternatives_table), :CurrentItem)
+      AlternativesDialog.new(selected_alternative).run
     end
 
     def create_table
@@ -56,7 +57,7 @@ module UpdateAlternatives
 
     def map_alternatives_items
       UpdateAlternatives::Alternative.all.map do |alternative|
-        Item(Id(:test), alternative.name, alternative.value, _(alternative.status))
+        Item(Id(alternative.name), alternative.name, alternative.value, _(alternative.status))
       end
     end
 

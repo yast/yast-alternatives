@@ -18,6 +18,7 @@
 
 require "yast"
 require "ui/dialog"
+require "update-alternatives/model/alternative"
 
 Yast.import "UI"
 Yast.import "Label"
@@ -28,7 +29,8 @@ module UpdateAlternatives
     MIN_WIDTH = 60
     MIN_HEIGHT = 20
 
-    def initialize
+    def initialize(alternative)
+      @alternative = UpdateAlternatives::Alternative.load(alternative)
       @mock_slaves = {
         ed:  "<pre>editor.1.gz /usr/share/man/man1/ed.1.gz</pre>",
         vim: "<pre>editor.1.gz /usr/share/man/man1/vim.1.gz\n" \
@@ -72,11 +74,14 @@ module UpdateAlternatives
         Id(:alternatives),
         Opt(:notify, :immediate),
         Header(_("Alternative"), _("Priority")),
-        [
-          Item(Id(:vim), "/usr/bin/vim.basic", "50"),
-          Item(Id(:ed), "/bin/ed", "-100")
-        ]
+        choices_list
       )
+    end
+
+    def choices_list
+      @alternative.choices.map { |choice|
+        Item(Id(choice.path), choice.path, choice.priority)
+      }
     end
 
     def footer
