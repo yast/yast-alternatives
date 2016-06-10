@@ -42,10 +42,14 @@ module UpdateAlternatives
     end
 
     def show_handler
-      AlternativesDialog.new.run
+      open_alternatives_dialog
     end
 
     def alternatives_table_handler
+      open_alternatives_dialog
+    end
+
+    def open_alternatives_dialog
       alternative_index = Yast::UI.QueryWidget(Id(:alternatives_table), :CurrentItem)
       AlternativesDialog.new(@alternatives_list[alternative_index]).run
     end
