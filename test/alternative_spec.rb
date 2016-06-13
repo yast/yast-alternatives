@@ -8,7 +8,7 @@ describe UpdateAlternatives::Alternative do
 
     it "returns an Alternative object" do
       alternatives_pip_stub
-      expect(loaded_alternative.class).to eq UpdateAlternatives::Alternative
+      expect(loaded_alternative).to be_an UpdateAlternatives::Alternative
     end
 
     it "initializes the name, status and value" do
@@ -20,7 +20,7 @@ describe UpdateAlternatives::Alternative do
 
     it "initializes choices as an array of Choice objects" do
       alternatives_pip_with_two_choices_stub
-      expect(loaded_alternative.choices.class).to eq Array
+      expect(loaded_alternative.choices).to be_an Array
       expect(loaded_alternative.choices).to all(be_a(UpdateAlternatives::Alternative::Choice))
     end
 
@@ -47,8 +47,8 @@ describe UpdateAlternatives::Alternative do
 
     it "returns an array of Alternative objects" do
       alternatives_pip_with_two_choices_stub
-      expect(all_alternatives.class).to eq Array
-      expect(all_alternatives).to all(be_a(UpdateAlternatives::Alternative))
+      expect(all_alternatives).to be_an Array
+      expect(all_alternatives).to all(be_an(UpdateAlternatives::Alternative))
     end
 
     context "if there are no alternatives in the system" do
