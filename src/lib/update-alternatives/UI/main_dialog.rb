@@ -58,9 +58,9 @@ module UpdateAlternatives
     end
 
     def map_alternatives_items
-      @alternatives_list.map do |alternative|
+      @alternatives_list.each_with_index.map do |alternative, index|
         Item(
-          Id(@alternatives_list.find_index(alternative)),
+          Id(index),
           alternative.name,
           alternative.value,
           _(alternative.status)
