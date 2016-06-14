@@ -58,9 +58,9 @@ module UpdateAlternatives
       alternative = parse_to_map(raw_data.slice(0..raw_data.find_index("\n")))
       choices = raw_data.slice(raw_data.find_index("\n") + 1..raw_data.length)
       new(
-        alternative["Name:"],
-        alternative["Status:"],
-        alternative["Value:"],
+        alternative["Name"],
+        alternative["Status"],
+        alternative["Value"],
         load_choices_from(choices)
       )
     end
@@ -68,7 +68,8 @@ module UpdateAlternatives
     def self.parse_to_map(alternative_data)
       alternative = {}
       alternative_data.each do |line|
-        alternative[line.split.first] = line.split.last
+        key, value = line.split(":", 2)
+        alternative[key.strip] = value.strip if !value.nil?
       end
       alternative
     end
