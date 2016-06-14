@@ -28,7 +28,8 @@ module UpdateAlternatives
     MIN_WIDTH = 60
     MIN_HEIGHT = 20
 
-    def initialize
+    def initialize(alternative)
+      @alternative = alternative
       @mock_slaves = {
         ed:  "<pre>editor.1.gz /usr/share/man/man1/ed.1.gz</pre>",
         vim: "<pre>editor.1.gz /usr/share/man/man1/vim.1.gz\n" \
@@ -72,11 +73,14 @@ module UpdateAlternatives
         Id(:alternatives),
         Opt(:notify, :immediate),
         Header(_("Alternative"), _("Priority")),
-        [
-          Item(Id(:vim), "/usr/bin/vim.basic", "50"),
-          Item(Id(:ed), "/bin/ed", "-100")
-        ]
+        choices_list
       )
+    end
+
+    def choices_list
+      @alternative.choices.map do |choice|
+        Item(Id(choice.path), choice.path, choice.priority)
+      end
     end
 
     def footer

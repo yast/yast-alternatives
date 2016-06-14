@@ -19,12 +19,17 @@
 require "yast"
 require "ui/dialog"
 require "update-alternatives/UI/alternatives_dialog"
+require "update-alternatives/model/alternative"
 
 Yast.import "UI"
 
 module UpdateAlternatives
   # Dialog where all alternatives groups in the system are listed.
   class MainDialog < UI::Dialog
+    def initialize
+      @alternatives_list = UpdateAlternatives::Alternative.all
+    end
+
     def dialog_options
       Opt(:decorated, :defaultsize)
     end
@@ -36,29 +41,36 @@ module UpdateAlternatives
       )
     end
 
-    def show_handler
-      AlternativesDialog.new.run
+    def show_alternatives_handler
+      alternative_index = Yast::UI.QueryWidget(Id(:alternatives_table), :CurrentItem)
+      AlternativesDialog.new(@alternatives_list[alternative_index]).run
     end
 
-    def alternatives_table_handler
-      AlternativesDialog.new.run
-    end
+    alias_method :alternatives_table_handler, :show_alternatives_handler
 
     def create_table
       Table(
         Id(:alternatives_table),
         Opt(:notify),
         Header(_("Name"), _("Actual alternative"), _("Status")),
-        [
-          Item(Id(:java), "java", "/usr/lib64/jvm/jre-1.8.0-openjdk/bin/java", _("auto")),
-          Item(Id(:an_alternative_name), "an alternative name", "Alternative_path", _("manual"))
-        ]
+        map_alternatives_items
       )
+    end
+
+    def map_alternatives_items
+      @alternatives_list.each_with_index.map do |alternative, index|
+        Item(
+          Id(index),
+          alternative.name,
+          alternative.value,
+          _(alternative.status)
+        )
+      end
     end
 
     def footer
       HBox(
-        PushButton(Id(:show), _("Show alternatives")),
+        PushButton(Id(:show_alternatives), _("Show alternatives")),
         PushButton(Id(:cancel), Yast::Label.CancelButton)
       )
     end
