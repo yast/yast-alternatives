@@ -42,9 +42,10 @@ describe UpdateAlternatives::Alternative do
     end
 
     context "if there is an alternative without choices" do
-      it "return nil object" do
+      it "return an EmptyAlternative" do
         alternative_without_choices_stub
-        expect(loaded_alternative).to be nil
+        expect(loaded_alternative).to be_an UpdateAlternatives::EmptyAlternative
+        expect(loaded_alternative.empty?).to eq true
       end
     end
   end
@@ -74,10 +75,12 @@ describe UpdateAlternatives::Alternative do
     end
 
     context "if there are alternatives without choices" do
-      it "return an array of Alternatives objects ignoring the alternatives without choices" do
+      it "return an array of Alternatives including the alternatives without choices" do
         some_alternatives_some_without_choices_stub
-        expect(all_alternatives.length).to eq 2
-        expect(all_alternatives.map(&:name)).to eq ["rake", "rubocop.ruby2.1"]
+        expect(all_alternatives).to all(be_an(UpdateAlternatives::Alternative))
+        expect(all_alternatives.length).to eq 4
+        expect(all_alternatives.map(&:name)).to eq ["rake", "pip", "editor", "rubocop.ruby2.1"]
+        expect(all_alternatives.map(&:empty?)).to eq [false, true, true, false]
       end
     end
   end

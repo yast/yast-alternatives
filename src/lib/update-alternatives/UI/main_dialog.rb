@@ -28,6 +28,7 @@ module UpdateAlternatives
   class MainDialog < UI::Dialog
     def initialize
       @alternatives_list = UpdateAlternatives::Alternative.all
+        .select { |alternative| !alternative.empty? }
     end
 
     def dialog_options

@@ -48,16 +48,15 @@ module UpdateAlternatives
 
     # @return [Array<Alternative>] an array with all alternatives.
     def self.all
-      all_names.map { |name| load(name) }.compact
+      all_names.map { |name| load(name) }
     end
 
     # @return [Alternative] an alternative with the given name.
     # @param name [String] The name of the alternative to be loaded.
     def self.load(name)
       raw_data = Cheetah.run("update-alternatives", "--query", name, stdout: :capture).lines
-      empty_line_index = raw_data.find_index("\n")
-      return nil if empty_line_index.nil?
-      alternative = parse_to_map(raw_data.slice(0..empty_line_index))
+      return EmptyAlternative.new(name) unless raw_data.include?("\n")
+      alternative = parse_to_map(raw_data.slice(0..raw_data.find_index("\n")))
       choices = raw_data.slice(raw_data.find_index("\n") + 1..raw_data.length)
       new(
         alternative["Name"],
@@ -92,7 +91,21 @@ module UpdateAlternatives
       }
     end
 
+    def empty?
+      false
+    end
+
     private_class_method :all_names, :load_choices_from, :parse_to_map
     private_class_method :load_choice, :to_map
+  end
+  # Represents an alternative without any choice
+  class EmptyAlternative < Alternative
+    def initialize(name)
+      super(name, "", "", [])
+    end
+
+    def empty?
+      true
+    end
   end
 end
