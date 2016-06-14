@@ -42,7 +42,7 @@ describe UpdateAlternatives::Alternative do
     end
 
     context "if there is an alternative without choices" do
-      it "return an EmptyAlternative" do
+      it "returns an EmptyAlternative instance" do
         alternative_without_choices_stub
         expect(loaded_alternative).to be_an UpdateAlternatives::EmptyAlternative
         expect(loaded_alternative.empty?).to eq true
@@ -75,7 +75,7 @@ describe UpdateAlternatives::Alternative do
     end
 
     context "if there are alternatives without choices" do
-      it "return an array of Alternatives including the alternatives without choices" do
+      it "returns an array of Alternatives including the alternatives without choices" do
         some_alternatives_some_without_choices_stub
         expect(all_alternatives).to all(be_an(UpdateAlternatives::Alternative))
         expect(all_alternatives.length).to eq 4
