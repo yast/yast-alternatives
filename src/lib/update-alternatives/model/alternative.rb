@@ -68,7 +68,8 @@ module UpdateAlternatives
     def self.parse_to_map(alternative_data)
       alternative = {}
       alternative_data.each do |line|
-        alternative[line.split(/\W/).first] = line.split.last
+        key, value = line.split(":", 2)
+        alternative[key.strip] = value.strip if !value.nil?
       end
       alternative
     end
