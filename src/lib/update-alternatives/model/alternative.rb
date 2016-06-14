@@ -55,9 +55,9 @@ module UpdateAlternatives
     # @param name [String] The name of the alternative to be loaded.
     def self.load(name)
       raw_data = Cheetah.run("update-alternatives", "--query", name, stdout: :capture).lines
-      empty_line = raw_data.find_index("\n")
-      return nil if empty_line.nil?
-      alternative = parse_to_map(raw_data.slice(0..raw_data.find_index("\n")))
+      empty_line_index = raw_data.find_index("\n")
+      return nil if empty_line_index.nil?
+      alternative = parse_to_map(raw_data.slice(0..empty_line_index))
       choices = raw_data.slice(raw_data.find_index("\n") + 1..raw_data.length)
       new(
         alternative["Name"],
