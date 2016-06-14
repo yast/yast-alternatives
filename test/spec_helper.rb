@@ -24,21 +24,6 @@ if ENV["COVERAGE"]
   end
 end
 
-def alternatives_names_stub
-  allow(Cheetah).to receive(:run).with(
-    "update-alternatives", "--get-selections", stdout: :capture
-  ).and_return(
-    "pilconvert                     auto     /usr/bin/pilconvert-2.7\n" \
-    "pip                            auto     /usr/bin/pip3.4\n" \
-    "rake                           auto     /usr/bin/rake.ruby.ruby2.1\n" \
-    "rake.ruby2.1                   auto     /usr/bin/rake.ruby.ruby2.1\n" \
-    "rdoc                           auto     /usr/bin/rdoc.ruby.ruby2.1\n" \
-    "rdoc.ruby2.1                   auto     /usr/bin/rdoc.ruby.ruby2.1\n" \
-    "ri                             auto     /usr/bin/ri.ruby.ruby2.1\n" \
-    "ri.ruby2.1                     auto     /usr/bin/ri.ruby.ruby2.1\n"
-  )
-end
-
 def alternatives_pip_stub
   allow(Cheetah).to receive(:run).with(
     "update-alternatives", "--query", "pip", stdout: :capture
