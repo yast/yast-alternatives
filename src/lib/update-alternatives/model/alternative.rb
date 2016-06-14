@@ -48,7 +48,7 @@ module UpdateAlternatives
 
     # @return [Array<Alternative>] an array with all alternatives.
     def self.all
-      all_names.map { |name| load(name) }
+      all_names.map { |name| load(name) }.compact
     end
 
     # @return [Alternative] an alternative with the given name.

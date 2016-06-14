@@ -143,3 +143,32 @@ def alternative_without_choices_stub
       "Value: none\n"
   )
 end
+
+def some_alternatives_some_without_choices_stub
+  allow(Cheetah).to receive(:run).with(
+    "update-alternatives", "--get-selections", stdout: :capture
+  ).and_return(
+    "rake                           auto     /usr/bin/rake.ruby.ruby2.1\n" \
+    "pip                            auto     \n" \
+    "editor                         auto     \n" \
+    "rubocop.ruby2.1                auto     /usr/bin/rubocop.ruby2.1-0.29.1\n"
+  )
+  alternative_rake_stub
+  alternative_rubocop_stub
+  allow(Cheetah).to receive(:run).with(
+    "update-alternatives", "--query", "pip", stdout: :capture
+  ).and_return(
+    "Name: pip\n" \
+      "Link: /usr/bin/pip\n" \
+      "Status: auto\n" \
+      "Value: none\n"
+  )
+  allow(Cheetah).to receive(:run).with(
+    "update-alternatives", "--query", "editor", stdout: :capture
+  ).and_return(
+    "Name: editor\n" \
+      "Link: /usr/bin/editor\n" \
+      "Status: auto\n" \
+      "Value: none\n"
+  )
+end
