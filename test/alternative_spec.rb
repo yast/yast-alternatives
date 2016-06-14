@@ -40,6 +40,13 @@ describe UpdateAlternatives::Alternative do
         expect(loaded_alternative.choices).to all(have_attributes(slaves: ""))
       end
     end
+
+    context "if there are alternatives without choices" do
+      it "return nil object" do
+        alternative_without_choices_stub
+        expect(loaded_alternative).to be nil
+      end
+    end
   end
 
   describe ".all" do

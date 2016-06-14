@@ -127,3 +127,19 @@ def some_alternatives_stub
   alternative_rake_stub
   alternative_rubocop_stub
 end
+
+def alternative_without_choices_stub
+  allow(Cheetah).to receive(:run).with(
+    "update-alternatives", "--get-selections", stdout: :capture
+  ).and_return(
+    "pip                            auto     \n"
+  )
+  allow(Cheetah).to receive(:run).with(
+    "update-alternatives", "--query", "pip", stdout: :capture
+  ).and_return(
+    "Name: pip\n" \
+      "Link: /usr/bin/pip\n" \
+      "Status: auto\n" \
+      "Value: none\n"
+  )
+end
