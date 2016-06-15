@@ -27,7 +27,7 @@ module UpdateAlternatives
   # Dialog where all alternatives groups in the system are listed.
   class MainDialog < UI::Dialog
     def initialize
-      @alternatives_list = UpdateAlternatives::Alternative.all
+      @alternatives_list = UpdateAlternatives::Alternative.all.reject(&:empty?)
     end
 
     def dialog_options
