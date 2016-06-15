@@ -98,7 +98,7 @@ describe UpdateAlternatives::Alternative do
       )
     end
 
-    it "changes the alternative's actual choice" do
+    it "changes the alternative's actual choice to given parameter" do
       alternative.choice("/usr/bin/nano")
       expect(alternative.value).to eq "/usr/bin/nano"
     end
@@ -109,14 +109,10 @@ describe UpdateAlternatives::Alternative do
     end
 
     context "if the given choice path doesn't correspond to any of the alternative's choices" do
-      it "do not changes the alternative's actual choice" do
-        alternative.choice("/usr/bin/not-exists")
-        expect(alternative.value).to eq "/usr/bin/vim"
-      end
-
-      it "do not changes the status" do
-        alternative.choice("/usr/bin/not-exists")
-        expect(alternative.status).to eq "auto"
+      it "raises a RuntimeError" do
+        expect { alternative.choice("/usr/bin/not-exists") }.to raise_error(RuntimeError,
+          "The alternative doesn't have any choice with path '/usr/bin/not-exists'"
+        )
       end
     end
   end

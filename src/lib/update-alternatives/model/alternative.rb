@@ -96,14 +96,16 @@ module UpdateAlternatives
     end
 
     def choice(new_choice_path)
-      return unless choices.map(&:path).include?(new_choice_path)
+      unless choices.map(&:path).include?(new_choice_path)
+        raise "The alternative doesn't have any choice with path '#{new_choice_path}'"
+      end
       @value = new_choice_path
       @status = "manual"
     end
 
     def automatic_mode
       @status = "auto"
-      @value = choices.sort { |a, b| b.priority.to_i <=> a.priority.to_i }.first.path
+      @value = choices.sort_by { |choice| choice.priority.to_i }.last.path
     end
 
     private_class_method :all_names, :load_choices_from, :parse_to_map
