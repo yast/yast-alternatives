@@ -95,6 +95,11 @@ module UpdateAlternatives
       false
     end
 
+    def choice(new_choice)
+      @value = new_choice
+      @status = "manual"
+    end
+
     private_class_method :all_names, :load_choices_from, :parse_to_map
     private_class_method :load_choice, :to_map
   end

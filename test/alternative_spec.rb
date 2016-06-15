@@ -84,4 +84,28 @@ describe UpdateAlternatives::Alternative do
       end
     end
   end
+
+  describe "#choice" do
+    subject(:alternative) do
+      UpdateAlternatives::Alternative.new(
+        "editor",
+        "auto",
+        "/usr/bin/vim",
+        [
+          UpdateAlternatives::Alternative::Choice.new("/usr/bin/nano", "20", ""),
+          UpdateAlternatives::Alternative::Choice.new("/usr/bin/vim", "30", "")
+        ]
+      )
+    end
+
+    it "changes the alternative's actual choice" do
+      alternative.choice("/usr/bin/nano")
+      expect(alternative.value).to eq "/usr/bin/nano"
+    end
+
+    it "changes the status to 'manual'" do
+      alternative.choice("/usr/bin/nano")
+      expect(alternative.status).to eq "manual"
+    end
+  end
 end
