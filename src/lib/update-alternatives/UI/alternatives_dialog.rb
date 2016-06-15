@@ -18,6 +18,8 @@
 
 require "yast"
 require "ui/dialog"
+require "update-alternatives/control/set_choice_command"
+require "update-alternatives/control/automatic_mode_command"
 
 Yast.import "UI"
 Yast.import "Label"
@@ -28,8 +30,9 @@ module UpdateAlternatives
     MIN_WIDTH = 60
     MIN_HEIGHT = 20
 
-    def initialize(alternative)
+    def initialize(alternative, commands_list)
       @alternative = alternative
+      @commands_list = commands_list
       @mock_slaves = {
         ed:  "<pre>editor.1.gz /usr/share/man/man1/ed.1.gz</pre>",
         vim: "<pre>editor.1.gz /usr/share/man/man1/vim.1.gz\n" \
@@ -56,13 +59,19 @@ module UpdateAlternatives
       selected_choice = Yast::UI.QueryWidget(Id(:alternatives), :CurrentItem)
       log.info("User selected the alternative: #{selected_choice}")
       @alternative.choice(selected_choice)
-      finish_dialog
+      @commands_list << UpdateAlternatives::SetChoiceCommand.new(@alternative)
+      finish_dialog @commands_list
     end
 
     def auto_handler
       log.info("User selected \"Set automatic mode\" button")
       @alternative.automatic_mode
-      finish_dialog
+      @commands_list << UpdateAlternatives::AutomaticModeCommand.new(@alternative)
+      finish_dialog @commands_list
+    end
+
+    def cancel_handler
+      finish_dialog @commands_list
     end
 
     def alternatives_handler
