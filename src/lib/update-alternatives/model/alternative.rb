@@ -103,7 +103,7 @@ module UpdateAlternatives
 
     def automatic_mode
       @status = "auto"
-      @value = choices.sort { |c| c.priority.to_i }.first.path
+      @value = choices.sort { |a, b| b.priority.to_i <=> a.priority.to_i }.first.path
     end
 
     private_class_method :all_names, :load_choices_from, :parse_to_map

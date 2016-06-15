@@ -129,6 +129,7 @@ describe UpdateAlternatives::Alternative do
         "/usr/bin/nano",
         [
           UpdateAlternatives::Alternative::Choice.new("/usr/bin/nano", "20", ""),
+          UpdateAlternatives::Alternative::Choice.new("/usr/bin/emacs", "40", ""),
           UpdateAlternatives::Alternative::Choice.new("/usr/bin/vim", "30", "")
         ]
       )
@@ -141,7 +142,7 @@ describe UpdateAlternatives::Alternative do
 
     it "changes the actual choice for the choice with highest priority" do
       alternative.automatic_mode
-      expect(alternative.value).to eq "/usr/bin/vim"
+      expect(alternative.value).to eq "/usr/bin/emacs"
     end
   end
 end
