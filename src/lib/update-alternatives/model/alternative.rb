@@ -101,6 +101,11 @@ module UpdateAlternatives
       @status = "manual"
     end
 
+    def automatic_mode
+      @status = "auto"
+      @value = choices.sort { |c| c.priority.to_i }.first.path
+    end
+
     private_class_method :all_names, :load_choices_from, :parse_to_map
     private_class_method :load_choice, :to_map
   end

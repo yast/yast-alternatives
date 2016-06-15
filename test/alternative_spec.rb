@@ -108,7 +108,7 @@ describe UpdateAlternatives::Alternative do
       expect(alternative.status).to eq "manual"
     end
 
-    context "if the given choice path doesn't correspond to any in the alternative's choices list" do
+    context "if the given choice path doesn't correspond to any of the alternative's choices" do
       it "do not changes the alternative's actual choice" do
         alternative.choice("/usr/bin/not-exists")
         expect(alternative.value).to eq "/usr/bin/vim"
@@ -118,6 +118,30 @@ describe UpdateAlternatives::Alternative do
         alternative.choice("/usr/bin/not-exists")
         expect(alternative.status).to eq "auto"
       end
+    end
+  end
+
+  describe "#automatic_mode" do
+    subject(:alternative) do
+      UpdateAlternatives::Alternative.new(
+        "editor",
+        "manual",
+        "/usr/bin/nano",
+        [
+          UpdateAlternatives::Alternative::Choice.new("/usr/bin/nano", "20", ""),
+          UpdateAlternatives::Alternative::Choice.new("/usr/bin/vim", "30", "")
+        ]
+      )
+    end
+
+    it "changes the status to 'auto'" do
+      alternative.automatic_mode
+      expect(alternative.status).to eq "auto"
+    end
+
+    it "changes the actual choice for the choice with highest priority" do
+      alternative.automatic_mode
+      expect(alternative.value).to eq "/usr/bin/vim"
     end
   end
 end
