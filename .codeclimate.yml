@@ -11,5 +11,5 @@ engines:
     enabled: false
 ratings:
   paths:
-  - "**.rb"
+  - "src/**.rb"
 exclude_paths: []
