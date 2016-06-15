@@ -95,8 +95,9 @@ module UpdateAlternatives
       false
     end
 
-    def choice(new_choice)
-      @value = new_choice
+    def choice(new_choice_path)
+      return unless choices.map(&:path).include?(new_choice_path)
+      @value = new_choice_path
       @status = "manual"
     end
 

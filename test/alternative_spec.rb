@@ -107,5 +107,17 @@ describe UpdateAlternatives::Alternative do
       alternative.choice("/usr/bin/nano")
       expect(alternative.status).to eq "manual"
     end
+
+    context "if the given choice path doesn't correspond to any in the alternative's choices list" do
+      it "do not changes the alternative's actual choice" do
+        alternative.choice("/usr/bin/not-exists")
+        expect(alternative.value).to eq "/usr/bin/vim"
+      end
+
+      it "do not changes the status" do
+        alternative.choice("/usr/bin/not-exists")
+        expect(alternative.status).to eq "auto"
+      end
+    end
   end
 end
