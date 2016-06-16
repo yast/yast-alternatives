@@ -35,8 +35,8 @@ module UpdateAlternatives
     Choice = Struct.new(:path, :priority, :slaves)
 
     STATUS_COMMANDS = {
-      "auto"    =>  UpdateAlternatives::AutomaticModeCommand,
-      "manual"  =>  UpdateAlternatives::SetChoiceCommand
+      "auto"   => UpdateAlternatives::AutomaticModeCommand,
+      "manual" => UpdateAlternatives::SetChoiceCommand
     }
     STATUS_COMMANDS.default_proc = ->(_h, k) { raise "unknown status '#{k}'" }
 
