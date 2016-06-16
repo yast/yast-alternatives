@@ -85,7 +85,7 @@ describe UpdateAlternatives::Alternative do
     end
   end
 
-  describe "#choice" do
+  describe "#choose!" do
     subject(:alternative) do
       UpdateAlternatives::Alternative.new(
         "editor",
@@ -99,25 +99,25 @@ describe UpdateAlternatives::Alternative do
     end
 
     it "changes the alternative's actual choice to given parameter" do
-      alternative.choice("/usr/bin/nano")
+      alternative.choose!("/usr/bin/nano")
       expect(alternative.value).to eq "/usr/bin/nano"
     end
 
     it "changes the status to 'manual'" do
-      alternative.choice("/usr/bin/nano")
+      alternative.choose!("/usr/bin/nano")
       expect(alternative.status).to eq "manual"
     end
 
     context "if the given choice path doesn't correspond to any of the alternative's choices" do
       it "raises a RuntimeError" do
-        expect { alternative.choice("/usr/bin/not-exists") }.to raise_error(RuntimeError,
+        expect { alternative.choose!("/usr/bin/not-exists") }.to raise_error(RuntimeError,
           "The alternative doesn't have any choice with path '/usr/bin/not-exists'"
         )
       end
     end
   end
 
-  describe "#automatic_mode" do
+  describe "#automatic_mode!" do
     subject(:alternative) do
       UpdateAlternatives::Alternative.new(
         "editor",
@@ -132,12 +132,12 @@ describe UpdateAlternatives::Alternative do
     end
 
     it "changes the status to 'auto'" do
-      alternative.automatic_mode
+      alternative.automatic_mode!
       expect(alternative.status).to eq "auto"
     end
 
     it "changes the actual choice for the choice with highest priority" do
-      alternative.automatic_mode
+      alternative.automatic_mode!
       expect(alternative.value).to eq "/usr/bin/emacs"
     end
   end
@@ -155,7 +155,7 @@ describe UpdateAlternatives::Alternative do
     context "if the alternative's selected choice has changed" do
       subject(:alternative) { editor_alternative_automatic_mode }
       it "execute a SetChoiceCommand" do
-        alternative.choice("/usr/bin/nano")
+        alternative.choose!("/usr/bin/nano")
         expect(UpdateAlternatives::SetChoiceCommand).to receive(:execute).with(alternative)
         alternative.save
       end
@@ -165,7 +165,7 @@ describe UpdateAlternatives::Alternative do
       subject(:alternative) { editor_alternative_manual_mode }
 
       it "execute an AutomaticModeCommand" do
-        alternative.automatic_mode
+        alternative.automatic_mode!
         expect(UpdateAlternatives::AutomaticModeCommand).to receive(:execute).with(alternative)
         alternative.save
       end
@@ -174,8 +174,8 @@ describe UpdateAlternatives::Alternative do
     context "if the alternative is modified more than once" do
       subject(:alternative) { editor_alternative_automatic_mode }
       it "only execute the last change" do
-        alternative.choice("/usr/bin/nano")
-        alternative.automatic_mode
+        alternative.choose!("/usr/bin/nano")
+        alternative.automatic_mode!
         expect(UpdateAlternatives::SetChoiceCommand).not_to receive(:execute)
         expect(UpdateAlternatives::AutomaticModeCommand).to receive(:execute).with(alternative)
         alternative.save

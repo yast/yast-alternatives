@@ -55,13 +55,13 @@ module UpdateAlternatives
     def set_handler
       selected_choice = Yast::UI.QueryWidget(Id(:alternatives), :CurrentItem)
       log.info("User selected the alternative: #{selected_choice}")
-      @alternative.choice(selected_choice)
+      @alternative.choose!(selected_choice)
       finish_dialog
     end
 
     def auto_handler
       log.info("User selected \"Set automatic mode\" button")
-      @alternative.automatic_mode
+      @alternative.automatic_mode!
       finish_dialog
     end
 

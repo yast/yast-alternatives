@@ -104,8 +104,8 @@ module UpdateAlternatives
       false
     end
 
-    def choice(new_choice_path)
-      unless choices.map(&:path).include?(new_choice_path)
+    def choose!(new_choice_path)
+      if !choices.map(&:path).include?(new_choice_path)
         raise "The alternative doesn't have any choice with path '#{new_choice_path}'"
       end
       @value = new_choice_path
@@ -113,7 +113,7 @@ module UpdateAlternatives
       @modified = true
     end
 
-    def automatic_mode
+    def automatic_mode!
       @status = "auto"
       @value = choices.sort_by { |choice| choice.priority.to_i }.last.path
       @modified = true
