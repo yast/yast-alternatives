@@ -48,6 +48,7 @@ module UpdateAlternatives
     end
 
     def accept_handler
+      @alternatives_list.each(&:save)
       finish_dialog
     end
 
