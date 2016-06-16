@@ -23,7 +23,7 @@ describe UpdateAlternatives::SetChoiceCommand do
         "editor",
         "/usr/bin/nano"
       )
-      UpdateAlternatives::SetChoiceCommand.new(alternative).execute
+      UpdateAlternatives::SetChoiceCommand.execute(alternative)
     end
   end
 end
@@ -44,7 +44,7 @@ describe UpdateAlternatives::AutomaticModeCommand do
   describe "#execute" do
     it "set the automatic mode for given alternative on the system" do
       expect(Cheetah).to receive(:run).with("update-alternatives", "--auto", "editor")
-      UpdateAlternatives::AutomaticModeCommand.new(alternative).execute
+      UpdateAlternatives::AutomaticModeCommand.execute(alternative)
     end
   end
 end

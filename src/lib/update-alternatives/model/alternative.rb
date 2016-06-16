@@ -34,6 +34,12 @@ module UpdateAlternatives
     # Represents a Choice of an alternative.
     Choice = Struct.new(:path, :priority, :slaves)
 
+    STATUS_COMMANDS = {
+      "auto"    =>  UpdateAlternatives::AutomaticModeCommand,
+      "manual"  =>  UpdateAlternatives::SetChoiceCommand
+    }
+    STATUS_COMMANDS.default_proc = ->(_h, k) { raise "unknown status '#{k}'" }
+
     # Creates a new Alternative with the given parameters.
     def initialize(name, status, value, choices)
       @name = name
@@ -115,11 +121,7 @@ module UpdateAlternatives
 
     def save
       return unless @modified
-      if @status == "auto"
-        UpdateAlternatives::AutomaticModeCommand.new(self).execute
-      else
-        UpdateAlternatives::SetChoiceCommand.new(self).execute
-      end
+      STATUS_COMMANDS[@status].execute(self)
     end
 
     private_class_method :all_names, :load_choices_from, :parse_to_map

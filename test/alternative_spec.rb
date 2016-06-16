@@ -146,8 +146,8 @@ describe UpdateAlternatives::Alternative do
     context "if the alternative is not modificated" do
       subject(:alternative) { editor_alternative_automatic_mode }
       it "do not execute any command" do
-        expect_any_instance_of(UpdateAlternatives::SetChoiceCommand).not_to receive(:execute)
-        expect_any_instance_of(UpdateAlternatives::AutomaticModeCommand).not_to receive(:execute)
+        expect(UpdateAlternatives::SetChoiceCommand).not_to receive(:execute)
+        expect(UpdateAlternatives::AutomaticModeCommand).not_to receive(:execute)
         alternative.save
       end
     end
@@ -156,7 +156,7 @@ describe UpdateAlternatives::Alternative do
       subject(:alternative) { editor_alternative_automatic_mode }
       it "execute a SetChoiceCommand" do
         alternative.choice("/usr/bin/nano")
-        expect_any_instance_of(UpdateAlternatives::SetChoiceCommand).to receive(:execute)
+        expect(UpdateAlternatives::SetChoiceCommand).to receive(:execute).with(alternative)
         alternative.save
       end
     end
@@ -166,7 +166,7 @@ describe UpdateAlternatives::Alternative do
 
       it "execute an AutomaticModeCommand" do
         alternative.automatic_mode
-        expect_any_instance_of(UpdateAlternatives::AutomaticModeCommand).to receive(:execute)
+        expect(UpdateAlternatives::AutomaticModeCommand).to receive(:execute).with(alternative)
         alternative.save
       end
     end
@@ -176,8 +176,8 @@ describe UpdateAlternatives::Alternative do
       it "only execute the last change" do
         alternative.choice("/usr/bin/nano")
         alternative.automatic_mode
-        expect_any_instance_of(UpdateAlternatives::SetChoiceCommand).not_to receive(:execute)
-        expect_any_instance_of(UpdateAlternatives::AutomaticModeCommand).to receive(:execute)
+        expect(UpdateAlternatives::SetChoiceCommand).not_to receive(:execute)
+        expect(UpdateAlternatives::AutomaticModeCommand).to receive(:execute).with(alternative)
         alternative.save
       end
     end

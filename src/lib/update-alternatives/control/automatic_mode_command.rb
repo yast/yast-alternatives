@@ -21,12 +21,8 @@ require "cheetah"
 module UpdateAlternatives
   # Command to set an alternative in automatic mode.
   class AutomaticModeCommand
-    def initialize(alternative)
-      @alternative = alternative
-    end
-
-    def execute
-      Cheetah.run("update-alternatives", "--auto", @alternative.name)
+    def self.execute(alternative)
+      Cheetah.run("update-alternatives", "--auto", alternative.name)
     end
   end
 end

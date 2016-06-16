@@ -21,12 +21,8 @@ require "cheetah"
 module UpdateAlternatives
   # Command to change the selected choice of an alternative.
   class SetChoiceCommand
-    def initialize(alternative)
-      @alternative = alternative
-    end
-
-    def execute
-      Cheetah.run("update-alternatives", "--set", @alternative.name, @alternative.value)
+    def self.execute(alternative)
+      Cheetah.run("update-alternatives", "--set", alternative.name, alternative.value)
     end
   end
 end
