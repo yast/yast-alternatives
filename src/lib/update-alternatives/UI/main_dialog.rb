@@ -28,7 +28,6 @@ module UpdateAlternatives
   class MainDialog < UI::Dialog
     def initialize
       @alternatives_list = UpdateAlternatives::Alternative.all.reject(&:empty?)
-      @commands_list = []
     end
 
     def dialog_options
@@ -44,12 +43,11 @@ module UpdateAlternatives
 
     def show_alternatives_handler
       index = Yast::UI.QueryWidget(Id(:alternatives_table), :CurrentItem)
-      @commands_list = AlternativesDialog.new(@alternatives_list[index], @commands_list).run
+      AlternativesDialog.new(@alternatives_list[index]).run
       Yast::UI.ChangeWidget(Id(:alternatives_table), :Items, map_alternatives_items)
     end
 
     def accept_handler
-      @commands_list.each(&:execute)
       finish_dialog
     end
 

@@ -17,6 +17,8 @@
 #  you may find current contact information at www.suse.com
 
 require "cheetah"
+require "update-alternatives/control/set_choice_command"
+require "update-alternatives/control/automatic_mode_command"
 
 module UpdateAlternatives
   # Represents an alternative
@@ -38,6 +40,7 @@ module UpdateAlternatives
       @status = status
       @value = value
       @choices = choices
+      @modified = false
     end
 
     # @return [Array<String>] an array with the names of the alternatives.
@@ -101,11 +104,22 @@ module UpdateAlternatives
       end
       @value = new_choice_path
       @status = "manual"
+      @modified = true
     end
 
     def automatic_mode
       @status = "auto"
       @value = choices.sort_by { |choice| choice.priority.to_i }.last.path
+      @modified = true
+    end
+
+    def save
+      return unless @modified
+      if @status == "auto"
+        UpdateAlternatives::AutomaticModeCommand.new(self).execute
+      else
+        UpdateAlternatives::SetChoiceCommand.new(self).execute
+      end
     end
 
     private_class_method :all_names, :load_choices_from, :parse_to_map

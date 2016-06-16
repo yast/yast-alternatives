@@ -141,4 +141,45 @@ describe UpdateAlternatives::Alternative do
       expect(alternative.value).to eq "/usr/bin/emacs"
     end
   end
+
+  describe "#save" do
+    context "if the alternative is not modificated" do
+      subject(:alternative) { editor_alternative_automatic_mode }
+      it "do not execute any command" do
+        expect_any_instance_of(UpdateAlternatives::SetChoiceCommand).not_to receive(:execute)
+        expect_any_instance_of(UpdateAlternatives::AutomaticModeCommand).not_to receive(:execute)
+        alternative.save
+      end
+    end
+
+    context "if the alternative's selected choice has changed" do
+      subject(:alternative) { editor_alternative_automatic_mode }
+      it "execute a SetChoiceCommand" do
+        alternative.choice("/usr/bin/nano")
+        expect_any_instance_of(UpdateAlternatives::SetChoiceCommand).to receive(:execute)
+        alternative.save
+      end
+    end
+
+    context "if the alternative's stastus has changed to automatic mode" do
+      subject(:alternative) { editor_alternative_manual_mode }
+
+      it "execute an AutomaticModeCommand" do
+        alternative.automatic_mode
+        expect_any_instance_of(UpdateAlternatives::AutomaticModeCommand).to receive(:execute)
+        alternative.save
+      end
+    end
+
+    context "if the alternative is modified more than once" do
+      subject(:alternative) { editor_alternative_automatic_mode }
+      it "only execute the last change" do
+        alternative.choice("/usr/bin/nano")
+        alternative.automatic_mode
+        expect_any_instance_of(UpdateAlternatives::SetChoiceCommand).not_to receive(:execute)
+        expect_any_instance_of(UpdateAlternatives::AutomaticModeCommand).to receive(:execute)
+        alternative.save
+      end
+    end
+  end
 end
