@@ -94,19 +94,18 @@ module UpdateAlternatives
     end
 
     def self.to_map(choice_data)
+      path, priority, *slaves = choice_data
       {
-        path:     choice_data[0].split.last,
-        priority: choice_data[1].split.last,
-        slaves:   parse_slaves(choice_data[3..choice_data.length])
+        path:     path.split.last,
+        priority: priority.split.last,
+        slaves:   parse_slaves(slaves)
       }
     end
 
     def self.parse_slaves(slaves_data)
-      if slaves_data
-        slaves_data.reject { |line| line == "\n" }.map(&:lstrip).join
-      else
-        ""
-      end
+      slaves_data.delete("\n")
+      slaves_data.delete("Slaves:\n")
+      slaves_data.map(&:lstrip).join
     end
 
     def empty?

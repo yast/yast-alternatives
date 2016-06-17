@@ -59,7 +59,7 @@ module UpdateAlternatives
 
     def alternatives_handler
       selected_choice = Yast::UI.QueryWidget(Id(:alternatives), :CurrentItem)
-      choice = @alternative.choices.select { |e| e.path == selected_choice }.first
+      choice = @alternative.choices.find { |e| e.path == selected_choice }
       slaves = "<pre>" + choice.slaves + "</pre>"
       Yast::UI.ChangeWidget(Id(:slaves), :Value, slaves)
     end

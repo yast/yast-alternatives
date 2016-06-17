@@ -35,7 +35,7 @@ describe UpdateAlternatives::Alternative do
       )
     end
 
-    it "initializes the slaves of every choice" do
+    it "initializes slaves for each choice" do
       alternative_with_slaves_stub
       expect(alternative_with_slaves.choices).to eq alternative_with_slaves_expected_choices
     end
