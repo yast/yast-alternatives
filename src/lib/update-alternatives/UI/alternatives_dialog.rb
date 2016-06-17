@@ -30,14 +30,6 @@ module UpdateAlternatives
 
     def initialize(alternative)
       @alternative = alternative
-      @mock_slaves = {
-        ed:  "<pre>editor.1.gz /usr/share/man/man1/ed.1.gz</pre>",
-        vim: "<pre>editor.1.gz /usr/share/man/man1/vim.1.gz\n" \
-             "editor.fr.1.gz /usr/share/man/fr/man1/vim.1.gz\n" \
-             "editor.it.1.gz /usr/share/man/it/man1/vim.1.gz\n" \
-             "editor.pl.1.gz /usr/share/man/pl/man1/vim.1.gz\n" \
-             "editor.ru.1.gz /usr/share/man/ru/man1/vim.1.gz</pre>"
-      }
     end
 
     def dialog_content
@@ -66,8 +58,10 @@ module UpdateAlternatives
     end
 
     def alternatives_handler
-      selected_alternative = Yast::UI.QueryWidget(Id(:alternatives), :CurrentItem)
-      Yast::UI.ChangeWidget(Id(:slaves), :Value, @mock_slaves[selected_alternative])
+      selected_choice = Yast::UI.QueryWidget(Id(:alternatives), :CurrentItem)
+      choice = @alternative.choices.select { |e| e.path == selected_choice }.first
+      slaves = "<pre>" + choice.slaves + "</pre>"
+      Yast::UI.ChangeWidget(Id(:slaves), :Value, slaves)
     end
 
     def create_alternatives_table
