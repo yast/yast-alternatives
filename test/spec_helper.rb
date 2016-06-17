@@ -157,3 +157,27 @@ def some_alternatives_some_without_choices_stub
       "Value: none\n"
   )
 end
+
+def editor_alternative_automatic_mode
+  UpdateAlternatives::Alternative.new(
+    "editor",
+    "auto",
+    "/usr/bin/vim",
+    [
+      UpdateAlternatives::Alternative::Choice.new("/usr/bin/nano", "20", ""),
+      UpdateAlternatives::Alternative::Choice.new("/usr/bin/vim", "30", "")
+    ]
+  )
+end
+
+def editor_alternative_manual_mode
+  UpdateAlternatives::Alternative.new(
+    "editor",
+    "manual",
+    "/usr/bin/nano",
+    [
+      UpdateAlternatives::Alternative::Choice.new("/usr/bin/nano", "20", ""),
+      UpdateAlternatives::Alternative::Choice.new("/usr/bin/vim", "30", "")
+    ]
+  )
+end

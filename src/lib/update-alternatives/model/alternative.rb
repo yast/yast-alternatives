@@ -17,6 +17,8 @@
 #  you may find current contact information at www.suse.com
 
 require "cheetah"
+require "update-alternatives/control/set_choice_command"
+require "update-alternatives/control/automatic_mode_command"
 
 module UpdateAlternatives
   # Represents an alternative
@@ -32,12 +34,19 @@ module UpdateAlternatives
     # Represents a Choice of an alternative.
     Choice = Struct.new(:path, :priority, :slaves)
 
+    STATUS_COMMANDS = {
+      "auto"   => UpdateAlternatives::AutomaticModeCommand,
+      "manual" => UpdateAlternatives::SetChoiceCommand
+    }
+    STATUS_COMMANDS.default_proc = ->(_h, k) { raise "unknown status '#{k}'" }
+
     # Creates a new Alternative with the given parameters.
     def initialize(name, status, value, choices)
       @name = name
       @status = status
       @value = value
       @choices = choices
+      @modified = false
     end
 
     # @return [Array<String>] an array with the names of the alternatives.
@@ -93,6 +102,26 @@ module UpdateAlternatives
 
     def empty?
       false
+    end
+
+    def choose!(new_choice_path)
+      if !choices.map(&:path).include?(new_choice_path)
+        raise "The alternative doesn't have any choice with path '#{new_choice_path}'"
+      end
+      @value = new_choice_path
+      @status = "manual"
+      @modified = true
+    end
+
+    def automatic_mode!
+      @status = "auto"
+      @value = choices.sort_by { |choice| choice.priority.to_i }.last.path
+      @modified = true
+    end
+
+    def save
+      return unless @modified
+      STATUS_COMMANDS[@status].execute(self)
     end
 
     private_class_method :all_names, :load_choices_from, :parse_to_map
