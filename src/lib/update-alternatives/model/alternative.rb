@@ -90,14 +90,23 @@ module UpdateAlternatives
 
     def self.load_choice(data)
       map = to_map(data)
-      Choice.new(map[:path], map[:priority], "")
+      Choice.new(map[:path], map[:priority], map[:slaves])
     end
 
     def self.to_map(choice_data)
       {
         path:     choice_data[0].split.last,
-        priority: choice_data[1].split.last
+        priority: choice_data[1].split.last,
+        slaves:   parse_slaves(choice_data[3..choice_data.length])
       }
+    end
+
+    def self.parse_slaves(slaves_data)
+      if slaves_data
+        slaves_data.reject { |line| line == "\n" }.map(&:lstrip).join
+      else
+        ""
+      end
     end
 
     def empty?

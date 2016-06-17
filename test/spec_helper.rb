@@ -181,3 +181,53 @@ def editor_alternative_manual_mode
     ]
   )
 end
+
+def alternative_with_slaves_stub
+  allow(Cheetah).to receive(:run).with(
+    "update-alternatives", "--query", "editor", stdout: :capture
+  ).and_return(
+    "Name: editor\n" \
+      "Link: /usr/bin/editor\n" \
+      "Slaves:\n" \
+      " editor.1.gz /usr/share/man/man1/editor.1.gz\n" \
+      " editor.fr.1.gz /usr/share/man/fr/man1/editor.1.gz\n" \
+      " editor.it.1.gz /usr/share/man/it/man1/editor.1.gz\n" \
+      " editor.pl.1.gz /usr/share/man/pl/man1/editor.1.gz\n" \
+      " editor.ru.1.gz /usr/share/man/ru/man1/editor.1.gz\n" \
+      "Status: auto\n" \
+      "Best: /usr/bin/vim.basic\n" \
+      "Value: /usr/bin/vim.basic\n" \
+      "\n" \
+      "Alternative: /bin/ed\n" \
+      "Priority: -100\n" \
+      "Slaves:\n" \
+      " editor.1.gz /usr/share/man/man1/ed.1.gz\n" \
+      "\n" \
+      "Alternative: /usr/bin/vim.basic\n" \
+      "Priority: 50\n" \
+      "Slaves:\n" \
+      " editor.1.gz /usr/share/man/man1/vim.1.gz\n" \
+      " editor.fr.1.gz /usr/share/man/fr/man1/vim.1.gz\n" \
+      " editor.it.1.gz /usr/share/man/it/man1/vim.1.gz\n" \
+      " editor.pl.1.gz /usr/share/man/pl/man1/vim.1.gz\n" \
+      " editor.ru.1.gz /usr/share/man/ru/man1/vim.1.gz\n" \
+  )
+end
+
+def alternative_with_slaves_expected_choices
+  [
+    UpdateAlternatives::Alternative::Choice.new("/bin/ed",
+      "-100",
+      "editor.1.gz /usr/share/man/man1/ed.1.gz\n"
+    ),
+    UpdateAlternatives::Alternative::Choice.new(
+      "/usr/bin/vim.basic",
+      "50",
+      "editor.1.gz /usr/share/man/man1/vim.1.gz\n" \
+      "editor.fr.1.gz /usr/share/man/fr/man1/vim.1.gz\n" \
+      "editor.it.1.gz /usr/share/man/it/man1/vim.1.gz\n" \
+      "editor.pl.1.gz /usr/share/man/pl/man1/vim.1.gz\n" \
+      "editor.ru.1.gz /usr/share/man/ru/man1/vim.1.gz\n"
+    )
+  ]
+end
