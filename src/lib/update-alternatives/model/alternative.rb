@@ -134,7 +134,7 @@ module UpdateAlternatives
     end
 
     private_class_method :all_names, :load_choices_from, :parse_to_map
-    private_class_method :load_choice, :to_map
+    private_class_method :load_choice, :to_map, :parse_slaves
   end
   # Represents an alternative without any choice
   class EmptyAlternative < Alternative
