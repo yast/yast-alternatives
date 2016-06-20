@@ -92,12 +92,10 @@ module UpdateAlternatives
     end
 
     def filtered_alternatives
-      alternatives = @alternatives_list.select { |a| Regexp.new(@search).match(a.name) }
-      if @multi_choice_only
-        alternatives.each_with_index.select { |v, _i| v.choices.length > 1 }
-      else
-        alternatives.each_with_index
-      end
+      alternatives = @alternatives_list.each_with_index
+      alternatives = alternatives.select { |a, _i| a.choices.length > 1 } if @multi_choice_only
+      alternatives = alternatives.select { |a, _i| a.name.include?(@search) } unless @search.empty?
+      alternatives
     end
 
     def filters
@@ -106,7 +104,7 @@ module UpdateAlternatives
         CheckBox(
           Id(:multi_choice_only),
           Opt(:notify),
-          _("Filter alternatives with one choice"),
+          _("Show only alternatives with more than one choice"),
           @multi_choice_only
         )
       )
