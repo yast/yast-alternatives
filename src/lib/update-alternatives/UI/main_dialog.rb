@@ -28,6 +28,7 @@ module UpdateAlternatives
   class MainDialog < UI::Dialog
     def initialize
       @alternatives_list = UpdateAlternatives::Alternative.all.reject(&:empty?)
+      @one_choice_filter = true
     end
 
     def dialog_options
@@ -36,6 +37,7 @@ module UpdateAlternatives
 
     def dialog_content
       VBox(
+        filters,
         create_table,
         footer
       )
@@ -44,7 +46,7 @@ module UpdateAlternatives
     def show_alternatives_handler
       index = Yast::UI.QueryWidget(Id(:alternatives_table), :CurrentItem)
       AlternativesDialog.new(@alternatives_list[index]).run
-      Yast::UI.ChangeWidget(Id(:alternatives_table), :Items, map_alternatives_items)
+      redraw_table
     end
 
     def accept_handler
@@ -53,6 +55,15 @@ module UpdateAlternatives
     end
 
     alias_method :alternatives_table_handler, :show_alternatives_handler
+
+    def one_choice_filter_handler
+      @one_choice_filter = Yast::UI.QueryWidget(Id(:one_choice_filter), :Value)
+      redraw_table
+    end
+
+    def redraw_table
+      Yast::UI.ChangeWidget(Id(:alternatives_table), :Items, map_alternatives_items)
+    end
 
     def create_table
       Table(
@@ -64,7 +75,7 @@ module UpdateAlternatives
     end
 
     def map_alternatives_items
-      @alternatives_list.each_with_index.map do |alternative, index|
+      apply_filters.map do |alternative, index|
         Item(
           Id(index),
           alternative.name,
@@ -72,6 +83,18 @@ module UpdateAlternatives
           _(alternative.status)
         )
       end
+    end
+
+    def apply_filters
+      if @one_choice_filter
+        @alternatives_list.each_with_index.select { |v, _i| v.choices.length > 1 }
+      else
+        @alternatives_list.each_with_index
+      end
+    end
+
+    def filters
+      CheckBox(Id(:one_choice_filter), Opt(:notify), "Filter alternatives with one choice", true)
     end
 
     def footer
