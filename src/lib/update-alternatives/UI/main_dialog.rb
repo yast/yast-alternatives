@@ -28,7 +28,8 @@ module UpdateAlternatives
   class MainDialog < UI::Dialog
     def initialize
       @alternatives_list = UpdateAlternatives::Alternative.all.reject(&:empty?)
-      @one_choice_filter = true
+      @multi_choice_only = true
+      @search = ""
     end
 
     def dialog_options
@@ -56,8 +57,13 @@ module UpdateAlternatives
 
     alias_method :alternatives_table_handler, :show_alternatives_handler
 
-    def one_choice_filter_handler
-      @one_choice_filter = Yast::UI.QueryWidget(Id(:one_choice_filter), :Value)
+    def multi_choice_only_handler
+      @multi_choice_only = Yast::UI.QueryWidget(Id(:multi_choice_only), :Value)
+      redraw_table
+    end
+
+    def search_handler
+      @search = Yast::UI.QueryWidget(Id(:search), :Value)
       redraw_table
     end
 
@@ -75,7 +81,7 @@ module UpdateAlternatives
     end
 
     def map_alternatives_items
-      apply_filters.map do |alternative, index|
+      filtered_alternatives.map do |alternative, index|
         Item(
           Id(index),
           alternative.name,
@@ -85,16 +91,25 @@ module UpdateAlternatives
       end
     end
 
-    def apply_filters
-      if @one_choice_filter
-        @alternatives_list.each_with_index.select { |v, _i| v.choices.length > 1 }
+    def filtered_alternatives
+      alternatives = @alternatives_list.select { |a| Regexp.new(@search).match(a.name) }
+      if @multi_choice_only
+        alternatives.each_with_index.select { |v, _i| v.choices.length > 1 }
       else
-        @alternatives_list.each_with_index
+        alternatives.each_with_index
       end
     end
 
     def filters
-      CheckBox(Id(:one_choice_filter), Opt(:notify), "Filter alternatives with one choice", true)
+      VBox(
+        InputField(Id(:search), Opt(:notify), _("Search by name"), @search),
+        CheckBox(
+          Id(:multi_choice_only),
+          Opt(:notify),
+          _("Filter alternatives with one choice"),
+          @multi_choice_only
+        )
+      )
     end
 
     def footer
