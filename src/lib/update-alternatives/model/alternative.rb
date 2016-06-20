@@ -90,14 +90,22 @@ module UpdateAlternatives
 
     def self.load_choice(data)
       map = to_map(data)
-      Choice.new(map[:path], map[:priority], "")
+      Choice.new(map[:path], map[:priority], map[:slaves])
     end
 
     def self.to_map(choice_data)
+      path, priority, *slaves = choice_data
       {
-        path:     choice_data[0].split.last,
-        priority: choice_data[1].split.last
+        path:     path.split.last,
+        priority: priority.split.last,
+        slaves:   parse_slaves(slaves)
       }
+    end
+
+    def self.parse_slaves(slaves_data)
+      slaves_data.delete("\n")
+      slaves_data.delete("Slaves:\n")
+      slaves_data.map(&:lstrip).join
     end
 
     def empty?
@@ -125,7 +133,7 @@ module UpdateAlternatives
     end
 
     private_class_method :all_names, :load_choices_from, :parse_to_map
-    private_class_method :load_choice, :to_map
+    private_class_method :load_choice, :to_map, :parse_slaves
   end
   # Represents an alternative without any choice
   class EmptyAlternative < Alternative

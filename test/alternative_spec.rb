@@ -5,6 +5,7 @@ describe UpdateAlternatives::Alternative do
 
   describe ".load" do
     subject(:loaded_alternative) { UpdateAlternatives::Alternative.load("pip") }
+    subject(:alternative_with_slaves) { UpdateAlternatives::Alternative.load("editor") }
 
     it "returns an Alternative object" do
       alternatives_pip_stub
@@ -32,6 +33,11 @@ describe UpdateAlternatives::Alternative do
       expect(loaded_alternative).to have_attributes(
         choices: expected_choices
       )
+    end
+
+    it "initializes slaves for each choice" do
+      alternative_with_slaves_stub
+      expect(alternative_with_slaves.choices).to eq alternative_with_slaves_expected_choices
     end
 
     context "if there are a choice without slaves" do
