@@ -28,6 +28,8 @@ module UpdateAlternatives
   class MainDialog < UI::Dialog
     def initialize
       @alternatives_list = UpdateAlternatives::Alternative.all.reject(&:empty?)
+      @multi_choice_only = true
+      @search = ""
     end
 
     def dialog_options
@@ -36,6 +38,7 @@ module UpdateAlternatives
 
     def dialog_content
       VBox(
+        filters,
         create_table,
         footer
       )
@@ -44,7 +47,7 @@ module UpdateAlternatives
     def show_alternatives_handler
       index = Yast::UI.QueryWidget(Id(:alternatives_table), :CurrentItem)
       AlternativesDialog.new(@alternatives_list[index]).run
-      Yast::UI.ChangeWidget(Id(:alternatives_table), :Items, map_alternatives_items)
+      redraw_table
     end
 
     def accept_handler
@@ -53,6 +56,20 @@ module UpdateAlternatives
     end
 
     alias_method :alternatives_table_handler, :show_alternatives_handler
+
+    def multi_choice_only_handler
+      @multi_choice_only = Yast::UI.QueryWidget(Id(:multi_choice_only), :Value)
+      redraw_table
+    end
+
+    def search_handler
+      @search = Yast::UI.QueryWidget(Id(:search), :Value)
+      redraw_table
+    end
+
+    def redraw_table
+      Yast::UI.ChangeWidget(Id(:alternatives_table), :Items, map_alternatives_items)
+    end
 
     def create_table
       Table(
@@ -64,7 +81,7 @@ module UpdateAlternatives
     end
 
     def map_alternatives_items
-      @alternatives_list.each_with_index.map do |alternative, index|
+      filtered_alternatives.map do |alternative, index|
         Item(
           Id(index),
           alternative.name,
@@ -72,6 +89,25 @@ module UpdateAlternatives
           _(alternative.status)
         )
       end
+    end
+
+    def filtered_alternatives
+      alternatives = @alternatives_list.each_with_index
+      alternatives = alternatives.select { |a, _i| a.choices.length > 1 } if @multi_choice_only
+      alternatives = alternatives.select { |a, _i| a.name.include?(@search) } unless @search.empty?
+      alternatives
+    end
+
+    def filters
+      VBox(
+        InputField(Id(:search), Opt(:notify), _("Search by name"), @search),
+        CheckBox(
+          Id(:multi_choice_only),
+          Opt(:notify),
+          _("Show only alternatives with more than one choice"),
+          @multi_choice_only
+        )
+      )
     end
 
     def footer
