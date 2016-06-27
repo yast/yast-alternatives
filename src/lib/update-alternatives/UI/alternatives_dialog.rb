@@ -37,6 +37,7 @@ module UpdateAlternatives
         MIN_WIDTH,
         MIN_HEIGHT,
         VBox(
+          alternative_information,
           create_alternatives_table,
           RichText(Id(:slaves), _("Please select an alternative to view his slaves.")),
           footer
@@ -84,6 +85,17 @@ module UpdateAlternatives
         PushButton(Id(:set), _("Set alternative")),
         PushButton(Id(:auto), _("Set automatic mode")),
         PushButton(Id(:cancel), Yast::Label.CancelButton)
+      )
+    end
+
+    def alternative_information
+      HBox(
+        HSpacing(),
+        VBox(
+          Left(HBox(Label(_("Name:")), Label(@alternative.name))),
+          Left(HBox(Label(_("Status:")), Label(@alternative.status))),
+          Left(HBox(Label(_("Actual alternative:")), Label(@alternative.value)))
+        )
       )
     end
   end
