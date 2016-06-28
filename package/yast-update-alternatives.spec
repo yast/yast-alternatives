@@ -25,7 +25,7 @@ Group:          System/Yast
 Source0:        %{name}-%{version}.tar.bz2
 BuildRequires:  yast2
 BuildRequires:  yast2-devtools
-BuildRequires:  yast-ruby-bindings
+BuildRequires:  yast2-ruby-bindings
 # For install
 BuildRequires:  rubygem(yast-rake)
 # For test
