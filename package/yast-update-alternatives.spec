@@ -52,6 +52,7 @@ rake install DESTDIR=%{buildroot}
 %files
 %defattr(-,root,root)
 %{yast_dir}/clients/*.rb
+%{yast_dir}/lib/update-alternatives/
 %{yast_dir}/lib/update-alternatives/model
 %{yast_dir}/lib/update-alternatives/control
 %{yast_dir}/lib/update-alternatives/UI
