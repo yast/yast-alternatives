@@ -39,7 +39,7 @@ module UpdateAlternatives
         VBox(
           alternative_information,
           create_alternatives_table,
-          RichText(Id(:slaves), _("Please select an alternative to view his slaves.")),
+          RichText(Id(:slaves), "<pre>#{@alternative.choices.first.slaves}</pre>"),
           footer
         )
       )
