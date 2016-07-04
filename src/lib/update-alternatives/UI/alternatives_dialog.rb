@@ -39,10 +39,16 @@ module UpdateAlternatives
         VBox(
           alternative_information,
           create_alternatives_table,
-          RichText(Id(:slaves), _("Please select an alternative to view his slaves.")),
+          RichText(Id(:slaves), ""),
           footer
         )
       )
+    end
+
+    def event_loop
+      Yast::UI.ChangeWidget(Id(:alternatives), :CurrentItem, Id(@alternative.value))
+      alternatives_handler
+      super
     end
 
     def set_handler
