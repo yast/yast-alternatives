@@ -18,7 +18,7 @@
 
 require "yast"
 require "ui/dialog"
-require "update-alternatives/UI/alternatives_dialog"
+require "update-alternatives/UI/alternative_dialog"
 require "update-alternatives/model/alternative"
 
 Yast.import "UI"
@@ -46,7 +46,7 @@ module UpdateAlternatives
 
     def show_alternatives_handler
       index = Yast::UI.QueryWidget(Id(:alternatives_table), :CurrentItem)
-      AlternativesDialog.new(@alternatives_list[index]).run
+      AlternativeDialog.new(@alternatives_list[index]).run
       redraw_table
     end
 
