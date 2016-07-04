@@ -23,7 +23,7 @@ Yast.import "UI"
 Yast.import "Label"
 
 module UpdateAlternatives
-  # Dialog for displaying possible alternatives for one particular group.
+  # Dialog for displaying possible Choices for one particular Alternative.
   class AlternativesDialog < UI::Dialog
     MIN_WIDTH = 60
     MIN_HEIGHT = 20
@@ -38,7 +38,7 @@ module UpdateAlternatives
         MIN_HEIGHT,
         VBox(
           alternative_information,
-          create_alternatives_table,
+          create_choices_table,
           RichText(Id(:slaves), ""),
           footer
         )
@@ -46,13 +46,13 @@ module UpdateAlternatives
     end
 
     def event_loop
-      Yast::UI.ChangeWidget(Id(:alternatives), :CurrentItem, Id(@alternative.value))
-      alternatives_handler
+      Yast::UI.ChangeWidget(Id(:choices_table), :CurrentItem, Id(@alternative.value))
+      choices_table_handler
       super
     end
 
     def set_handler
-      selected_choice = Yast::UI.QueryWidget(Id(:alternatives), :CurrentItem)
+      selected_choice = Yast::UI.QueryWidget(Id(:choices_table), :CurrentItem)
       log.info("User selected the alternative: #{selected_choice}")
       @alternative.choose!(selected_choice)
       finish_dialog
@@ -64,16 +64,16 @@ module UpdateAlternatives
       finish_dialog
     end
 
-    def alternatives_handler
-      selected_choice = Yast::UI.QueryWidget(Id(:alternatives), :CurrentItem)
+    def choices_table_handler
+      selected_choice = Yast::UI.QueryWidget(Id(:choices_table), :CurrentItem)
       choice = @alternative.choices.find { |e| e.path == selected_choice }
       slaves = "<pre>" + choice.slaves + "</pre>"
       Yast::UI.ChangeWidget(Id(:slaves), :Value, slaves)
     end
 
-    def create_alternatives_table
+    def create_choices_table
       Table(
-        Id(:alternatives),
+        Id(:choices_table),
         Opt(:notify, :immediate),
         Header(_("Alternative"), _("Priority")),
         choices_list
@@ -88,7 +88,7 @@ module UpdateAlternatives
 
     def footer
       HBox(
-        PushButton(Id(:set), _("Set alternative")),
+        PushButton(Id(:set), _("Set choice")),
         PushButton(Id(:auto), _("Set automatic mode")),
         PushButton(Id(:cancel), Yast::Label.CancelButton)
       )
@@ -100,7 +100,7 @@ module UpdateAlternatives
         VBox(
           Left(HBox(Label(_("Name:")), Label(@alternative.name))),
           Left(HBox(Label(_("Status:")), Label(@alternative.status))),
-          Left(HBox(Label(_("Actual alternative:")), Label(@alternative.value)))
+          Left(HBox(Label(_("Actual choice:")), Label(@alternative.value)))
         )
       )
     end
