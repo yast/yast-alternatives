@@ -44,7 +44,7 @@ module UpdateAlternatives
       )
     end
 
-    def show_alternatives_handler
+    def edit_alternative_handler
       index = Yast::UI.QueryWidget(Id(:alternatives_table), :CurrentItem)
       AlternativeDialog.new(@alternatives_list[index]).run
       redraw_table
@@ -55,7 +55,7 @@ module UpdateAlternatives
       finish_dialog
     end
 
-    alias_method :alternatives_table_handler, :show_alternatives_handler
+    alias_method :alternatives_table_handler, :edit_alternative_handler
 
     def multi_choice_only_handler
       @multi_choice_only = Yast::UI.QueryWidget(Id(:multi_choice_only), :Value)
@@ -112,7 +112,7 @@ module UpdateAlternatives
 
     def footer
       HBox(
-        PushButton(Id(:show_alternatives), _("Show alternatives")),
+        PushButton(Id(:edit_alternative), Yast::Label.EditButton),
         PushButton(Id(:cancel), Yast::Label.CancelButton),
         PushButton(Id(:accept), Yast::Label.AcceptButton)
       )
