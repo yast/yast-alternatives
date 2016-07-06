@@ -51,6 +51,14 @@ describe UpdateAlternatives::AlternativeDialog do
       expect(alternative).to receive(:choose!)
       UpdateAlternatives::AlternativeDialog.new(alternative).run
     end
+
+    it "calls Alternative#choose! with the path of the selected choice in the table" do
+      mock_ui_events(:set)
+      allow(Yast::UI).to receive(:QueryWidget).with(:choices_table, :CurrentItem)
+        .and_return(alternative.value, "/usr/bin/vim")
+      expect(alternative).to receive(:choose!).with("/usr/bin/vim")
+      UpdateAlternatives::AlternativeDialog.new(alternative).run
+    end
   end
 
   describe "#cancel_handler" do
