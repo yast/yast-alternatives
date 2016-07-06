@@ -52,4 +52,13 @@ describe UpdateAlternatives::AlternativeDialog do
       UpdateAlternatives::AlternativeDialog.new(alternative).run
     end
   end
+
+  describe "#cancel_handler" do
+    it "doesn't modify the alternative" do
+      mock_ui_events(:cancel)
+      expect(alternative).to_not receive(:choose!)
+      expect(alternative).to_not receive(:automatic_mode!)
+      UpdateAlternatives::AlternativeDialog.new(alternative).run
+    end
+  end
 end
