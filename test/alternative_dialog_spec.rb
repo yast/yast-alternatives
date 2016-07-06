@@ -75,10 +75,13 @@ describe UpdateAlternatives::AlternativeDialog do
       mock_ui_events(:choices_table, :cancel)
       allow(Yast::UI).to receive(:QueryWidget).with(:choices_table, :CurrentItem)
         .and_return(alternative.value, "/usr/bin/vim")
-      allow(Yast::UI).to receive(:ChangeWidget).with(:choices_table, :CurrentItem, alternative.value)
-      allow(Yast::UI).to receive(:ChangeWidget).with(:slaves, :Value, "<pre>nano slaves\n line2</pre>")
+      allow(Yast::UI).to receive(:ChangeWidget)
+        .with(:choices_table, :CurrentItem, alternative.value)
+      allow(Yast::UI).to receive(:ChangeWidget)
+        .with(:slaves, :Value, "<pre>nano slaves\n line2</pre>")
 
-      expect(Yast::UI).to receive(:ChangeWidget).with(:slaves, :Value, "<pre>vim slaves\n line2</pre>")
+      expect(Yast::UI).to receive(:ChangeWidget)
+        .with(:slaves, :Value, "<pre>vim slaves\n line2</pre>")
       UpdateAlternatives::AlternativeDialog.new(alternative).run
     end
   end
