@@ -69,4 +69,17 @@ describe UpdateAlternatives::AlternativeDialog do
       UpdateAlternatives::AlternativeDialog.new(alternative).run
     end
   end
+
+  describe "#choices_table_handler" do
+    it "update the slaves widget with the slaves belonging by the selected choice" do
+      mock_ui_events(:choices_table, :cancel)
+      allow(Yast::UI).to receive(:QueryWidget).with(:choices_table, :CurrentItem)
+        .and_return(alternative.value, "/usr/bin/vim")
+      allow(Yast::UI).to receive(:ChangeWidget).with(:choices_table, :CurrentItem, alternative.value)
+      allow(Yast::UI).to receive(:ChangeWidget).with(:slaves, :Value, "<pre>nano slaves\n line2</pre>")
+
+      expect(Yast::UI).to receive(:ChangeWidget).with(:slaves, :Value, "<pre>vim slaves\n line2</pre>")
+      UpdateAlternatives::AlternativeDialog.new(alternative).run
+    end
+  end
 end
