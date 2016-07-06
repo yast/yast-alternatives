@@ -10,6 +10,8 @@ describe UpdateAlternatives::AlternativeDialog do
   before do
     allow(Yast::UI).to receive(:OpenDialog).and_return(true)
     allow(Yast::UI).to receive(:CloseDialog).and_return(true)
+    allow(Yast::UI).to receive(:QueryWidget).with(:choices_table, :CurrentItem)
+      .and_return(alternative.value)
   end
 
   subject(:alternative) do
@@ -28,11 +30,17 @@ describe UpdateAlternatives::AlternativeDialog do
     it "selects the Alternative's current choice and show his slaves" do
       expect(Yast::UI).to receive(:ChangeWidget)
         .with(:choices_table, :CurrentItem, alternative.value)
-      allow(Yast::UI).to receive(:QueryWidget).with(:choices_table, :CurrentItem)
-        .and_return(alternative.value)
       expect(Yast::UI).to receive(:ChangeWidget)
         .with(:slaves, :Value, "<pre>" + alternative.choices.first.slaves + "</pre>")
       mock_ui_events(:cancel)
+      UpdateAlternatives::AlternativeDialog.new(alternative).run
+    end
+  end
+
+  describe "#auto_handler" do
+    it "calls Alternative#automatic_mode!" do
+      mock_ui_events(:auto)
+      expect(alternative).to receive(:automatic_mode!)
       UpdateAlternatives::AlternativeDialog.new(alternative).run
     end
   end
