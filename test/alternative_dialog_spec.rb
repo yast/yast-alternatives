@@ -44,4 +44,12 @@ describe UpdateAlternatives::AlternativeDialog do
       UpdateAlternatives::AlternativeDialog.new(alternative).run
     end
   end
+
+  describe "#set_handler" do
+    it "calls Alternative#choose!" do
+      mock_ui_events(:set)
+      expect(alternative).to receive(:choose!)
+      UpdateAlternatives::AlternativeDialog.new(alternative).run
+    end
+  end
 end

@@ -52,7 +52,7 @@ module UpdateAlternatives
     end
 
     def set_handler
-      selected_choice = Yast::UI.QueryWidget(Id(:choices_table), :CurrentItem)
+      selected_choice = Yast::UI.QueryWidget(:choices_table, :CurrentItem)
       log.info("User selected the alternative: #{selected_choice}")
       @alternative.choose!(selected_choice)
       finish_dialog
