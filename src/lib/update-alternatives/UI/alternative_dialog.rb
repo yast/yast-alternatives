@@ -46,7 +46,7 @@ module UpdateAlternatives
     end
 
     def event_loop
-      Yast::UI.ChangeWidget(Id(:choices_table), :CurrentItem, Id(@alternative.value))
+      Yast::UI.ChangeWidget(:choices_table, :CurrentItem, @alternative.value)
       choices_table_handler
       super
     end
@@ -65,10 +65,10 @@ module UpdateAlternatives
     end
 
     def choices_table_handler
-      selected_choice = Yast::UI.QueryWidget(Id(:choices_table), :CurrentItem)
+      selected_choice = Yast::UI.QueryWidget(:choices_table, :CurrentItem)
       choice = @alternative.choices.find { |e| e.path == selected_choice }
       slaves = "<pre>" + choice.slaves + "</pre>"
-      Yast::UI.ChangeWidget(Id(:slaves), :Value, slaves)
+      Yast::UI.ChangeWidget(:slaves, :Value, slaves)
     end
 
     def create_choices_table
