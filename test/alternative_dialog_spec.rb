@@ -24,6 +24,7 @@ describe UpdateAlternatives::AlternativeDialog do
       "manual",
       "/usr/bin/nano",
       [
+        UpdateAlternatives::Alternative::Choice.new("/usr/bin/emacs", "15", "emacs slaves\n line2"),
         UpdateAlternatives::Alternative::Choice.new("/usr/bin/nano", "20", "nano slaves\n line2"),
         UpdateAlternatives::Alternative::Choice.new("/usr/bin/vim", "30", "vim slaves\n line2")
       ]
@@ -35,7 +36,7 @@ describe UpdateAlternatives::AlternativeDialog do
       expect(Yast::UI).to receive(:ChangeWidget)
         .with(:choices_table, :CurrentItem, alternative.value)
       expect(Yast::UI).to receive(:ChangeWidget)
-        .with(:slaves, :Value, "<pre>" + alternative.choices.first.slaves + "</pre>")
+        .with(:slaves, :Value, "<pre>nano slaves\n line2</pre>")
       mock_ui_events(:cancel)
       UpdateAlternatives::AlternativeDialog.new(alternative).run
     end
