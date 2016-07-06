@@ -7,19 +7,18 @@ describe UpdateAlternatives::AlternativeDialog do
     allow(Yast::UI).to receive(:UserInput).and_return(*events)
   end
 
-  def simulate_the_change_of_selected_choice
+  def mock_selected_choice(*values)
     allow(Yast::UI).to receive(:QueryWidget).with(:choices_table, :CurrentItem)
-      .and_return(alternative.value, "/usr/bin/vim")
+      .and_return(*values)
   end
 
   before do
     allow(Yast::UI).to receive(:OpenDialog).and_return(true)
     allow(Yast::UI).to receive(:CloseDialog).and_return(true)
-    allow(Yast::UI).to receive(:QueryWidget).with(:choices_table, :CurrentItem)
-      .and_return(alternative.value)
+    mock_selected_choice(alternative.value)
   end
 
-  subject(:alternative) do
+  let(:alternative) do
     UpdateAlternatives::Alternative.new(
       "editor",
       "manual",
@@ -59,7 +58,9 @@ describe UpdateAlternatives::AlternativeDialog do
 
     it "calls Alternative#choose! with the path of the selected choice in the table" do
       mock_ui_events(:set)
-      simulate_the_change_of_selected_choice
+      # Mock two values, first is used when open the dialog,
+      # and the second is used when triggering set_handler.
+      mock_selected_choice(alternative.value, "/usr/bin/vim")
       expect(alternative).to receive(:choose!).with("/usr/bin/vim")
       UpdateAlternatives::AlternativeDialog.new(alternative).run
     end
@@ -75,9 +76,11 @@ describe UpdateAlternatives::AlternativeDialog do
   end
 
   describe "#choices_table_handler" do
-    it "update the slaves widget with the slaves belonging by the selected choice" do
+    it "updates slaves list when a choice is selected" do
       mock_ui_events(:choices_table, :cancel)
-      simulate_the_change_of_selected_choice
+      # Mock two values, first is used when open the dialog,
+      # and the second is used when triggering choices_table_handler.
+      mock_selected_choice(alternative.value, "/usr/bin/vim")
       allow(Yast::UI).to receive(:ChangeWidget)
         .with(:choices_table, :CurrentItem, alternative.value)
       allow(Yast::UI).to receive(:ChangeWidget)
