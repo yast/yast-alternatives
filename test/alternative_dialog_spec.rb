@@ -58,12 +58,6 @@ describe UpdateAlternatives::AlternativeDialog do
   end
 
   describe "#set_handler" do
-    it "calls Alternative#choose!" do
-      mock_ui_events(:set)
-      expect(alternative).to receive(:choose!)
-      UpdateAlternatives::AlternativeDialog.new(alternative).run
-    end
-
     it "calls Alternative#choose! with the path of the selected choice in the table" do
       mock_ui_events(:set)
       # Mock two values, first is used when open the dialog,
