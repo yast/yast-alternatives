@@ -31,6 +31,8 @@ describe UpdateAlternatives::AlternativeDialog do
     )
   end
 
+  subject(:dialog) { UpdateAlternatives::AlternativeDialog.new(alternative) }
+
   describe "#run" do
     it "selects the Alternative's current choice and show his slaves" do
       expect(Yast::UI).to receive(:ChangeWidget)
@@ -38,7 +40,7 @@ describe UpdateAlternatives::AlternativeDialog do
       expect(Yast::UI).to receive(:ChangeWidget)
         .with(:slaves, :Value, "<pre>nano slaves\n line2</pre>")
       mock_ui_events(:cancel)
-      UpdateAlternatives::AlternativeDialog.new(alternative).run
+      dialog.run
     end
   end
 
@@ -46,12 +48,11 @@ describe UpdateAlternatives::AlternativeDialog do
     it "calls Alternative#automatic_mode!" do
       mock_ui_events(:auto)
       expect(alternative).to receive(:automatic_mode!)
-      UpdateAlternatives::AlternativeDialog.new(alternative).run
+      dialog.run
     end
 
     it "closes the dialog" do
       mock_ui_events(:cancel)
-      dialog = UpdateAlternatives::AlternativeDialog.new(alternative)
       expect(dialog).to receive(:finish_dialog).and_call_original
       dialog.run
     end
@@ -64,12 +65,11 @@ describe UpdateAlternatives::AlternativeDialog do
       # and the second is used when triggering set_handler.
       mock_selected_choice(alternative.value, "/usr/bin/vim")
       expect(alternative).to receive(:choose!).with("/usr/bin/vim")
-      UpdateAlternatives::AlternativeDialog.new(alternative).run
+      dialog.run
     end
 
     it "closes the dialog" do
       mock_ui_events(:cancel)
-      dialog = UpdateAlternatives::AlternativeDialog.new(alternative)
       expect(dialog).to receive(:finish_dialog).and_call_original
       dialog.run
     end
@@ -80,12 +80,11 @@ describe UpdateAlternatives::AlternativeDialog do
       mock_ui_events(:cancel)
       expect(alternative).to_not receive(:choose!)
       expect(alternative).to_not receive(:automatic_mode!)
-      UpdateAlternatives::AlternativeDialog.new(alternative).run
+      dialog.run
     end
 
     it "closes the dialog" do
       mock_ui_events(:cancel)
-      dialog = UpdateAlternatives::AlternativeDialog.new(alternative)
       expect(dialog).to receive(:finish_dialog).and_call_original
       dialog.run
     end
@@ -104,7 +103,7 @@ describe UpdateAlternatives::AlternativeDialog do
 
       expect(Yast::UI).to receive(:ChangeWidget)
         .with(:slaves, :Value, "<pre>vim slaves\n line2</pre>")
-      UpdateAlternatives::AlternativeDialog.new(alternative).run
+      dialog.run
     end
   end
 end
