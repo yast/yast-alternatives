@@ -48,6 +48,13 @@ describe UpdateAlternatives::AlternativeDialog do
       expect(alternative).to receive(:automatic_mode!)
       UpdateAlternatives::AlternativeDialog.new(alternative).run
     end
+
+    it "closes the dialog" do
+      mock_ui_events(:cancel)
+      dialog = UpdateAlternatives::AlternativeDialog.new(alternative)
+      expect(dialog).to receive(:finish_dialog).and_call_original
+      dialog.run
+    end
   end
 
   describe "#set_handler" do
@@ -65,6 +72,13 @@ describe UpdateAlternatives::AlternativeDialog do
       expect(alternative).to receive(:choose!).with("/usr/bin/vim")
       UpdateAlternatives::AlternativeDialog.new(alternative).run
     end
+
+    it "closes the dialog" do
+      mock_ui_events(:cancel)
+      dialog = UpdateAlternatives::AlternativeDialog.new(alternative)
+      expect(dialog).to receive(:finish_dialog).and_call_original
+      dialog.run
+    end
   end
 
   describe "#cancel_handler" do
@@ -73,6 +87,13 @@ describe UpdateAlternatives::AlternativeDialog do
       expect(alternative).to_not receive(:choose!)
       expect(alternative).to_not receive(:automatic_mode!)
       UpdateAlternatives::AlternativeDialog.new(alternative).run
+    end
+
+    it "closes the dialog" do
+      mock_ui_events(:cancel)
+      dialog = UpdateAlternatives::AlternativeDialog.new(alternative)
+      expect(dialog).to receive(:finish_dialog).and_call_original
+      dialog.run
     end
   end
 
