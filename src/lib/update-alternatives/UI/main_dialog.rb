@@ -45,7 +45,7 @@ module UpdateAlternatives
     end
 
     def edit_alternative_handler
-      index = Yast::UI.QueryWidget(Id(:alternatives_table), :CurrentItem)
+      index = Yast::UI.QueryWidget(:alternatives_table, :CurrentItem)
       AlternativeDialog.new(@alternatives_list[index]).run
       redraw_table
     end
