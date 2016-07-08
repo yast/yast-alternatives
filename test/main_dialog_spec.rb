@@ -6,11 +6,22 @@ describe UpdateAlternatives::MainDialog do
     allow(Yast::UI).to receive(:UserInput).and_return(*events)
   end
 
-  subject(:dialog) { UpdateAlternatives::MainDialog }
+  subject(:dialog) { UpdateAlternatives::MainDialog.new }
 
   before do
     allow(Yast::UI).to receive(:OpenDialog).and_return(true)
     allow(Yast::UI).to receive(:CloseDialog).and_return(true)
+  end
+
+  describe "#run" do
+    it "ignores EmptyAlternative ojects" do
+      allow(UpdateAlternatives::Alternative).to receive(:all)
+        .and_return(main_dialog_alternatives_list)
+
+      dialog.instance_variable_get(:@alternatives_list).each do |alternative|
+        expect(alternative).not_to be_an(UpdateAlternatives::EmptyAlternative)
+      end
+    end
   end
 
   describe "#multi_choice_only_handler" do
