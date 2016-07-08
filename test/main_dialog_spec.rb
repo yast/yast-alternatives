@@ -11,13 +11,12 @@ describe UpdateAlternatives::MainDialog do
   before do
     allow(Yast::UI).to receive(:OpenDialog).and_return(true)
     allow(Yast::UI).to receive(:CloseDialog).and_return(true)
+    allow(UpdateAlternatives::Alternative).to receive(:all)
+      .and_return(main_dialog_alternatives_list)
   end
 
   describe "#run" do
     it "ignores EmptyAlternative ojects" do
-      allow(UpdateAlternatives::Alternative).to receive(:all)
-        .and_return(main_dialog_alternatives_list)
-
       dialog.instance_variable_get(:@alternatives_list).each do |alternative|
         expect(alternative).not_to be_an(UpdateAlternatives::EmptyAlternative)
       end
@@ -27,8 +26,6 @@ describe UpdateAlternatives::MainDialog do
   describe "#multi_choice_only_handler" do
     before do
       mock_ui_events(:multi_choice_only, :cancel)
-      allow(UpdateAlternatives::Alternative).to receive(:all)
-        .and_return(main_dialog_alternatives_list)
     end
 
     def expect_update_table_with(expected_items)
@@ -70,8 +67,6 @@ describe UpdateAlternatives::MainDialog do
   describe "#edit_alternative_handler" do
     it "opens an AlternativeDialog with the selected alternative" do
       mock_ui_events(:edit_alternative, :cancel)
-      allow(UpdateAlternatives::Alternative).to receive(:all)
-        .and_return(main_dialog_alternatives_list)
       allow(Yast::UI).to receive(:QueryWidget).with(:alternatives_table, :CurrentItem).and_return(2)
 
       selected_alternative = dialog.instance_variable_get(:@alternatives_list)[2]
