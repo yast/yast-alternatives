@@ -15,6 +15,14 @@ describe UpdateAlternatives::MainDialog do
       .and_return(main_dialog_alternatives_list)
   end
 
+  def expect_update_table_with(expected_items)
+    expect(Yast::UI).to receive(:ChangeWidget) do |widgetId, option, itemsList|
+      expect(widgetId).to eq(:alternatives_table)
+      expect(option).to eq(:Items)
+      expect(itemsList.map(&:params)).to eq(expected_items)
+    end
+  end
+
   describe "#run" do
     it "ignores EmptyAlternative ojects" do
       dialog.instance_variable_get(:@alternatives_list).each do |alternative|
@@ -26,14 +34,6 @@ describe UpdateAlternatives::MainDialog do
   describe "#multi_choice_only_handler" do
     before do
       mock_ui_events(:multi_choice_only, :cancel)
-    end
-
-    def expect_update_table_with(expected_items)
-      expect(Yast::UI).to receive(:ChangeWidget) do |widgetId, option, itemsList|
-        expect(widgetId).to eq(:alternatives_table)
-        expect(option).to eq(:Items)
-        expect(itemsList.map(&:params)).to eq(expected_items)
-      end
     end
 
     context "if multi_choice_only filter is enabled" do
@@ -91,6 +91,52 @@ describe UpdateAlternatives::MainDialog do
       expect(Yast::UI).to receive(:ChangeWidget).with(:alternatives_table, :Items, kind_of(Array))
 
       dialog.run
+    end
+  end
+
+  describe "#search_handler" do
+    before do
+      # First we send :multi_choice_only event to disable the filter.
+      mock_ui_events(:multi_choice_only, :search, :cancel)
+      allow(Yast::UI).to receive(:QueryWidget).with(:multi_choice_only, :Value).and_return(false)
+      # Expect fill the alternatives table when opening the dialog.
+      expect_update_table_with(
+        [
+          [Id(0), "editor", "/usr/bin/vim", "auto"],
+          [Id(1), "pip", "/usr/bin/pip3.4", "auto"],
+          [Id(2), "test", "/usr/bin/test2", "manual"]
+        ]
+      )
+    end
+
+    context "if the input field is empty" do
+      it "shows all alternatives" do
+        allow(Yast::UI).to receive(:QueryWidget).with(:search, :Value).and_return("")
+        expect_update_table_with(
+          [
+            [Id(0), "editor", "/usr/bin/vim", "auto"],
+            [Id(1), "pip", "/usr/bin/pip3.4", "auto"],
+            [Id(2), "test", "/usr/bin/test2", "manual"]
+          ]
+        )
+        dialog.run
+      end
+    end
+
+    context "if the input field has text that match with some alternative's name" do
+      it "shows the alternatives who match its name with the text" do
+        allow(Yast::UI).to receive(:QueryWidget).with(:search, :Value).and_return("ed")
+        expect_update_table_with([[Id(0), "editor", "/usr/bin/vim", "auto"]])
+        dialog.run
+      end
+    end
+
+    context "if the input field has text that does not match with any alternative's name" do
+      it "does not show any alternative" do
+        allow(Yast::UI).to receive(:QueryWidget).with(:search, :Value).and_return("no match")
+        expect_update_table_with([])
+        dialog.run
+      end
     end
   end
 end

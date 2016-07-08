@@ -63,7 +63,7 @@ module UpdateAlternatives
     end
 
     def search_handler
-      @search = Yast::UI.QueryWidget(Id(:search), :Value)
+      @search = Yast::UI.QueryWidget(:search, :Value)
       redraw_table
     end
 
