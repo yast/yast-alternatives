@@ -65,10 +65,12 @@ describe UpdateAlternatives::MainDialog do
   end
 
   describe "#edit_alternative_handler" do
-    it "opens an AlternativeDialog with the selected alternative" do
+    before do
       mock_ui_events(:edit_alternative, :cancel)
       allow(Yast::UI).to receive(:QueryWidget).with(:alternatives_table, :CurrentItem).and_return(2)
+    end
 
+    it "opens an AlternativeDialog with the selected alternative" do
       selected_alternative = dialog.instance_variable_get(:@alternatives_list)[2]
       alternative_dialog = UpdateAlternatives::AlternativeDialog.new(selected_alternative)
 
@@ -76,6 +78,17 @@ describe UpdateAlternatives::MainDialog do
         .with(selected_alternative)
         .and_return(alternative_dialog)
       expect(alternative_dialog).to receive(:run)
+
+      dialog.run
+    end
+
+    it "updates the alternatives table" do
+      alternative_dialog = UpdateAlternatives::AlternativeDialog.new(nil)
+      allow(UpdateAlternatives::AlternativeDialog).to receive(:new)
+        .and_return(alternative_dialog)
+      allow(alternative_dialog).to receive(:run)
+
+      expect(Yast::UI).to receive(:ChangeWidget).with(:alternatives_table, :Items, kind_of(Array))
 
       dialog.run
     end
