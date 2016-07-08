@@ -249,3 +249,28 @@ def alternative_with_slaves_expected_choices
     )
   ]
 end
+
+def main_dialog_alternatives_list
+  [
+    editor_alternative_automatic_mode,
+    UpdateAlternatives::EmptyAlternative.new("rake"),
+    UpdateAlternatives::Alternative.new(
+      "pip",
+      "auto",
+      "/usr/bin/pip3.4",
+      [
+        UpdateAlternatives::Alternative::Choice.new("/usr/bin/pip3.4", "30", "")
+      ]
+    ),
+    UpdateAlternatives::EmptyAlternative.new("rubocop"),
+    UpdateAlternatives::Alternative.new(
+      "test",
+      "manual",
+      "/usr/bin/test2",
+      [
+        UpdateAlternatives::Alternative::Choice.new("/usr/bin/test1", "200", ""),
+        UpdateAlternatives::Alternative::Choice.new("/usr/bin/test2", "3", "")
+      ]
+    )
+  ]
+end

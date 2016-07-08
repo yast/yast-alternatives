@@ -58,7 +58,7 @@ module UpdateAlternatives
     alias_method :alternatives_table_handler, :edit_alternative_handler
 
     def multi_choice_only_handler
-      @multi_choice_only = Yast::UI.QueryWidget(Id(:multi_choice_only), :Value)
+      @multi_choice_only = Yast::UI.QueryWidget(:multi_choice_only, :Value)
       redraw_table
     end
 
@@ -68,7 +68,7 @@ module UpdateAlternatives
     end
 
     def redraw_table
-      Yast::UI.ChangeWidget(Id(:alternatives_table), :Items, map_alternatives_items)
+      Yast::UI.ChangeWidget(:alternatives_table, :Items, map_alternatives_items)
     end
 
     def create_table
