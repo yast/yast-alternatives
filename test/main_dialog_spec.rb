@@ -139,4 +139,18 @@ describe UpdateAlternatives::MainDialog do
       end
     end
   end
+
+  describe "#accept_handler" do
+    it "saves all changes" do
+      mock_ui_events(:accept)
+      expect(dialog.instance_variable_get(:@alternatives_list)).to all receive(:save)
+      dialog.run
+    end
+
+    it "closes the dialog" do
+      mock_ui_events(:accept)
+      expect(dialog).to receive(:finish_dialog).and_call_original
+      dialog.run
+    end
+  end
 end
