@@ -141,28 +141,32 @@ describe UpdateAlternatives::MainDialog do
   end
 
   describe "#accept_handler" do
-    it "saves all changes" do
+    before do
       mock_ui_events(:accept)
+    end
+
+    it "saves all changes" do
       expect(dialog.instance_variable_get(:@alternatives_list)).to all receive(:save)
       dialog.run
     end
 
     it "closes the dialog" do
-      mock_ui_events(:accept)
       expect(dialog).to receive(:finish_dialog).and_call_original
       dialog.run
     end
   end
 
   describe "#cancel_handler" do
-    it "doesn't save any change" do
+    before do
       mock_ui_events(:cancel)
+    end
+
+    it "doesn't save any change" do
       expect_any_instance_of(UpdateAlternatives::Alternative).to_not receive(:save)
       dialog.run
     end
 
     it "closes the dialog" do
-      mock_ui_events(:cancel)
       expect(dialog).to receive(:finish_dialog).and_call_original
       dialog.run
     end
