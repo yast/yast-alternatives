@@ -153,4 +153,18 @@ describe UpdateAlternatives::MainDialog do
       dialog.run
     end
   end
+
+  describe "#cancel_handler" do
+    it "doesn't save any change" do
+      mock_ui_events(:cancel)
+      expect_any_instance_of(UpdateAlternatives::Alternative).to_not receive(:save)
+      dialog.run
+    end
+
+    it "closes the dialog" do
+      mock_ui_events(:cancel)
+      expect(dialog).to receive(:finish_dialog).and_call_original
+      dialog.run
+    end
+  end
 end
