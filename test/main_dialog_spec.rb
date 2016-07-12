@@ -8,11 +8,36 @@ describe UpdateAlternatives::MainDialog do
 
   subject(:dialog) { UpdateAlternatives::MainDialog.new }
 
+  let(:loaded_alternatives_list) do
+    [
+      editor_alternative_automatic_mode,
+      UpdateAlternatives::EmptyAlternative.new("rake"),
+      UpdateAlternatives::Alternative.new(
+        "pip",
+        "auto",
+        "/usr/bin/pip3.4",
+        [
+          UpdateAlternatives::Alternative::Choice.new("/usr/bin/pip3.4", "30", "")
+        ]
+      ),
+      UpdateAlternatives::EmptyAlternative.new("rubocop"),
+      UpdateAlternatives::Alternative.new(
+        "test",
+        "manual",
+        "/usr/bin/test2",
+        [
+          UpdateAlternatives::Alternative::Choice.new("/usr/bin/test1", "200", ""),
+          UpdateAlternatives::Alternative::Choice.new("/usr/bin/test2", "3", "")
+        ]
+      )
+    ]
+  end
+
   before do
     allow(Yast::UI).to receive(:OpenDialog).and_return(true)
     allow(Yast::UI).to receive(:CloseDialog).and_return(true)
     allow(UpdateAlternatives::Alternative).to receive(:all)
-      .and_return(main_dialog_alternatives_list)
+      .and_return(loaded_alternatives_list)
   end
 
   def expect_update_table_with(expected_items)
@@ -73,10 +98,8 @@ describe UpdateAlternatives::MainDialog do
     let(:alternativeDialog) { double("AlternativeDialog") }
 
     it "opens an AlternativeDialog with the selected alternative" do
-      selected_alternative = dialog.instance_variable_get(:@alternatives_list)[2]
-
       expect(UpdateAlternatives::AlternativeDialog).to receive(:new)
-        .with(selected_alternative)
+        .with(loaded_alternatives_list[4])
         .and_return(alternativeDialog)
       expect(alternativeDialog).to receive(:run)
 
