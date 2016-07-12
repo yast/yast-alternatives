@@ -45,7 +45,7 @@ module UpdateAlternatives
     end
 
     def edit_alternative_handler
-      index = Yast::UI.QueryWidget(Id(:alternatives_table), :CurrentItem)
+      index = Yast::UI.QueryWidget(:alternatives_table, :CurrentItem)
       AlternativeDialog.new(@alternatives_list[index]).run
       redraw_table
     end
@@ -58,17 +58,17 @@ module UpdateAlternatives
     alias_method :alternatives_table_handler, :edit_alternative_handler
 
     def multi_choice_only_handler
-      @multi_choice_only = Yast::UI.QueryWidget(Id(:multi_choice_only), :Value)
+      @multi_choice_only = Yast::UI.QueryWidget(:multi_choice_only, :Value)
       redraw_table
     end
 
     def search_handler
-      @search = Yast::UI.QueryWidget(Id(:search), :Value)
+      @search = Yast::UI.QueryWidget(:search, :Value)
       redraw_table
     end
 
     def redraw_table
-      Yast::UI.ChangeWidget(Id(:alternatives_table), :Items, map_alternatives_items)
+      Yast::UI.ChangeWidget(:alternatives_table, :Items, map_alternatives_items)
     end
 
     def create_table
