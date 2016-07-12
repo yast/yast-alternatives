@@ -75,7 +75,7 @@ module UpdateAlternatives
       Table(
         Id(:alternatives_table),
         Opt(:notify),
-        Header(_("Name"), _("Actual alternative"), _("Status")),
+        Header(_("Name"), _("Current choice"), _("Status")),
         map_alternatives_items
       )
     end
