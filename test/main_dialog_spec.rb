@@ -101,21 +101,21 @@ describe UpdateAlternatives::MainDialog do
       allow(Yast::UI).to receive(:QueryWidget).with(:alternatives_table, :CurrentItem).and_return(2)
     end
 
-    let(:alternativeDialog) { double("AlternativeDialog") }
+    let(:alternative_dialog) { double("AlternativeDialog") }
 
     it "opens an AlternativeDialog with the selected alternative" do
       expect(UpdateAlternatives::AlternativeDialog).to receive(:new)
         .with(loaded_alternatives_list[4])
-        .and_return(alternativeDialog)
-      expect(alternativeDialog).to receive(:run)
+        .and_return(alternative_dialog)
+      expect(alternative_dialog).to receive(:run)
 
       dialog.run
     end
 
     it "updates the alternatives table" do
       allow(UpdateAlternatives::AlternativeDialog).to receive(:new)
-        .and_return(alternativeDialog)
-      allow(alternativeDialog).to receive(:run)
+        .and_return(alternative_dialog)
+      allow(alternative_dialog).to receive(:run)
 
       expect(Yast::UI).to receive(:ChangeWidget).with(:alternatives_table, :Items, kind_of(Array))
 
