@@ -62,8 +62,11 @@ describe UpdateAlternatives::MainDialog do
     end
 
     context "if multi_choice_only filter is enabled" do
-      it "update the table of alternative excluding the alternatives with only one choice" do
+      before do
         allow(Yast::UI).to receive(:QueryWidget).with(:multi_choice_only, :Value).and_return(true)
+      end
+
+      it "update the table of alternative excluding the alternatives with only one choice" do
         expect_update_table_with(
           [
             [Id(0), "editor", "/usr/bin/vim", "auto"],
@@ -75,8 +78,11 @@ describe UpdateAlternatives::MainDialog do
     end
 
     context "if multi_choice_only filter is disabled" do
-      it "update the table of alternative including the alternative with only one choice" do
+      before do
         allow(Yast::UI).to receive(:QueryWidget).with(:multi_choice_only, :Value).and_return(false)
+      end
+
+      it "update the table of alternative including the alternative with only one choice" do
         expect_update_table_with(
           [
             [Id(0), "editor", "/usr/bin/vim", "auto"],
