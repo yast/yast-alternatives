@@ -31,6 +31,7 @@ module UpdateAlternatives
       @alternatives_list = UpdateAlternatives::Alternative.all.reject(&:empty?)
       @multi_choice_only = true
       @search = ""
+      @changes = false
     end
 
     def dialog_options
@@ -47,7 +48,9 @@ module UpdateAlternatives
 
     def edit_alternative_handler
       index = Yast::UI.QueryWidget(:alternatives_table, :CurrentItem)
-      AlternativeDialog.new(@alternatives_list[index]).run
+      if AlternativeDialog.new(@alternatives_list[index]).run
+        @changes = true
+      end
       update_table(index)
     end
 
@@ -70,10 +73,14 @@ module UpdateAlternatives
     end
 
     def cancel_handler
-      confirmation = Yast::Popup.ContinueCancel(
-        _("All the changes will be lost if you leave with Cancel.\nDo you really want to quit?")
-      )
-      finish_dialog(:cancel) if confirmation
+      if @changes == false
+        finish_dialog(:cancel)
+      else
+        confirmation = Yast::Popup.ContinueCancel(
+          _("All the changes will be lost if you leave with Cancel.\nDo you really want to quit?")
+        )
+        finish_dialog(:cancel) if confirmation
+      end
     end
 
     alias_method :alternatives_table_handler, :edit_alternative_handler

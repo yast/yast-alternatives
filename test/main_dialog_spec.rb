@@ -59,8 +59,6 @@ describe UpdateAlternatives::MainDialog do
   describe "#multi_choice_only_handler" do
     before do
       mock_ui_events(:multi_choice_only, :cancel)
-      allow(Yast::Popup).to receive(:ContinueCancel)
-        .and_return(true)
     end
 
     context "if multi_choice_only filter is enabled" do
@@ -101,8 +99,6 @@ describe UpdateAlternatives::MainDialog do
     before do
       mock_ui_events(:edit_alternative, :cancel)
       allow(Yast::UI).to receive(:QueryWidget).with(:alternatives_table, :CurrentItem).and_return(2)
-      allow(Yast::Popup).to receive(:ContinueCancel)
-        .and_return(true)
     end
 
     let(:alternative_dialog) { double("AlternativeDialog") }
@@ -136,8 +132,6 @@ describe UpdateAlternatives::MainDialog do
     before do
       # First we send :multi_choice_only event to disable the filter.
       mock_ui_events(:multi_choice_only, :search, :cancel)
-      allow(Yast::Popup).to receive(:ContinueCancel)
-        .and_return(true)
       allow(Yast::UI).to receive(:QueryWidget).with(:multi_choice_only, :Value).and_return(false)
       # Expect fill the alternatives table when opening the dialog.
       expect_update_table_with(
@@ -197,47 +191,64 @@ describe UpdateAlternatives::MainDialog do
   end
 
   describe "#cancel_handler" do
-    before do
-      mock_ui_events(:cancel)
-      allow(Yast::Popup).to receive(:ContinueCancel)
-        .and_return(true)
-    end
+    context "if there are any change" do
+      let(:alternative_dialog) { double("AlternativeDialog") }
 
-    it "doesn't save any change" do
-      expect_any_instance_of(UpdateAlternatives::Alternative).to_not receive(:save)
-      dialog.run
-    end
-
-    it "shows a confirmation dialog" do
-      expect(Yast::Popup).to receive(:ContinueCancel)
-        .with("All the changes will be lost if you leave with Cancel.\nDo you really want to quit?")
-      dialog.run
-    end
-
-    context "if user confirm to leave" do
       before do
-        mock_ui_events(:cancel)
-        allow(Yast::Popup).to receive(:ContinueCancel)
-          .and_return(true)
+        mock_ui_events(:edit_alternative, :cancel)
+        allow(Yast::UI).to receive(:QueryWidget).with(:alternatives_table, :CurrentItem).and_return(0)
+        allow(UpdateAlternatives::AlternativeDialog).to receive(:new)
+          .and_return(alternative_dialog)
+        allow(alternative_dialog).to receive(:run).and_return(true)
       end
 
-      it "closes the dialog with :cancel symbol" do
-        expect(dialog).to receive(:finish_dialog).with(:cancel).and_call_original
+      it "shows a confirmation dialog" do
+        expect(Yast::Popup).to receive(:ContinueCancel)
+          .with("All the changes will be lost if you leave with Cancel.\nDo you really want to quit?")
+          .and_return(true)
         dialog.run
       end
-    end
 
-    context "if user doesn't confirm to leave" do
-      before do
-        # First cancel, and then accept to close the dialog.
-        mock_ui_events(:cancel, :accept)
-        allow(Yast::Popup).to receive(:ContinueCancel)
-          .and_return(false)
+      context "if user confirm to leave" do
+        before do
+          allow(Yast::Popup).to receive(:ContinueCancel)
+            .and_return(true)
+        end
+
+        it "closes the dialog with :cancel symbol" do
+          expect(dialog).to receive(:finish_dialog).with(:cancel).and_call_original
+          dialog.run
+        end
+
+        it "doesn't save any change" do
+          expect_any_instance_of(UpdateAlternatives::Alternative).to_not receive(:save)
+          dialog.run
+        end
       end
 
-      it "doesn't close the dialog" do
-        expect(dialog).not_to receive(:finish_dialog).with(:cancel)
-        allow(dialog).to receive(:finish_dialog).and_call_original
+      context "if user doesn't confirm to leave" do
+        before do
+          # First cancel, and then accept to close the dialog.
+          mock_ui_events(:edit_alternative, :cancel, :accept)
+          allow(Yast::Popup).to receive(:ContinueCancel)
+            .and_return(false)
+        end
+
+        it "doesn't close the dialog" do
+          expect(dialog).not_to receive(:finish_dialog).with(:cancel)
+          allow(dialog).to receive(:finish_dialog).and_call_original
+          dialog.run
+        end
+      end
+    end
+
+    context "if there aren't any change" do
+      before do
+        mock_ui_events(:cancel)
+      end
+
+      it "doesn't show confirmation dialog" do
+        expect(Yast::Popup).not_to receive(:ContinueCancel)
         dialog.run
       end
     end
