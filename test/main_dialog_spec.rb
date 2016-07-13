@@ -196,7 +196,9 @@ describe UpdateAlternatives::MainDialog do
 
       before do
         mock_ui_events(:edit_alternative, :cancel)
-        allow(Yast::UI).to receive(:QueryWidget).with(:alternatives_table, :CurrentItem).and_return(0)
+        allow(Yast::UI).to receive(:QueryWidget)
+          .with(:alternatives_table, :CurrentItem)
+          .and_return(0)
         allow(UpdateAlternatives::AlternativeDialog).to receive(:new)
           .and_return(alternative_dialog)
         allow(alternative_dialog).to receive(:run).and_return(true)
@@ -204,8 +206,9 @@ describe UpdateAlternatives::MainDialog do
 
       it "shows a confirmation dialog" do
         expect(Yast::Popup).to receive(:ContinueCancel)
-          .with("All the changes will be lost if you leave with Cancel.\nDo you really want to quit?")
-          .and_return(true)
+          .with(
+            "All the changes will be lost if you leave with Cancel.\nDo you really want to quit?"
+          ).and_return(true)
         dialog.run
       end
 

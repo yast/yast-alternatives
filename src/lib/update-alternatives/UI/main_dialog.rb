@@ -48,9 +48,7 @@ module UpdateAlternatives
 
     def edit_alternative_handler
       index = Yast::UI.QueryWidget(:alternatives_table, :CurrentItem)
-      if AlternativeDialog.new(@alternatives_list[index]).run
-        @changes = true
-      end
+      @changes = true if AlternativeDialog.new(@alternatives_list[index]).run
       update_table(index)
     end
 
