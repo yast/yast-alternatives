@@ -64,10 +64,6 @@ module UpdateAlternatives
       finish_dialog(true)
     end
 
-    def cancel_handler
-      finish_dialog(false)
-    end
-
     def choices_table_handler
       selected_choice = Yast::UI.QueryWidget(:choices_table, :CurrentItem)
       choice = @alternative.choices.find { |e| e.path == selected_choice }

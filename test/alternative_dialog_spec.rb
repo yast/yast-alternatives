@@ -88,8 +88,8 @@ describe UpdateAlternatives::AlternativeDialog do
       dialog.run
     end
 
-    it "closes the dialog with false" do
-      expect(dialog.run).to eq false
+    it "closes the dialog with nil" do
+      expect(dialog.run).to eq nil
     end
   end
 
