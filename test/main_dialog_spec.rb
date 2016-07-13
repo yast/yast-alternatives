@@ -254,6 +254,11 @@ describe UpdateAlternatives::MainDialog do
         expect(Yast::Popup).not_to receive(:ContinueCancel)
         dialog.run
       end
+
+      it "closes the dialog with :cancel symbol" do
+        expect(dialog).to receive(:finish_dialog).with(:cancel).and_call_original
+        dialog.run
+      end
     end
   end
 end
