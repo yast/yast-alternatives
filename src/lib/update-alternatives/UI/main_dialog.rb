@@ -71,13 +71,13 @@ module UpdateAlternatives
     end
 
     def cancel_handler
-      if @changes == false
-        finish_dialog(:cancel)
-      else
+      if @changes
         confirmation = Yast::Popup.ContinueCancel(
           _("All the changes will be lost if you leave with Cancel.\nDo you really want to quit?")
         )
         finish_dialog(:cancel) if confirmation
+      else
+        finish_dialog(:cancel)
       end
     end
 
