@@ -75,7 +75,7 @@ module UpdateAlternatives
       Table(
         Id(:choices_table),
         Opt(:notify, :immediate),
-        Header(_("Alternative"), _("Priority")),
+        Header(_("Choice"), _("Priority")),
         choices_list
       )
     end
@@ -100,7 +100,7 @@ module UpdateAlternatives
         VBox(
           Left(HBox(Label(_("Name:")), Label(@alternative.name))),
           Left(HBox(Label(_("Status:")), Label(@alternative.status))),
-          Left(HBox(Label(_("Actual choice:")), Label(@alternative.value)))
+          Left(HBox(Label(_("Current choice:")), Label(@alternative.value)))
         )
       )
     end
