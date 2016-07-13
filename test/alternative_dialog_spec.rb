@@ -55,8 +55,7 @@ describe UpdateAlternatives::AlternativeDialog do
     end
 
     it "closes the dialog with true" do
-      expect(dialog).to receive(:finish_dialog).with(true).and_call_original
-      dialog.run
+      expect(dialog.run).to eq true
     end
   end
 
@@ -74,8 +73,7 @@ describe UpdateAlternatives::AlternativeDialog do
     end
 
     it "closes the dialog with true" do
-      expect(dialog).to receive(:finish_dialog).with(true).and_call_original
-      dialog.run
+      expect(dialog.run).to eq true
     end
   end
 
@@ -91,8 +89,7 @@ describe UpdateAlternatives::AlternativeDialog do
     end
 
     it "closes the dialog with false" do
-      expect(dialog).to receive(:finish_dialog).with(false).and_call_original
-      dialog.run
+      expect(dialog.run).to eq false
     end
   end
 
