@@ -112,12 +112,17 @@ describe UpdateAlternatives::MainDialog do
       dialog.run
     end
 
-    it "updates the alternatives table" do
+    it "updates the modified alternative on the table" do
       allow(UpdateAlternatives::AlternativeDialog).to receive(:new)
         .and_return(alternative_dialog)
       allow(alternative_dialog).to receive(:run)
 
-      expect(Yast::UI).to receive(:ChangeWidget).with(:alternatives_table, :Items, kind_of(Array))
+      # Need to change two cells, the first to update-alternatives the "Current choice"
+      # and the second to update the "Status"
+      expect(Yast::UI).to receive(:ChangeWidget)
+        .with(Id(:alternatives_table), Cell(2, 1), "/usr/bin/test2")
+      expect(Yast::UI).to receive(:ChangeWidget)
+        .with(Id(:alternatives_table), Cell(2, 2), "manual")
 
       dialog.run
     end
