@@ -45,22 +45,26 @@ describe UpdateAlternatives::AlternativeDialog do
   end
 
   describe "#auto_handler" do
-    it "calls Alternative#automatic_mode!" do
+    before do
       mock_ui_events(:auto)
+    end
+
+    it "calls Alternative#automatic_mode!" do
       expect(alternative).to receive(:automatic_mode!)
       dialog.run
     end
 
-    it "closes the dialog" do
-      mock_ui_events(:cancel)
-      expect(dialog).to receive(:finish_dialog).and_call_original
-      dialog.run
+    it "closes the dialog with true" do
+      expect(dialog.run).to eq true
     end
   end
 
   describe "#set_handler" do
-    it "calls Alternative#choose! with the path of the selected choice in the table" do
+    before do
       mock_ui_events(:set)
+    end
+
+    it "calls Alternative#choose! with the path of the selected choice in the table" do
       # Mock two values, first is used when open the dialog,
       # and the second is used when triggering set_handler.
       mock_selected_choice(alternative.value, "/usr/bin/vim")
@@ -68,25 +72,24 @@ describe UpdateAlternatives::AlternativeDialog do
       dialog.run
     end
 
-    it "closes the dialog" do
-      mock_ui_events(:cancel)
-      expect(dialog).to receive(:finish_dialog).and_call_original
-      dialog.run
+    it "closes the dialog with true" do
+      expect(dialog.run).to eq true
     end
   end
 
   describe "#cancel_handler" do
-    it "doesn't modify the alternative" do
+    before do
       mock_ui_events(:cancel)
+    end
+
+    it "doesn't modify the alternative" do
       expect(alternative).to_not receive(:choose!)
       expect(alternative).to_not receive(:automatic_mode!)
       dialog.run
     end
 
-    it "closes the dialog" do
-      mock_ui_events(:cancel)
-      expect(dialog).to receive(:finish_dialog).and_call_original
-      dialog.run
+    it "closes the dialog with nil" do
+      expect(dialog.run).to eq nil
     end
   end
 

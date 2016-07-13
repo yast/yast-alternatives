@@ -22,6 +22,7 @@ require "update-alternatives/UI/alternative_dialog"
 require "update-alternatives/model/alternative"
 
 Yast.import "UI"
+Yast.import "Popup"
 
 module UpdateAlternatives
   # Dialog where all alternatives groups in the system are listed.
@@ -30,6 +31,7 @@ module UpdateAlternatives
       @alternatives_list = UpdateAlternatives::Alternative.all.reject(&:empty?)
       @multi_choice_only = true
       @search = ""
+      @changes = false
     end
 
     def dialog_options
@@ -46,7 +48,7 @@ module UpdateAlternatives
 
     def edit_alternative_handler
       index = Yast::UI.QueryWidget(:alternatives_table, :CurrentItem)
-      AlternativeDialog.new(@alternatives_list[index]).run
+      @changes = true if AlternativeDialog.new(@alternatives_list[index]).run
       update_table(index)
     end
 
@@ -66,6 +68,17 @@ module UpdateAlternatives
     def accept_handler
       @alternatives_list.each(&:save)
       finish_dialog
+    end
+
+    def cancel_handler
+      if @changes
+        confirmation = Yast::Popup.ContinueCancel(
+          _("All the changes will be lost if you leave with Cancel.\nDo you really want to quit?")
+        )
+        finish_dialog(:cancel) if confirmation
+      else
+        finish_dialog(:cancel)
+      end
     end
 
     alias_method :alternatives_table_handler, :edit_alternative_handler
