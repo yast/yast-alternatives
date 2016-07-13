@@ -192,16 +192,13 @@ describe UpdateAlternatives::MainDialog do
 
   describe "#cancel_handler" do
     context "if there are any change" do
-      let(:alternative_dialog) { double("AlternativeDialog") }
-
       before do
         mock_ui_events(:edit_alternative, :cancel)
         allow(Yast::UI).to receive(:QueryWidget)
           .with(:alternatives_table, :CurrentItem)
           .and_return(0)
         allow(UpdateAlternatives::AlternativeDialog).to receive(:new)
-          .and_return(alternative_dialog)
-        allow(alternative_dialog).to receive(:run).and_return(true)
+          .and_return(double("AlternativeDialog", run: true))
       end
 
       it "shows a confirmation dialog" do
@@ -256,8 +253,7 @@ describe UpdateAlternatives::MainDialog do
       end
 
       it "closes the dialog with :cancel symbol" do
-        expect(dialog).to receive(:finish_dialog).with(:cancel).and_call_original
-        dialog.run
+        expect(dialog.run).to eq :cancel
       end
     end
   end
