@@ -119,8 +119,10 @@ describe UpdateAlternatives::MainDialog do
 
       # Need to change two cells, the first to update-alternatives the "Current choice"
       # and the second to update the "Status"
-      expect(Yast::UI).to receive(:ChangeWidget).with(Id(:alternatives_table), Cell(2, 1), "/usr/bin/test2")
-      expect(Yast::UI).to receive(:ChangeWidget).with(Id(:alternatives_table), Cell(2, 2), "manual")
+      expect(Yast::UI).to receive(:ChangeWidget)
+        .with(Id(:alternatives_table), Cell(2, 1), "/usr/bin/test2")
+      expect(Yast::UI).to receive(:ChangeWidget)
+        .with(Id(:alternatives_table), Cell(2, 2), "manual")
 
       dialog.run
     end
