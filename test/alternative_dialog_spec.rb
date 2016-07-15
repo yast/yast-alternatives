@@ -4,7 +4,7 @@ require "update-alternatives/model/alternative"
 
 describe UpdateAlternatives::AlternativeDialog do
   def mock_ui_events(*events)
-    allow(Yast::UI).to receive(:UserInput).and_return(*events)
+    allow(Yast::UI).to receive(:WaitForEvent).and_return(*events)
   end
 
   def mock_selected_choice(*values)
@@ -39,14 +39,14 @@ describe UpdateAlternatives::AlternativeDialog do
         .with(:choices_table, :CurrentItem, alternative.value)
       expect(Yast::UI).to receive(:ChangeWidget)
         .with(:slaves, :Value, "<pre>nano slaves\n line2</pre>")
-      mock_ui_events(:cancel)
+      mock_ui_events(cancel_event)
       dialog.run
     end
   end
 
   describe "#auto_handler" do
     before do
-      mock_ui_events(:auto)
+      mock_ui_events(automatic_mode_event)
     end
 
     it "calls Alternative#automatic_mode!" do
@@ -61,7 +61,7 @@ describe UpdateAlternatives::AlternativeDialog do
 
   describe "#set_handler" do
     before do
-      mock_ui_events(:set)
+      mock_ui_events(set_choice_event)
     end
 
     it "calls Alternative#choose! with the path of the selected choice in the table" do
@@ -79,7 +79,7 @@ describe UpdateAlternatives::AlternativeDialog do
 
   describe "#cancel_handler" do
     before do
-      mock_ui_events(:cancel)
+      mock_ui_events(cancel_event)
     end
 
     it "doesn't modify the alternative" do
@@ -94,8 +94,14 @@ describe UpdateAlternatives::AlternativeDialog do
   end
 
   describe "#choices_table_handler" do
+    before do
+      mock_ui_events(
+        table_selection_changed,
+        cancel_event
+      )
+    end
+
     it "updates slaves list when a choice is selected" do
-      mock_ui_events(:choices_table, :cancel)
       # Mock two values, first is used when open the dialog,
       # and the second is used when triggering choices_table_handler.
       mock_selected_choice(alternative.value, "/usr/bin/vim")
