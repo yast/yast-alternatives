@@ -94,25 +94,35 @@ describe UpdateAlternatives::AlternativeDialog do
   end
 
   describe "#choices_table_handler" do
-    before do
-      mock_ui_events(
-        table_selection_changed,
-        cancel_event
-      )
+    context "when change the selected item" do
+      before do
+        mock_ui_events(table_selection_changed, cancel_event)
+      end
+
+      it "updates slaves list when a choice is selected" do
+        # Mock two values, first is used when open the dialog,
+        # and the second is used when triggering choices_table_handler.
+        mock_selected_choice(alternative.value, "/usr/bin/vim")
+        allow(Yast::UI).to receive(:ChangeWidget)
+          .with(:choices_table, :CurrentItem, alternative.value)
+        allow(Yast::UI).to receive(:ChangeWidget)
+          .with(:slaves, :Value, "<pre>nano slaves\n line2</pre>")
+
+        expect(Yast::UI).to receive(:ChangeWidget)
+          .with(:slaves, :Value, "<pre>vim slaves\n line2</pre>")
+        dialog.run
+      end
     end
 
-    it "updates slaves list when a choice is selected" do
-      # Mock two values, first is used when open the dialog,
-      # and the second is used when triggering choices_table_handler.
-      mock_selected_choice(alternative.value, "/usr/bin/vim")
-      allow(Yast::UI).to receive(:ChangeWidget)
-        .with(:choices_table, :CurrentItem, alternative.value)
-      allow(Yast::UI).to receive(:ChangeWidget)
-        .with(:slaves, :Value, "<pre>nano slaves\n line2</pre>")
+    context "when double click on an item" do
+      before do
+        mock_ui_events(double_click_on_table, cancel_event)
+      end
 
-      expect(Yast::UI).to receive(:ChangeWidget)
-        .with(:slaves, :Value, "<pre>vim slaves\n line2</pre>")
-      dialog.run
+      it "calls #set_handler" do
+        expect(dialog).to receive(:set_handler).and_call_original
+        dialog.run
+      end
     end
   end
 end

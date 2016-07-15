@@ -52,7 +52,9 @@ module UpdateAlternatives
     end
 
     def user_input
-      Yast::UI.WaitForEvent["ID"]
+      event = Yast::UI.WaitForEvent
+      return :set if event["ID"] == :choices_table && event["EventReason"] == "Activated"
+      event["ID"]
     end
 
     def set_handler
