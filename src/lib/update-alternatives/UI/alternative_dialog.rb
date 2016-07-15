@@ -51,6 +51,12 @@ module UpdateAlternatives
       super
     end
 
+    def user_input
+      event = Yast::UI.WaitForEvent
+      return :set if event["ID"] == :choices_table && event["EventReason"] == "Activated"
+      event["ID"]
+    end
+
     def set_handler
       selected_choice = Yast::UI.QueryWidget(:choices_table, :CurrentItem)
       log.info("User selected the alternative: #{selected_choice}")

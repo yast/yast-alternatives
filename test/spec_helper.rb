@@ -249,3 +249,61 @@ def alternative_with_slaves_expected_choices
     )
   ]
 end
+
+def cancel_event
+  {
+    "EventReason"      => "Activated",
+    "EventSerialNo"    => 0,
+    "EventType"        => "WidgetEvent",
+    "ID"               => :cancel,
+    "WidgetClass"      => :PushButton,
+    "WidgetDebugLabel" => "Cancel",
+    "WidgetID"         => :cancel
+  }
+end
+
+def table_selection_changed
+  {
+    "EventReason"   => "SelectionChanged",
+    "EventSerialNo" => 0,
+    "EventType"     => "WidgetEvent",
+    "ID"            => :choices_table,
+    "WidgetClass"   => :Table,
+    "WidgetID"      => :choices_table
+  }
+end
+
+def double_click_on_table
+  {
+    "EventReason"   => "Activated",
+    "EventSerialNo" => 0,
+    "EventType"     => "WidgetEvent",
+    "ID"            => :choices_table,
+    "WidgetClass"   => :Table,
+    "WidgetID"      => :choices_table
+  }
+end
+
+def automatic_mode_event
+  {
+    "EventReason"      => "Activated",
+    "EventSerialNo"    => 0,
+    "EventType"        => "WidgetEvent",
+    "ID"               => :auto,
+    "WidgetClass"      => :PushButton,
+    "WidgetDebugLabel" => "Set automatic mode",
+    "WidgetID"         => :auto
+  }
+end
+
+def set_choice_event
+  {
+    "EventReason"      => "Activated",
+    "EventSerialNo"    => 0,
+    "EventType"        => "WidgetEvent",
+    "ID"               => :set,
+    "WidgetClass"      => :PushButton,
+    "WidgetDebugLabel" => "Set choice",
+    "WidgetID"         => :set
+  }
+end
