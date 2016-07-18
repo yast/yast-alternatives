@@ -15,7 +15,7 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
-Name:           yast2-update-alternatives
+Name:           yast2-alternatives
 Version:        3.1.0
 Release:        0
 License:        GPL-2.0
@@ -43,7 +43,7 @@ A YaST2 module to manage update alternatives switching
 rake test:unit
 
 %install
-rake install DESTDIR=%{buildroot} 
+rake install DESTDIR=%{buildroot}
 
 %post
 
