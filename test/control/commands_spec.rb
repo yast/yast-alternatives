@@ -16,7 +16,7 @@
 #  To contact SUSE about this file by physical or electronic mail,
 #  you may find current contact information at www.suse.com
 
-require_relative "spec_helper.rb"
+require_relative "../spec_helper.rb"
 require "update-alternatives/model/alternative"
 require "update-alternatives/control/set_choice_command"
 require "update-alternatives/control/automatic_mode_command"

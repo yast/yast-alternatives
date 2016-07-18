@@ -1,4 +1,4 @@
-require_relative "spec_helper.rb"
+require_relative "../spec_helper.rb"
 require "update-alternatives/UI/main_dialog"
 
 describe Y2Alternatives::Dialog::MainDialog do
