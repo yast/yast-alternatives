@@ -257,4 +257,29 @@ describe UpdateAlternatives::MainDialog do
       end
     end
   end
+
+  describe "#help_handler" do
+    before do
+      mock_ui_events(:help, :cancel)
+    end
+
+    it "launch a help popup" do
+      expect(Yast::Popup).to receive(:LongText).with(
+        "Help",
+        RichText(
+          "<p>The status of an alternative, can be automatic or manual. In <b>automatic mode</b> "\
+          "the system set the choice with higher priority. The <b>manual mode</b> it is set " \
+          "when the user selects a choice manually. " \
+          "When change the current choice also his <b>slaves</b> are modified in the system.</p>" \
+          "<p>To change the current choice of an alternative, select the alternative, click the " \
+          "edit button then select the desired choice in the table and click on the set choice " \
+          "button. If you want to set the alternative in automatic mode just click the set " \
+          "automatic mode button in the edit dialog.</p>"
+        ),
+        60,
+        20
+      )
+      dialog.run
+    end
+  end
 end

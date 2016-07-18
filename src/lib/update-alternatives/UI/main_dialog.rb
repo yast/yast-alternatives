@@ -46,6 +46,24 @@ module UpdateAlternatives
       )
     end
 
+    def help_handler
+      Yast::Popup.LongText(
+        _("Help"),
+        RichText(
+          _("<p>The status of an alternative, can be automatic or manual. " \
+          "In <b>automatic mode</b> the system set the choice with higher priority. " \
+          "The <b>manual mode</b> it is set when the user selects a choice manually. " \
+          "When change the current choice also his <b>slaves</b> are modified in the system.</p>" \
+          "<p>To change the current choice of an alternative, select the alternative, click the " \
+          "edit button then select the desired choice in the table and click on the set choice " \
+          "button. If you want to set the alternative in automatic mode just click the set " \
+          "automatic mode button in the edit dialog.</p>")
+        ),
+        60,
+        20
+      )
+    end
+
     def edit_alternative_handler
       index = Yast::UI.QueryWidget(:alternatives_table, :CurrentItem)
       @changes = true if AlternativeDialog.new(@alternatives_list[index]).run
@@ -138,9 +156,12 @@ module UpdateAlternatives
 
     def footer
       HBox(
+        HSpacing(),
+        Left(PushButton(Id(:help), Opt(:key_F1, :help), Yast::Label.HelpButton)),
         PushButton(Id(:edit_alternative), Yast::Label.EditButton),
         PushButton(Id(:cancel), Yast::Label.CancelButton),
-        PushButton(Id(:accept), Yast::Label.AcceptButton)
+        PushButton(Id(:accept), Yast::Label.AcceptButton),
+        HSpacing()
       )
     end
   end
