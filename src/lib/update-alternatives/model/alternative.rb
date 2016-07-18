@@ -20,7 +20,7 @@ require "cheetah"
 require "update-alternatives/control/set_choice_command"
 require "update-alternatives/control/automatic_mode_command"
 
-module UpdateAlternatives
+module Y2Alternatives
   # Represents an alternative
   class Alternative
     # @return [String] name of the alternative.
@@ -35,8 +35,8 @@ module UpdateAlternatives
     Choice = Struct.new(:path, :priority, :slaves)
 
     STATUS_COMMANDS = {
-      "auto"   => UpdateAlternatives::AutomaticModeCommand,
-      "manual" => UpdateAlternatives::SetChoiceCommand
+      "auto"   => Y2Alternatives::Control::AutomaticModeCommand,
+      "manual" => Y2Alternatives::Control::SetChoiceCommand
     }
     STATUS_COMMANDS.default_proc = ->(_h, k) { raise "unknown status '#{k}'" }
 

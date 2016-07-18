@@ -1,33 +1,33 @@
 require_relative "spec_helper.rb"
 require "update-alternatives/UI/main_dialog"
 
-describe UpdateAlternatives::MainDialog do
+describe Y2Alternatives::Dialog::MainDialog do
   def mock_ui_events(*events)
     allow(Yast::UI).to receive(:UserInput).and_return(*events)
   end
 
-  subject(:dialog) { UpdateAlternatives::MainDialog.new }
+  subject(:dialog) { Y2Alternatives::Dialog::MainDialog.new }
 
   let(:loaded_alternatives_list) do
     [
       editor_alternative_automatic_mode,
-      UpdateAlternatives::EmptyAlternative.new("rake"),
-      UpdateAlternatives::Alternative.new(
+      Y2Alternatives::EmptyAlternative.new("rake"),
+      Y2Alternatives::Alternative.new(
         "pip",
         "auto",
         "/usr/bin/pip3.4",
         [
-          UpdateAlternatives::Alternative::Choice.new("/usr/bin/pip3.4", "30", "")
+          Y2Alternatives::Alternative::Choice.new("/usr/bin/pip3.4", "30", "")
         ]
       ),
-      UpdateAlternatives::EmptyAlternative.new("rubocop"),
-      UpdateAlternatives::Alternative.new(
+      Y2Alternatives::EmptyAlternative.new("rubocop"),
+      Y2Alternatives::Alternative.new(
         "test",
         "manual",
         "/usr/bin/test2",
         [
-          UpdateAlternatives::Alternative::Choice.new("/usr/bin/test1", "200", ""),
-          UpdateAlternatives::Alternative::Choice.new("/usr/bin/test2", "3", "")
+          Y2Alternatives::Alternative::Choice.new("/usr/bin/test1", "200", ""),
+          Y2Alternatives::Alternative::Choice.new("/usr/bin/test2", "3", "")
         ]
       )
     ]
@@ -36,7 +36,7 @@ describe UpdateAlternatives::MainDialog do
   before do
     allow(Yast::UI).to receive(:OpenDialog).and_return(true)
     allow(Yast::UI).to receive(:CloseDialog).and_return(true)
-    allow(UpdateAlternatives::Alternative).to receive(:all)
+    allow(Y2Alternatives::Alternative).to receive(:all)
       .and_return(loaded_alternatives_list)
   end
 
@@ -51,7 +51,7 @@ describe UpdateAlternatives::MainDialog do
   describe "#run" do
     it "ignores EmptyAlternative ojects" do
       dialog.instance_variable_get(:@alternatives_list).each do |alternative|
-        expect(alternative).not_to be_an(UpdateAlternatives::EmptyAlternative)
+        expect(alternative).not_to be_an(Y2Alternatives::EmptyAlternative)
       end
     end
   end
@@ -104,7 +104,7 @@ describe UpdateAlternatives::MainDialog do
     let(:alternative_dialog) { double("AlternativeDialog") }
 
     it "opens an AlternativeDialog with the selected alternative" do
-      expect(UpdateAlternatives::AlternativeDialog).to receive(:new)
+      expect(Y2Alternatives::Dialog::AlternativeDialog).to receive(:new)
         .with(loaded_alternatives_list[4])
         .and_return(alternative_dialog)
       expect(alternative_dialog).to receive(:run)
@@ -113,7 +113,7 @@ describe UpdateAlternatives::MainDialog do
     end
 
     it "updates the modified alternative on the table" do
-      allow(UpdateAlternatives::AlternativeDialog).to receive(:new)
+      allow(Y2Alternatives::Dialog::AlternativeDialog).to receive(:new)
         .and_return(alternative_dialog)
       allow(alternative_dialog).to receive(:run)
 
@@ -197,7 +197,7 @@ describe UpdateAlternatives::MainDialog do
         allow(Yast::UI).to receive(:QueryWidget)
           .with(:alternatives_table, :CurrentItem)
           .and_return(0)
-        allow(UpdateAlternatives::AlternativeDialog).to receive(:new)
+        allow(Y2Alternatives::Dialog::AlternativeDialog).to receive(:new)
           .and_return(double("AlternativeDialog", run: true))
       end
 
@@ -221,7 +221,7 @@ describe UpdateAlternatives::MainDialog do
         end
 
         it "doesn't save any change" do
-          expect_any_instance_of(UpdateAlternatives::Alternative).to_not receive(:save)
+          expect_any_instance_of(Y2Alternatives::Alternative).to_not receive(:save)
           dialog.run
         end
       end

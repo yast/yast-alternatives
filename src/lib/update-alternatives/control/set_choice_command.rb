@@ -18,11 +18,13 @@
 
 require "cheetah"
 
-module UpdateAlternatives
-  # Command to change the selected choice of an alternative.
-  class SetChoiceCommand
-    def self.execute(alternative)
-      Cheetah.run("update-alternatives", "--set", alternative.name, alternative.value)
+module Y2Alternatives
+  module Control
+    # Command to change the selected choice of an alternative.
+    class SetChoiceCommand
+      def self.execute(alternative)
+        Cheetah.run("update-alternatives", "--set", alternative.name, alternative.value)
+      end
     end
   end
 end

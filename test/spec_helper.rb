@@ -177,25 +177,25 @@ def some_alternatives_some_without_choices_stub
 end
 
 def editor_alternative_automatic_mode
-  UpdateAlternatives::Alternative.new(
+  Y2Alternatives::Alternative.new(
     "editor",
     "auto",
     "/usr/bin/vim",
     [
-      UpdateAlternatives::Alternative::Choice.new("/usr/bin/nano", "20", ""),
-      UpdateAlternatives::Alternative::Choice.new("/usr/bin/vim", "30", "")
+      Y2Alternatives::Alternative::Choice.new("/usr/bin/nano", "20", ""),
+      Y2Alternatives::Alternative::Choice.new("/usr/bin/vim", "30", "")
     ]
   )
 end
 
 def editor_alternative_manual_mode
-  UpdateAlternatives::Alternative.new(
+  Y2Alternatives::Alternative.new(
     "editor",
     "manual",
     "/usr/bin/nano",
     [
-      UpdateAlternatives::Alternative::Choice.new("/usr/bin/nano", "20", ""),
-      UpdateAlternatives::Alternative::Choice.new("/usr/bin/vim", "30", "")
+      Y2Alternatives::Alternative::Choice.new("/usr/bin/nano", "20", ""),
+      Y2Alternatives::Alternative::Choice.new("/usr/bin/vim", "30", "")
     ]
   )
 end
@@ -234,11 +234,11 @@ end
 
 def alternative_with_slaves_expected_choices
   [
-    UpdateAlternatives::Alternative::Choice.new("/bin/ed",
+    Y2Alternatives::Alternative::Choice.new("/bin/ed",
       "-100",
       "editor.1.gz /usr/share/man/man1/ed.1.gz\n"
     ),
-    UpdateAlternatives::Alternative::Choice.new(
+    Y2Alternatives::Alternative::Choice.new(
       "/usr/bin/vim.basic",
       "50",
       "editor.1.gz /usr/share/man/man1/vim.1.gz\n" \

@@ -24,124 +24,126 @@ require "update-alternatives/model/alternative"
 Yast.import "UI"
 Yast.import "Popup"
 
-module UpdateAlternatives
-  # Dialog where all alternatives groups in the system are listed.
-  class MainDialog < UI::Dialog
-    def initialize
-      @alternatives_list = UpdateAlternatives::Alternative.all.reject(&:empty?)
-      @multi_choice_only = true
-      @search = ""
-      @changes = false
-    end
-
-    def dialog_options
-      Opt(:decorated, :defaultsize)
-    end
-
-    def dialog_content
-      VBox(
-        filters,
-        create_table,
-        footer
-      )
-    end
-
-    def edit_alternative_handler
-      index = Yast::UI.QueryWidget(:alternatives_table, :CurrentItem)
-      @changes = true if AlternativeDialog.new(@alternatives_list[index]).run
-      update_table(index)
-    end
-
-    def update_table(index)
-      Yast::UI.ChangeWidget(
-        Id(:alternatives_table),
-        Cell(index, 1),
-        @alternatives_list[index].value
-      )
-      Yast::UI.ChangeWidget(
-        Id(:alternatives_table),
-        Cell(index, 2),
-        @alternatives_list[index].status
-      )
-    end
-
-    def accept_handler
-      @alternatives_list.each(&:save)
-      finish_dialog
-    end
-
-    def cancel_handler
-      if @changes
-        confirmation = Yast::Popup.ContinueCancel(
-          _("All the changes will be lost if you leave with Cancel.\nDo you really want to quit?")
-        )
-        finish_dialog(:cancel) if confirmation
-      else
-        finish_dialog(:cancel)
+module Y2Alternatives
+  module Dialog
+    # Dialog where all alternatives groups in the system are listed.
+    class MainDialog < UI::Dialog
+      def initialize
+        @alternatives_list = Y2Alternatives::Alternative.all.reject(&:empty?)
+        @multi_choice_only = true
+        @search = ""
+        @changes = false
       end
-    end
 
-    alias_method :alternatives_table_handler, :edit_alternative_handler
+      def dialog_options
+        Opt(:decorated, :defaultsize)
+      end
 
-    def multi_choice_only_handler
-      @multi_choice_only = Yast::UI.QueryWidget(:multi_choice_only, :Value)
-      redraw_table
-    end
+      def dialog_content
+        VBox(
+          filters,
+          create_table,
+          footer
+          )
+      end
 
-    def search_handler
-      @search = Yast::UI.QueryWidget(:search, :Value)
-      redraw_table
-    end
+      def edit_alternative_handler
+        index = Yast::UI.QueryWidget(:alternatives_table, :CurrentItem)
+        @changes = true if AlternativeDialog.new(@alternatives_list[index]).run
+        update_table(index)
+      end
 
-    def redraw_table
-      Yast::UI.ChangeWidget(:alternatives_table, :Items, map_alternatives_items)
-    end
-
-    def create_table
-      Table(
-        Id(:alternatives_table),
-        Opt(:notify),
-        Header(_("Name"), _("Current choice"), _("Status")),
-        map_alternatives_items
-      )
-    end
-
-    def map_alternatives_items
-      filtered_alternatives.map do |alternative, index|
-        Item(
-          Id(index),
-          alternative.name,
-          alternative.value,
-          _(alternative.status)
+      def update_table(index)
+        Yast::UI.ChangeWidget(
+          Id(:alternatives_table),
+          Cell(index, 1),
+          @alternatives_list[index].value
+        )
+        Yast::UI.ChangeWidget(
+          Id(:alternatives_table),
+          Cell(index, 2),
+          @alternatives_list[index].status
         )
       end
-    end
 
-    def filtered_alternatives
-      alternatives = @alternatives_list.each_with_index
-      alternatives = alternatives.select { |a, _i| a.choices.length > 1 } if @multi_choice_only
-      alternatives = alternatives.select { |a, _i| a.name.include?(@search) } unless @search.empty?
-      alternatives
-    end
+      def accept_handler
+        @alternatives_list.each(&:save)
+        finish_dialog
+      end
 
-    def filters
-      VBox(
-        InputField(Id(:search), Opt(:notify), _("Search by name"), @search),
-        CheckBox(
-          Id(:multi_choice_only),
+      def cancel_handler
+        if @changes
+          confirmation = Yast::Popup.ContinueCancel(
+            _("All the changes will be lost if you leave with Cancel.\nDo you really want to quit?")
+          )
+          finish_dialog(:cancel) if confirmation
+        else
+          finish_dialog(:cancel)
+        end
+      end
+
+      alias_method :alternatives_table_handler, :edit_alternative_handler
+
+      def multi_choice_only_handler
+        @multi_choice_only = Yast::UI.QueryWidget(:multi_choice_only, :Value)
+        redraw_table
+      end
+
+      def search_handler
+        @search = Yast::UI.QueryWidget(:search, :Value)
+        redraw_table
+      end
+
+      def redraw_table
+        Yast::UI.ChangeWidget(:alternatives_table, :Items, map_alternatives_items)
+      end
+
+      def create_table
+        Table(
+          Id(:alternatives_table),
           Opt(:notify),
-          _("Show only alternatives with more than one choice"),
-          @multi_choice_only
+          Header(_("Name"), _("Current choice"), _("Status")),
+          map_alternatives_items
         )
-      )
-    end
+      end
 
-    def footer
-      HBox(
-        PushButton(Id(:edit_alternative), Yast::Label.EditButton),
-        PushButton(Id(:cancel), Yast::Label.CancelButton),
-        PushButton(Id(:accept), Yast::Label.AcceptButton)
-      )
+      def map_alternatives_items
+        filtered_alternatives.map do |alternative, index|
+          Item(
+            Id(index),
+            alternative.name,
+            alternative.value,
+            _(alternative.status)
+          )
+        end
+      end
+
+      def filtered_alternatives
+        alternatives = @alternatives_list.each_with_index
+        alternatives = alternatives.select { |a, _i| a.choices.length > 1 } if @multi_choice_only
+        alternatives = alternatives.select { |a, _i| a.name.include?(@search) } unless @search.empty?
+        alternatives
+      end
+
+      def filters
+        VBox(
+          InputField(Id(:search), Opt(:notify), _("Search by name"), @search),
+          CheckBox(
+            Id(:multi_choice_only),
+            Opt(:notify),
+            _("Show only alternatives with more than one choice"),
+            @multi_choice_only
+            )
+          )
+      end
+
+      def footer
+        HBox(
+          PushButton(Id(:edit_alternative), Yast::Label.EditButton),
+          PushButton(Id(:cancel), Yast::Label.CancelButton),
+          PushButton(Id(:accept), Yast::Label.AcceptButton)
+        )
+      end
     end
   end
 end
