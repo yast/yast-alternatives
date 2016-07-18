@@ -17,9 +17,9 @@
 #  you may find current contact information at www.suse.com
 
 require_relative "../spec_helper.rb"
-require "update-alternatives/model/alternative"
-require "update-alternatives/control/set_choice_command"
-require "update-alternatives/control/automatic_mode_command"
+require "alternatives/model/alternative"
+require "alternatives/control/set_choice_command"
+require "alternatives/control/automatic_mode_command"
 
 describe Y2Alternatives::Control::SetChoiceCommand do
   subject(:alternative) do
