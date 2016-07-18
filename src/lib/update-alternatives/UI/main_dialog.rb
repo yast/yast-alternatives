@@ -119,10 +119,10 @@ module Y2Alternatives
       end
 
       def filtered_alternatives
-        alternatives = @alternatives_list.each_with_index
-        alternatives = alternatives.select { |a, _i| a.choices.length > 1 } if @multi_choice_only
-        alternatives = alternatives.select { |a, _i| a.name.include?(@search) } unless @search.empty?
-        alternatives
+        list = @alternatives_list.each_with_index
+        list = list.select { |a, _i| a.choices.length > 1 } if @multi_choice_only
+        list = list.select { |a, _i| a.name.include?(@search) } unless @search.empty?
+        list
       end
 
       def filters
