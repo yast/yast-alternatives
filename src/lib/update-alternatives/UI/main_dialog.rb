@@ -49,16 +49,31 @@ module UpdateAlternatives
     def help_handler
       Yast::Popup.LongText(
         _("Help"),
-        RichText(
-          _("<p>The status of an alternative, can be automatic or manual. " \
-          "In <b>automatic mode</b> the system set the choice with higher priority. " \
-          "The <b>manual mode</b> it is set when the user selects a choice manually. " \
-          "When change the current choice also his <b>slaves</b> are modified in the system.</p>" \
-          "<p>To change the current choice of an alternative, select the alternative, click the " \
-          "edit button then select the desired choice in the table and click on the set choice " \
-          "button. If you want to set the alternative in automatic mode just click the set " \
-          "automatic mode button in the edit dialog.</p>")
-        ),
+        RichText(_("<p>Alternatives are used to manage differents versions of an application. " \
+          "For example you can have differents versions of java installed on your system, " \
+          "and use the latest one when \"java\" is called.</p><p>Every alternative have an " \
+          "status, it can be automatic or manual. In <b>automatic mode</b> the system set " \
+          "the choice with higher priority. Note that <b>priority</b> is set by the packages " \
+          "creators trying to provide a reasonable defaults. The <b>manual mode</b> is set " \
+          "when the user selects a choice manually.</p><p>To change the current choice of an " \
+          "alternative, select the alternative, click the <b>edit</b> button then select the " \
+          "desired choice in the table and click on the <b>set choice</b> button. If you want to " \
+          "have the alternative in automatic mode just click the <b>set automatic mode</b> " \
+          "button in the edit dialog.</p><p>Furthermore every choice have his own <b>slaves</b>, " \
+          "these will be applied in the system when the choice is selected.</p><p>Lets see an " \
+          "example from the man-pages. We have an alternative \"editor\" that have two choices." \
+          "The first choice \"/bin/ed\" with the slave:</p>" \
+          "<pre>  editor.1.gz /usr/share/man/man1/ed.1.gz</pre>"\
+          "<p>Another choice \"/usr/bin/vim\" with the following slaves:</p>"\
+          "<pre>  editor.1.gz /usr/share/man/man1/vim.1.gz\n" \
+          "  editor.fr.1.gz /usr/share/man/fr/man1/vim.1.gz\n" \
+          "  editor.it.1.gz /usr/share/man/it/man1/vim.1.gz\n" \
+          "  editor.pl.1.gz /usr/share/man/pl/man1/vim.1.gz\n" \
+          "  editor.ru.1.gz /usr/share/man/ru/man1/vim.1.gz\n</pre>" \
+          "<p>In this case if we select the second choice all his slaves will be modified, " \
+          "or created if not exist already. Then if we set \"/bin/ed\" the slave " \
+          "\"editor.1.gz\" will be modified and the others will be removed.</p>"
+          )),
         60,
         20
       )
