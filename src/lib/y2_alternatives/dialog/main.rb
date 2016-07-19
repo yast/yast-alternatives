@@ -18,8 +18,8 @@
 
 require "yast"
 require "ui/dialog"
-require "alternatives/UI/alternative_dialog"
-require "alternatives/model/alternative"
+require "y2_alternatives/dialog/alternative"
+require "y2_alternatives/alternative"
 
 Yast.import "UI"
 Yast.import "Popup"

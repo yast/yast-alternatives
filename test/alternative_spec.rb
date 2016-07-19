@@ -17,7 +17,7 @@
 #  you may find current contact information at www.suse.com
 
 require_relative "spec_helper.rb"
-require "alternatives/model/alternative"
+require "y2_alternatives/alternative"
 
 describe Y2Alternatives::Alternative do
 

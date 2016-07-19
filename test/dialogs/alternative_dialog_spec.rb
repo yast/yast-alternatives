@@ -1,6 +1,6 @@
 require_relative "../spec_helper.rb"
-require "alternatives/UI/alternative_dialog"
-require "alternatives/model/alternative"
+require "y2_alternatives/dialog/alternative"
+require "y2_alternatives/alternative"
 
 describe Y2Alternatives::Dialog::AlternativeDialog do
   def mock_ui_events(*events)

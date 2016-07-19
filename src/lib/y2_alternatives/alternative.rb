@@ -17,8 +17,8 @@
 #  you may find current contact information at www.suse.com
 
 require "cheetah"
-require "alternatives/control/set_choice_command"
-require "alternatives/control/automatic_mode_command"
+require "y2_alternatives/control/set_choice_command"
+require "y2_alternatives/control/automatic_mode_command"
 
 module Y2Alternatives
   # Represents an alternative
