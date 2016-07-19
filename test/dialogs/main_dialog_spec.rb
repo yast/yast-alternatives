@@ -1,12 +1,12 @@
 require_relative "../spec_helper.rb"
 require "y2_alternatives/dialog/main"
 
-describe Y2Alternatives::Dialog::MainDialog do
+describe Y2Alternatives::Dialog::Main do
   def mock_ui_events(*events)
     allow(Yast::UI).to receive(:UserInput).and_return(*events)
   end
 
-  subject(:dialog) { Y2Alternatives::Dialog::MainDialog.new }
+  subject(:dialog) { Y2Alternatives::Dialog::Main.new }
 
   let(:loaded_alternatives_list) do
     [

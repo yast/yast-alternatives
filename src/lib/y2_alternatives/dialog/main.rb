@@ -27,7 +27,7 @@ Yast.import "Popup"
 module Y2Alternatives
   module Dialog
     # Dialog where all alternatives groups in the system are listed.
-    class MainDialog < UI::Dialog
+    class Main < UI::Dialog
       def initialize
         @alternatives_list = Y2Alternatives::Alternative.all.reject(&:empty?)
         @multi_choice_only = true
