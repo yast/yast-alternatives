@@ -1,5 +1,5 @@
 #
-# spec file for package yast-update-alternatives
+# spec file for package yast2-alternatives
 #
 # Copyright (c) 2016 SUSE LINUX Products GmbH, Nuernberg, Germany.
 #
@@ -52,8 +52,7 @@ rake install DESTDIR=%{buildroot}
 %files
 %defattr(-,root,root)
 %{yast_dir}/clients/*.rb
-%{yast_dir}/lib/update-alternatives/
-%{yast_dir}/lib/update-alternatives/model
-%{yast_dir}/lib/update-alternatives/control
-%{yast_dir}/lib/update-alternatives/UI
+%{yast_dir}/lib/y2_alternatives/
+%{yast_dir}/lib/y2_alternatives/dialog
+%{yast_dir}/lib/y2_alternatives/control
 %doc COPYING
