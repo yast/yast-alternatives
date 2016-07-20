@@ -18,7 +18,7 @@
 
 require "yast"
 require "ui/dialog"
-require "y2_alternatives/dialog/alternative"
+require "y2_alternatives/dialog/edit_alternative"
 require "y2_alternatives/alternative"
 
 Yast.import "UI"
@@ -49,7 +49,7 @@ module Y2Alternatives
 
       def edit_alternative_handler
         index = Yast::UI.QueryWidget(:alternatives_table, :CurrentItem)
-        @changes = true if Alternative.new(@alternatives_list[index]).run
+        @changes = true if EditAlternative.new(@alternatives_list[index]).run
         update_table(index)
       end
 

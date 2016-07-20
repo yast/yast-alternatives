@@ -104,7 +104,7 @@ describe Y2Alternatives::Dialog::ListAlternatives do
     let(:alternative_dialog) { double("AlternativeDialog") }
 
     it "opens an Alternative dialog with the selected alternative" do
-      expect(Y2Alternatives::Dialog::Alternative).to receive(:new)
+      expect(Y2Alternatives::Dialog::EditAlternative).to receive(:new)
         .with(loaded_alternatives_list[4])
         .and_return(alternative_dialog)
       expect(alternative_dialog).to receive(:run)
@@ -113,7 +113,7 @@ describe Y2Alternatives::Dialog::ListAlternatives do
     end
 
     it "updates the modified alternative on the table" do
-      allow(Y2Alternatives::Dialog::Alternative).to receive(:new)
+      allow(Y2Alternatives::Dialog::EditAlternative).to receive(:new)
         .and_return(alternative_dialog)
       allow(alternative_dialog).to receive(:run)
 
@@ -197,7 +197,7 @@ describe Y2Alternatives::Dialog::ListAlternatives do
         allow(Yast::UI).to receive(:QueryWidget)
           .with(:alternatives_table, :CurrentItem)
           .and_return(0)
-        allow(Y2Alternatives::Dialog::Alternative).to receive(:new)
+        allow(Y2Alternatives::Dialog::EditAlternative).to receive(:new)
           .and_return(double("AlternativeDialog", run: true))
       end
 

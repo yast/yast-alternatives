@@ -25,7 +25,7 @@ Yast.import "Label"
 module Y2Alternatives
   module Dialog
     # Dialog for displaying possible Choices for one particular Alternative.
-    class Alternative < UI::Dialog
+    class EditAlternative < UI::Dialog
       MIN_WIDTH = 60
       MIN_HEIGHT = 20
 

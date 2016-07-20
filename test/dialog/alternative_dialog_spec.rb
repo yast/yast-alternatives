@@ -1,8 +1,8 @@
 require_relative "../spec_helper.rb"
-require "y2_alternatives/dialog/alternative"
+require "y2_alternatives/dialog/edit_alternative"
 require "y2_alternatives/alternative"
 
-describe Y2Alternatives::Dialog::Alternative do
+describe Y2Alternatives::Dialog::EditAlternative do
   def mock_ui_events(*events)
     allow(Yast::UI).to receive(:WaitForEvent).and_return(*events)
   end
@@ -31,7 +31,7 @@ describe Y2Alternatives::Dialog::Alternative do
     )
   end
 
-  subject(:dialog) { Y2Alternatives::Dialog::Alternative.new(alternative) }
+  subject(:dialog) { Y2Alternatives::Dialog::EditAlternative.new(alternative) }
 
   describe "#run" do
     it "selects the Alternative's current choice and show his slaves" do
