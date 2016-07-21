@@ -16,7 +16,7 @@
 #
 
 Name:           yast2-update-alternatives
-Version:        3.1.0
+Version:        3.1.1
 Release:        0
 License:        GPL-2.0
 Summary:        YaST2 - Manage Update-alternatives switching
