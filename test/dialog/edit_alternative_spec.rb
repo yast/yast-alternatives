@@ -1,8 +1,8 @@
-require_relative "spec_helper.rb"
-require "update-alternatives/UI/alternative_dialog"
-require "update-alternatives/model/alternative"
+require_relative "../spec_helper.rb"
+require "y2_alternatives/dialog/edit_alternative"
+require "y2_alternatives/alternative"
 
-describe UpdateAlternatives::AlternativeDialog do
+describe Y2Alternatives::Dialog::EditAlternative do
   def mock_ui_events(*events)
     allow(Yast::UI).to receive(:WaitForEvent).and_return(*events)
   end
@@ -19,19 +19,19 @@ describe UpdateAlternatives::AlternativeDialog do
   end
 
   let(:alternative) do
-    UpdateAlternatives::Alternative.new(
+    Y2Alternatives::Alternative.new(
       "editor",
       "manual",
       "/usr/bin/nano",
       [
-        UpdateAlternatives::Alternative::Choice.new("/usr/bin/emacs", "15", "emacs slaves\n line2"),
-        UpdateAlternatives::Alternative::Choice.new("/usr/bin/nano", "20", "nano slaves\n line2"),
-        UpdateAlternatives::Alternative::Choice.new("/usr/bin/vim", "30", "vim slaves\n line2")
+        Y2Alternatives::Alternative::Choice.new("/usr/bin/emacs", "15", "emacs slaves\n line2"),
+        Y2Alternatives::Alternative::Choice.new("/usr/bin/nano", "20", "nano slaves\n line2"),
+        Y2Alternatives::Alternative::Choice.new("/usr/bin/vim", "30", "vim slaves\n line2")
       ]
     )
   end
 
-  subject(:dialog) { UpdateAlternatives::AlternativeDialog.new(alternative) }
+  subject(:dialog) { Y2Alternatives::Dialog::EditAlternative.new(alternative) }
 
   describe "#run" do
     it "selects the Alternative's current choice and show his slaves" do

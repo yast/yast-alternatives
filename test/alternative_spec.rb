@@ -17,17 +17,17 @@
 #  you may find current contact information at www.suse.com
 
 require_relative "spec_helper.rb"
-require "update-alternatives/model/alternative"
+require "y2_alternatives/alternative"
 
-describe UpdateAlternatives::Alternative do
+describe Y2Alternatives::Alternative do
 
   describe ".load" do
-    subject(:loaded_alternative) { UpdateAlternatives::Alternative.load("pip") }
-    subject(:alternative_with_slaves) { UpdateAlternatives::Alternative.load("editor") }
+    subject(:loaded_alternative) { Y2Alternatives::Alternative.load("pip") }
+    subject(:alternative_with_slaves) { Y2Alternatives::Alternative.load("editor") }
 
     it "returns an Alternative object" do
       alternatives_pip_stub
-      expect(loaded_alternative).to be_an UpdateAlternatives::Alternative
+      expect(loaded_alternative).to be_an Y2Alternatives::Alternative
     end
 
     it "initializes the name, status and value" do
@@ -40,13 +40,13 @@ describe UpdateAlternatives::Alternative do
     it "initializes choices as an array of Choice objects" do
       alternatives_pip_with_two_choices_stub
       expect(loaded_alternative.choices).to be_an Array
-      expect(loaded_alternative.choices).to all(be_a(UpdateAlternatives::Alternative::Choice))
+      expect(loaded_alternative.choices).to all(be_a(Y2Alternatives::Alternative::Choice))
     end
 
     it "initializes the path and priority for every choice" do
       alternatives_pip_with_two_choices_stub
-      choice_one = UpdateAlternatives::Alternative::Choice.new("/usr/bin/pip2.7", "20", "")
-      choice_two = UpdateAlternatives::Alternative::Choice.new("/usr/bin/pip3.4", "30", "")
+      choice_one = Y2Alternatives::Alternative::Choice.new("/usr/bin/pip2.7", "20", "")
+      choice_two = Y2Alternatives::Alternative::Choice.new("/usr/bin/pip3.4", "30", "")
       expected_choices = [choice_one, choice_two]
       expect(loaded_alternative).to have_attributes(
         choices: expected_choices
@@ -68,19 +68,19 @@ describe UpdateAlternatives::Alternative do
     context "if there is an alternative without choices" do
       it "returns an EmptyAlternative instance" do
         alternative_without_choices_stub
-        expect(loaded_alternative).to be_an UpdateAlternatives::EmptyAlternative
+        expect(loaded_alternative).to be_an Y2Alternatives::EmptyAlternative
         expect(loaded_alternative.empty?).to eq true
       end
     end
   end
 
   describe ".all" do
-    subject(:all_alternatives) { UpdateAlternatives::Alternative.all }
+    subject(:all_alternatives) { Y2Alternatives::Alternative.all }
 
     it "returns an array of Alternative objects" do
       alternatives_pip_with_two_choices_stub
       expect(all_alternatives).to be_an Array
-      expect(all_alternatives).to all(be_an(UpdateAlternatives::Alternative))
+      expect(all_alternatives).to all(be_an(Y2Alternatives::Alternative))
     end
 
     context "if there are no alternatives in the system" do
@@ -101,7 +101,7 @@ describe UpdateAlternatives::Alternative do
     context "if there are alternatives without choices" do
       it "returns an array of Alternatives including the alternatives without choices" do
         some_alternatives_some_without_choices_stub
-        expect(all_alternatives).to all(be_an(UpdateAlternatives::Alternative))
+        expect(all_alternatives).to all(be_an(Y2Alternatives::Alternative))
         expect(all_alternatives.length).to eq 4
         expect(all_alternatives.map(&:name)).to eq ["rake", "pip", "editor", "rubocop.ruby2.1"]
         expect(all_alternatives.map(&:empty?)).to eq [false, true, true, false]
@@ -111,13 +111,13 @@ describe UpdateAlternatives::Alternative do
 
   describe "#choose!" do
     subject(:alternative) do
-      UpdateAlternatives::Alternative.new(
+      Y2Alternatives::Alternative.new(
         "editor",
         "auto",
         "/usr/bin/vim",
         [
-          UpdateAlternatives::Alternative::Choice.new("/usr/bin/nano", "20", ""),
-          UpdateAlternatives::Alternative::Choice.new("/usr/bin/vim", "30", "")
+          Y2Alternatives::Alternative::Choice.new("/usr/bin/nano", "20", ""),
+          Y2Alternatives::Alternative::Choice.new("/usr/bin/vim", "30", "")
         ]
       )
     end
@@ -143,14 +143,14 @@ describe UpdateAlternatives::Alternative do
 
   describe "#automatic_mode!" do
     subject(:alternative) do
-      UpdateAlternatives::Alternative.new(
+      Y2Alternatives::Alternative.new(
         "editor",
         "manual",
         "/usr/bin/nano",
         [
-          UpdateAlternatives::Alternative::Choice.new("/usr/bin/nano", "20", ""),
-          UpdateAlternatives::Alternative::Choice.new("/usr/bin/emacs", "40", ""),
-          UpdateAlternatives::Alternative::Choice.new("/usr/bin/vim", "30", "")
+          Y2Alternatives::Alternative::Choice.new("/usr/bin/nano", "20", ""),
+          Y2Alternatives::Alternative::Choice.new("/usr/bin/emacs", "40", ""),
+          Y2Alternatives::Alternative::Choice.new("/usr/bin/vim", "30", "")
         ]
       )
     end
@@ -170,8 +170,8 @@ describe UpdateAlternatives::Alternative do
     context "if the alternative is not modificated" do
       subject(:alternative) { editor_alternative_automatic_mode }
       it "do not execute any command" do
-        expect(UpdateAlternatives::SetChoiceCommand).not_to receive(:execute)
-        expect(UpdateAlternatives::AutomaticModeCommand).not_to receive(:execute)
+        expect(Y2Alternatives::Control::SetChoiceCommand).not_to receive(:execute)
+        expect(Y2Alternatives::Control::AutomaticModeCommand).not_to receive(:execute)
         alternative.save
       end
     end
@@ -180,7 +180,7 @@ describe UpdateAlternatives::Alternative do
       subject(:alternative) { editor_alternative_automatic_mode }
       it "execute a SetChoiceCommand" do
         alternative.choose!("/usr/bin/nano")
-        expect(UpdateAlternatives::SetChoiceCommand).to receive(:execute).with(alternative)
+        expect(Y2Alternatives::Control::SetChoiceCommand).to receive(:execute).with(alternative)
         alternative.save
       end
     end
@@ -190,7 +190,7 @@ describe UpdateAlternatives::Alternative do
 
       it "execute an AutomaticModeCommand" do
         alternative.automatic_mode!
-        expect(UpdateAlternatives::AutomaticModeCommand).to receive(:execute).with(alternative)
+        expect(Y2Alternatives::Control::AutomaticModeCommand).to receive(:execute).with(alternative)
         alternative.save
       end
     end
@@ -200,8 +200,8 @@ describe UpdateAlternatives::Alternative do
       it "only execute the last change" do
         alternative.choose!("/usr/bin/nano")
         alternative.automatic_mode!
-        expect(UpdateAlternatives::SetChoiceCommand).not_to receive(:execute)
-        expect(UpdateAlternatives::AutomaticModeCommand).to receive(:execute).with(alternative)
+        expect(Y2Alternatives::Control::SetChoiceCommand).not_to receive(:execute)
+        expect(Y2Alternatives::Control::AutomaticModeCommand).to receive(:execute).with(alternative)
         alternative.save
       end
     end

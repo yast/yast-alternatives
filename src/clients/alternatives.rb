@@ -1,3 +1,3 @@
-require "update-alternatives/UI/main_dialog"
+require "y2_alternatives/dialog/list_alternatives"
 
-UpdateAlternatives::MainDialog.run
+Y2Alternatives::Dialog::ListAlternatives.run

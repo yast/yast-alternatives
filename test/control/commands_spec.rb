@@ -16,20 +16,20 @@
 #  To contact SUSE about this file by physical or electronic mail,
 #  you may find current contact information at www.suse.com
 
-require_relative "spec_helper.rb"
-require "update-alternatives/model/alternative"
-require "update-alternatives/control/set_choice_command"
-require "update-alternatives/control/automatic_mode_command"
+require_relative "../spec_helper.rb"
+require "y2_alternatives/alternative"
+require "y2_alternatives/control/set_choice_command"
+require "y2_alternatives/control/automatic_mode_command"
 
-describe UpdateAlternatives::SetChoiceCommand do
+describe Y2Alternatives::Control::SetChoiceCommand do
   subject(:alternative) do
-    UpdateAlternatives::Alternative.new(
+    Y2Alternatives::Alternative.new(
       "editor",
       "manual",
       "/usr/bin/nano",
       [
-        UpdateAlternatives::Alternative::Choice.new("/usr/bin/nano", "20", ""),
-        UpdateAlternatives::Alternative::Choice.new("/usr/bin/vim", "30", "")
+        Y2Alternatives::Alternative::Choice.new("/usr/bin/nano", "20", ""),
+        Y2Alternatives::Alternative::Choice.new("/usr/bin/vim", "30", "")
       ]
     )
   end
@@ -41,20 +41,20 @@ describe UpdateAlternatives::SetChoiceCommand do
         "editor",
         "/usr/bin/nano"
       )
-      UpdateAlternatives::SetChoiceCommand.execute(alternative)
+      Y2Alternatives::Control::SetChoiceCommand.execute(alternative)
     end
   end
 end
 
-describe UpdateAlternatives::AutomaticModeCommand do
+describe Y2Alternatives::Control::AutomaticModeCommand do
   subject(:alternative) do
-    UpdateAlternatives::Alternative.new(
+    Y2Alternatives::Alternative.new(
       "editor",
       "auto",
       "/usr/bin/vim",
       [
-        UpdateAlternatives::Alternative::Choice.new("/usr/bin/nano", "20", ""),
-        UpdateAlternatives::Alternative::Choice.new("/usr/bin/vim", "30", "")
+        Y2Alternatives::Alternative::Choice.new("/usr/bin/nano", "20", ""),
+        Y2Alternatives::Alternative::Choice.new("/usr/bin/vim", "30", "")
       ]
     )
   end
@@ -62,7 +62,7 @@ describe UpdateAlternatives::AutomaticModeCommand do
   describe "#execute" do
     it "set the automatic mode for given alternative on the system" do
       expect(Cheetah).to receive(:run).with("update-alternatives", "--auto", "editor")
-      UpdateAlternatives::AutomaticModeCommand.execute(alternative)
+      Y2Alternatives::Control::AutomaticModeCommand.execute(alternative)
     end
   end
 end
