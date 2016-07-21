@@ -68,8 +68,8 @@ module UpdateAlternatives
         "desired choice in the table and click on the <b>set choice</b> button. If you want to " \
         "have the alternative in automatic mode just click the <b>set automatic mode</b> button " \
         "in the edit dialog.</p><p>Furthermore every choice has its own set of <b>slaves</b>, " \
-        "these will be applied in the system when the choice is selected.</p><p>Lets see an " \
-        "example from the man-pages. We have an alternative \"editor\" that have two choices." \
+        "these will be applied in the system when the choice is selected.</p><p>For example, " \
+        "given an alternative \"editor\" that has two choices." \
         "The first choice \"/bin/ed\" with the slave:</p>" \
         "<pre>  editor.1.gz /usr/share/man/man1/ed.1.gz</pre>"\
         "<p>Another choice \"/usr/bin/vim\" with the following slaves:</p>"\
