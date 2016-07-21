@@ -135,7 +135,7 @@ describe Y2Alternatives::Dialog::ListAlternatives do
         .and_return(alternative_dialog)
       allow(alternative_dialog).to receive(:run)
 
-      # Need to change two cells, the first to update-alternatives the "Current choice"
+      # Need to change two cells, the first to update the "Current choice"
       # and the second to update the "Status"
       expect(Yast::UI).to receive(:ChangeWidget)
         .with(Id(:alternatives_table), Cell(2, 1), "/usr/bin/test2")
