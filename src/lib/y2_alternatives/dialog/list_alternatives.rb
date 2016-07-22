@@ -176,22 +176,14 @@ module Y2Alternatives
 
       def footer
         HBox(
+          HSpacing(),
+          Left(PushButton(Id(:help), Opt(:key_F1, :help), Yast::Label.HelpButton)),
           PushButton(Id(:edit_alternative), Yast::Label.EditButton),
           PushButton(Id(:cancel), Yast::Label.CancelButton),
-          PushButton(Id(:accept), Yast::Label.AcceptButton)
+          PushButton(Id(:accept), Yast::Label.AcceptButton),
+          HSpacing()
         )
       end
-    end
-
-    def footer
-      HBox(
-        HSpacing(),
-        Left(PushButton(Id(:help), Opt(:key_F1, :help), Yast::Label.HelpButton)),
-        PushButton(Id(:edit_alternative), Yast::Label.EditButton),
-        PushButton(Id(:cancel), Yast::Label.CancelButton),
-        PushButton(Id(:accept), Yast::Label.AcceptButton),
-        HSpacing()
-      )
     end
   end
 end
