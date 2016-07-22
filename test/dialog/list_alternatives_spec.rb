@@ -275,4 +275,15 @@ describe Y2Alternatives::Dialog::ListAlternatives do
       end
     end
   end
+
+  describe "#help_handler" do
+    before do
+      mock_ui_events(:help, :cancel)
+    end
+
+    it "launch a help popup" do
+      expect(Yast::Popup).to receive(:LongText)
+      dialog.run
+    end
+  end
 end
