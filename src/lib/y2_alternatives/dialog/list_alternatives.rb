@@ -37,7 +37,7 @@ module Y2Alternatives
       end
 
       def event_loop
-        Yast::Confirm.MustBeRoot
+        return :canceled_by_no_root_user unless Yast::Confirm.MustBeRoot
         super
       end
 

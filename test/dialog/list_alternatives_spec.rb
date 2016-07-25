@@ -79,6 +79,16 @@ describe Y2Alternatives::Dialog::ListAlternatives do
       expect(Yast::Confirm).to receive(:MustBeRoot).and_return true
       dialog.run
     end
+
+    context "if it is a normal user and cancel" do
+      before do
+        allow(Yast::Confirm).to receive(:MustBeRoot).and_return false
+      end
+
+      it "closes the dialog with :canceled_by_no_root_user symbol" do
+        expect(dialog.run).to eq(:canceled_by_no_root_user)
+      end
+    end
   end
 
   describe "#multi_choice_only_handler" do
