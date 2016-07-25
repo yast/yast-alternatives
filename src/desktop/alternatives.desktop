@@ -9,7 +9,7 @@ X-SuSE-YaST-Call=alternatives
 X-SuSE-YaST-Group=Misc
 X-SuSE-YaST-RootOnly=true
 
-Icon=
+Icon=yast-misc
 Exec=/sbin/yast2 alternatives
 
 Name=Alternatives
