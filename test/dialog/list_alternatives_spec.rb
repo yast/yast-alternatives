@@ -56,6 +56,7 @@ describe Y2Alternatives::Dialog::ListAlternatives do
     allow(Yast::UI).to receive(:CloseDialog).and_return(true)
     allow(Y2Alternatives::Alternative).to receive(:all)
       .and_return(loaded_alternatives_list)
+    allow(Yast::Confirm).to receive(:MustBeRoot).and_return(true)
   end
 
   def expect_update_table_with(expected_items)
@@ -71,6 +72,12 @@ describe Y2Alternatives::Dialog::ListAlternatives do
       dialog.instance_variable_get(:@alternatives_list).each do |alternative|
         expect(alternative).not_to be_an(Y2Alternatives::EmptyAlternative)
       end
+    end
+
+    it "checks if user is root" do
+      mock_ui_events(:cancel)
+      expect(Yast::Confirm).to receive(:MustBeRoot).and_return true
+      dialog.run
     end
   end
 
