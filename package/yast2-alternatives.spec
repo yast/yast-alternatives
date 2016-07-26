@@ -55,4 +55,5 @@ rake install DESTDIR=%{buildroot}
 %{yast_dir}/lib/y2_alternatives/
 %{yast_dir}/lib/y2_alternatives/dialog
 %{yast_dir}/lib/y2_alternatives/control
+%{yast_desktopdir}/alternatives.desktop
 %doc COPYING
