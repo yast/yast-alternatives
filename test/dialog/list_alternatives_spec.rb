@@ -56,7 +56,6 @@ describe Y2Alternatives::Dialog::ListAlternatives do
     allow(Yast::UI).to receive(:CloseDialog).and_return(true)
     allow(Y2Alternatives::Alternative).to receive(:all)
       .and_return(loaded_alternatives_list)
-    allow(Yast::Confirm).to receive(:MustBeRoot).and_return(true)
   end
 
   def expect_update_table_with(expected_items)
@@ -71,33 +70,6 @@ describe Y2Alternatives::Dialog::ListAlternatives do
     it "ignores EmptyAlternative ojects" do
       dialog.instance_variable_get(:@alternatives_list).each do |alternative|
         expect(alternative).not_to be_an(Y2Alternatives::EmptyAlternative)
-      end
-    end
-
-    it "checks if user is root" do
-      mock_ui_events(:cancel)
-      expect(Yast::Confirm).to receive(:MustBeRoot).and_return true
-      dialog.run
-    end
-
-    context "if a normal user cancel MustBeRoot confirmation" do
-      before do
-        allow(Yast::Confirm).to receive(:MustBeRoot).and_return false
-      end
-
-      it "closes the dialog with :canceled_by_no_root_user symbol" do
-        expect(dialog.run).to eq(:canceled_by_no_root_user)
-      end
-    end
-
-    context "if a normal user accept MustBeRoot confirmation" do
-      before do
-        allow(Yast::Confirm).to receive(:MustBeRoot).and_return true
-      end
-
-      it "don't closes the dialog with :canceled_by_no_root_user symbol" do
-        mock_ui_events(:cancel)
-        expect(dialog.run).to_not eq(:canceled_by_no_root_user)
       end
     end
   end

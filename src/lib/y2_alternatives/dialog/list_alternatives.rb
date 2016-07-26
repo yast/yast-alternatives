@@ -23,7 +23,6 @@ require "y2_alternatives/alternative"
 
 Yast.import "UI"
 Yast.import "Popup"
-Yast.import "Confirm"
 
 module Y2Alternatives
   module Dialog
@@ -34,11 +33,6 @@ module Y2Alternatives
         @multi_choice_only = true
         @search = ""
         @changes = false
-      end
-
-      def event_loop
-        return :canceled_by_no_root_user unless Yast::Confirm.MustBeRoot
-        super
       end
 
       def dialog_options
