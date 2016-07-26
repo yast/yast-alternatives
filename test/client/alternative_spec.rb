@@ -18,17 +18,15 @@
 
 require_relative "../spec_helper.rb"
 require "y2_alternatives/dialog/list_alternatives"
+require "y2_alternatives/client/start_checking_permissions"
 
-describe "AlternativesClient" do
-  before do
-    allow(Y2Alternatives::Dialog::ListAlternatives).to receive(:run)
-    require_relative "../../src/clients/alternatives.rb"
-  end
-
+describe Y2Alternatives::Client::StartCheckingPermissions do
   describe "#main" do
-    subject(:client) { AlternativesClient.new }
+    subject(:client) { Y2Alternatives::Client::StartCheckingPermissions.new }
 
     it "checks if user is root" do
+      allow(Y2Alternatives::Dialog::ListAlternatives).to receive(:run)
+
       expect(Yast::Confirm).to receive(:MustBeRoot).and_return true
       client.main
     end

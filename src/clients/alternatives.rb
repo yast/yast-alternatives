@@ -1,12 +1,3 @@
-require "y2_alternatives/dialog/list_alternatives"
+require "y2_alternatives/client/start_checking_permissions"
 
-Yast.import "Confirm"
-
-# Checks if user is root and create a ListAlternatives dialog
-class AlternativesClient
-  def main
-    Y2Alternatives::Dialog::ListAlternatives.run if Yast::Confirm.MustBeRoot
-  end
-end
-
-AlternativesClient.new.main
+Y2Alternatives::Client::StartCheckingPermissions.new.main
