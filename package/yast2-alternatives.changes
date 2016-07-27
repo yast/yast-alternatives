@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Jul 27 09:49:46 UTC 2016 - joaquinmnsm@gmail.com
+
+- Shows a confirmation dialog to continue if don't have permissions.
+- Fixed crash when try to save changes without permissions.
+- 3.1.3
+
+-------------------------------------------------------------------
 Fri Jul 22 11:21:46 UTC 2016 - joaquinmnsm@gmail.com
 
 - Added entry in YaST Control Center and system menu.
