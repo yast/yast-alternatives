@@ -129,7 +129,12 @@ module Y2Alternatives
 
     def save
       return unless @modified
-      STATUS_COMMANDS[@status].execute(self)
+      begin
+        STATUS_COMMANDS[@status].execute(self)
+        true
+      rescue Cheetah::ExecutionFailed
+        false
+      end
     end
 
     private_class_method :all_names, :load_choices_from, :parse_to_map

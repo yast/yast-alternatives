@@ -205,5 +205,25 @@ describe Y2Alternatives::Alternative do
         alternative.save
       end
     end
+
+    context "if the command fail" do
+      subject(:alternative) { editor_alternative_automatic_mode }
+      it "returns false" do
+        alternative.choose!("/usr/bin/nano")
+        allow(Y2Alternatives::Control::SetChoiceCommand).to receive(:execute)
+          .and_raise(Cheetah::ExecutionFailed.new("any", "any", "any", "any"))
+        expect(alternative.save).to eq false
+      end
+    end
+
+    context "if the command succeed" do
+      subject(:alternative) { editor_alternative_automatic_mode }
+      it "returns true" do
+        alternative.choose!("/usr/bin/nano")
+        allow(Y2Alternatives::Control::SetChoiceCommand).to receive(:execute)
+          .and_return(nil)
+        expect(alternative.save).to eq true
+      end
+    end
   end
 end
