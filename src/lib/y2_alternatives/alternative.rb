@@ -129,12 +129,7 @@ module Y2Alternatives
 
     def save
       return unless @modified
-      begin
-        STATUS_COMMANDS[@status].execute(self)
-        true
-      rescue Cheetah::ExecutionFailed
-        false
-      end
+      STATUS_COMMANDS[@status].execute(self) if Process::UID.rid == 0
     end
 
     private_class_method :all_names, :load_choices_from, :parse_to_map

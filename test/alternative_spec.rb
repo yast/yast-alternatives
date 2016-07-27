@@ -176,53 +176,65 @@ describe Y2Alternatives::Alternative do
       end
     end
 
-    context "if the alternative's selected choice has changed" do
+    context "if the alternative is modificated" do
       subject(:alternative) { editor_alternative_automatic_mode }
-      it "execute a SetChoiceCommand" do
+      before do
         alternative.choose!("/usr/bin/nano")
-        expect(Y2Alternatives::Control::SetChoiceCommand).to receive(:execute).with(alternative)
+      end
+
+      it "checks if user is root" do
+        expect(Process::UID).to receive(:rid)
         alternative.save
       end
-    end
 
-    context "if the alternative's stastus has changed to automatic mode" do
-      subject(:alternative) { editor_alternative_manual_mode }
+      context "if running as normal user" do
+        before do
+          allow(Process::UID).to receive(:rid).and_return(1000)
+        end
 
-      it "execute an AutomaticModeCommand" do
-        alternative.automatic_mode!
-        expect(Y2Alternatives::Control::AutomaticModeCommand).to receive(:execute).with(alternative)
-        alternative.save
+        it "doesn't execute any command" do
+          expect(Y2Alternatives::Control::SetChoiceCommand).not_to receive(:execute)
+          expect(Y2Alternatives::Control::AutomaticModeCommand).not_to receive(:execute)
+          alternative.save
+        end
       end
-    end
 
-    context "if the alternative is modified more than once" do
-      subject(:alternative) { editor_alternative_automatic_mode }
-      it "only execute the last change" do
-        alternative.choose!("/usr/bin/nano")
-        alternative.automatic_mode!
-        expect(Y2Alternatives::Control::SetChoiceCommand).not_to receive(:execute)
-        expect(Y2Alternatives::Control::AutomaticModeCommand).to receive(:execute).with(alternative)
-        alternative.save
-      end
-    end
+      context "if running as root user" do
+        before do
+          allow(Process::UID).to receive(:rid).and_return(0)
+        end
 
-    context "if the command fail" do
-      subject(:alternative) { editor_alternative_automatic_mode }
-      it "returns false" do
-        alternative.choose!("/usr/bin/nano")
-        allow(Y2Alternatives::Control::SetChoiceCommand).to receive(:execute)
-          .and_raise(Cheetah::ExecutionFailed.new("any", "any", "any", "any"))
-        expect(alternative.save).to eq false
-      end
-    end
+        context "if the alternative's selected choice has changed" do
+          subject(:alternative) { editor_alternative_automatic_mode }
+          it "execute a SetChoiceCommand" do
+            alternative.choose!("/usr/bin/nano")
+            expect(Y2Alternatives::Control::SetChoiceCommand).to receive(:execute).with(alternative)
+            alternative.save
+          end
+        end
 
-    context "if the command succeed" do
-      subject(:alternative) { editor_alternative_automatic_mode }
-      it "returns true" do
-        alternative.choose!("/usr/bin/nano")
-        allow(Y2Alternatives::Control::SetChoiceCommand).to receive(:execute)
-          .and_return(nil)
-        expect(alternative.save).to eq true
+        context "if the alternative's stastus has changed to automatic mode" do
+          subject(:alternative) { editor_alternative_manual_mode }
+
+          it "execute an AutomaticModeCommand" do
+            alternative.automatic_mode!
+            expect(Y2Alternatives::Control::AutomaticModeCommand).to receive(:execute)
+              .with(alternative)
+            alternative.save
+          end
+        end
+
+        context "if the alternative is modified more than once" do
+          subject(:alternative) { editor_alternative_automatic_mode }
+          it "only execute the last change" do
+            alternative.choose!("/usr/bin/nano")
+            alternative.automatic_mode!
+            expect(Y2Alternatives::Control::SetChoiceCommand).not_to receive(:execute)
+            expect(Y2Alternatives::Control::AutomaticModeCommand).to receive(:execute)
+              .with(alternative)
+            alternative.save
+          end
+        end
       end
     end
   end
