@@ -104,12 +104,8 @@ module Y2Alternatives
       end
 
       def accept_handler
-        @alternatives_list.each(&:save) if permissions?
+        @alternatives_list.each(&:save)
         finish_dialog
-      end
-
-      def permissions?
-        Process::UID.rid == 0
       end
 
       def cancel_handler

@@ -197,36 +197,14 @@ describe Y2Alternatives::Dialog::ListAlternatives do
       mock_ui_events(:accept)
     end
 
-    context "running as normal user" do
-      before do
-        allow(Process::UID).to receive(:rid).and_return(1000)
-      end
-
-      it "doesn't save any change" do
-        expect_any_instance_of(Y2Alternatives::Alternative).not_to receive(:save)
-        dialog.run
-      end
-
-      it "closes the dialog" do
-        expect(dialog).to receive(:finish_dialog).and_call_original
-        dialog.run
-      end
+    it "saves all changes" do
+      expect(dialog.instance_variable_get(:@alternatives_list)).to all receive(:save)
+      dialog.run
     end
 
-    context "running as root user" do
-      before do
-        allow(Process::UID).to receive(:rid).and_return(0)
-      end
-
-      it "saves all changes" do
-        expect(dialog.instance_variable_get(:@alternatives_list)).to all receive(:save)
-        dialog.run
-      end
-
-      it "closes the dialog" do
-        expect(dialog).to receive(:finish_dialog).and_call_original
-        dialog.run
-      end
+    it "closes the dialog" do
+      expect(dialog).to receive(:finish_dialog).and_call_original
+      dialog.run
     end
   end
 
