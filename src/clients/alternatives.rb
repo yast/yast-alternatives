@@ -1,3 +1,3 @@
-require "y2_alternatives/dialog/list_alternatives"
+require "y2_alternatives/client/start_checking_permissions"
 
-Y2Alternatives::Dialog::ListAlternatives.run
+Y2Alternatives::Client::StartCheckingPermissions.new.main
