@@ -183,7 +183,7 @@ describe Y2Alternatives::Alternative do
       end
 
       it "checks if user is root" do
-        expect(Process::UID).to receive(:rid)
+        expect(Process::UID).to receive(:rid).and_return(1000)
         alternative.save
       end
 
