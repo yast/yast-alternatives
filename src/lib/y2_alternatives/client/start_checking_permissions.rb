@@ -25,7 +25,7 @@ module Y2Alternatives
     # Checks if user is root and create a ListAlternatives dialog
     class StartCheckingPermissions
       def main
-        Y2Alternatives::Dialog::ListAlternatives.run if Yast::Confirm.MustBeRoot
+        Dialog::ListAlternatives.run if Yast::Confirm.MustBeRoot
       end
     end
   end
