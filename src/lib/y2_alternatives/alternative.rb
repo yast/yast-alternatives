@@ -37,7 +37,7 @@ module Y2Alternatives
     STATUS_COMMANDS = {
       "auto"   => Y2Alternatives::Control::AutomaticModeCommand,
       "manual" => Y2Alternatives::Control::SetChoiceCommand
-    }.freeze
+    }
     STATUS_COMMANDS.default_proc = ->(_h, k) { raise "unknown status '#{k}'" }
 
     # Creates a new Alternative with the given parameters.

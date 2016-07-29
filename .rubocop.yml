@@ -1,3 +1,8 @@
 # use the shared Yast defaults
 inherit_from:
   /usr/share/YaST2/data/devtools/data/rubocop_yast_style.yml
+
+Style/MutableConstant:
+  Exclude:
+    - 'src/lib/y2_alternatives/alternative.rb'
+  Enabled: true
