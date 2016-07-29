@@ -236,8 +236,7 @@ def alternative_with_slaves_expected_choices
   [
     Y2Alternatives::Alternative::Choice.new("/bin/ed",
       "-100",
-      "editor.1.gz /usr/share/man/man1/ed.1.gz\n"
-    ),
+      "editor.1.gz /usr/share/man/man1/ed.1.gz\n"),
     Y2Alternatives::Alternative::Choice.new(
       "/usr/bin/vim.basic",
       "50",

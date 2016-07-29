@@ -59,10 +59,10 @@ describe Y2Alternatives::Dialog::ListAlternatives do
   end
 
   def expect_update_table_with(expected_items)
-    expect(Yast::UI).to receive(:ChangeWidget) do |widgetId, option, itemsList|
-      expect(widgetId).to eq(:alternatives_table)
+    expect(Yast::UI).to receive(:ChangeWidget) do |widge_id, option, items_list|
+      expect(widge_id).to eq(:alternatives_table)
       expect(option).to eq(:Items)
-      expect(itemsList.map(&:params)).to eq(expected_items)
+      expect(items_list.map(&:params)).to eq(expected_items)
     end
   end
 
