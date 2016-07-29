@@ -39,8 +39,7 @@ describe Y2Alternatives::Control::SetChoiceCommand do
       expect(Cheetah).to receive(:run).with("update-alternatives",
         "--set",
         "editor",
-        "/usr/bin/nano"
-      )
+        "/usr/bin/nano")
       Y2Alternatives::Control::SetChoiceCommand.execute(alternative)
     end
   end

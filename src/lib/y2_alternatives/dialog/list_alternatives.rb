@@ -44,7 +44,7 @@ module Y2Alternatives
           filters,
           create_table,
           footer
-          )
+        )
       end
 
       def help_handler
@@ -170,8 +170,8 @@ module Y2Alternatives
             Opt(:notify),
             _("Show only alternatives with more than one choice"),
             @multi_choice_only
-            )
           )
+        )
       end
 
       def footer

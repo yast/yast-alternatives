@@ -135,8 +135,7 @@ describe Y2Alternatives::Alternative do
     context "if the given choice path doesn't correspond to any of the alternative's choices" do
       it "raises a RuntimeError" do
         expect { alternative.choose!("/usr/bin/not-exists") }.to raise_error(RuntimeError,
-          "The alternative doesn't have any choice with path '/usr/bin/not-exists'"
-        )
+          "The alternative doesn't have any choice with path '/usr/bin/not-exists'")
       end
     end
   end
