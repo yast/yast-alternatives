@@ -146,12 +146,16 @@ module Y2Alternatives
       end
 
       def map_alternatives_items
+        translated_status = {
+          "auto"   => _("auto"),
+          "manual" => _("manual")
+        }
         filtered_alternatives.map do |alternative, index|
           Item(
             Id(index),
             alternative.name,
             alternative.value,
-            _(alternative.status)
+            translated_status[alternative.status]
           )
         end
       end
