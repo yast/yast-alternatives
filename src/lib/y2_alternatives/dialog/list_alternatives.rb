@@ -29,6 +29,7 @@ module Y2Alternatives
     # Dialog where all alternatives groups in the system are listed.
     class ListAlternatives < UI::Dialog
       def initialize
+        textdomain "alternatives"
         @alternatives_list = Y2Alternatives::Alternative.all.reject(&:empty?)
         @multi_choice_only = true
         @search = ""
