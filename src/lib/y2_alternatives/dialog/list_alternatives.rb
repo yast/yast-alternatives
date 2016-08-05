@@ -29,6 +29,7 @@ module Y2Alternatives
     # Dialog where all alternatives groups in the system are listed.
     class ListAlternatives < UI::Dialog
       def initialize
+        textdomain "alternatives"
         @alternatives_list = Y2Alternatives::Alternative.all.reject(&:empty?)
         @multi_choice_only = true
         @search = ""
@@ -145,12 +146,16 @@ module Y2Alternatives
       end
 
       def map_alternatives_items
+        translated_status = {
+          "auto"   => _("auto"),
+          "manual" => _("manual")
+        }
         filtered_alternatives.map do |alternative, index|
           Item(
             Id(index),
             alternative.name,
             alternative.value,
-            _(alternative.status)
+            translated_status[alternative.status]
           )
         end
       end

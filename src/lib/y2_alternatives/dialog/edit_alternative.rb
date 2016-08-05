@@ -30,6 +30,7 @@ module Y2Alternatives
       MIN_HEIGHT = 20
 
       def initialize(alternative)
+        textdomain "alternatives"
         @alternative = alternative
       end
 
