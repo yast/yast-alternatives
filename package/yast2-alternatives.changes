@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon Aug  8 09:33:12 UTC 2016 - joaquinmnsm@gmail.com
+
+- Added textdomain to enable translations.
+- Enabled auto submit to factory.
+- Added yardopts file for code documentation.
+- 3.1.4
+
+-------------------------------------------------------------------
 Wed Jul 27 09:49:46 UTC 2016 - joaquinmnsm@gmail.com
 
 - Shows a confirmation dialog to continue if don't have permissions.
