@@ -16,7 +16,7 @@
 #
 
 Name:           yast2-alternatives
-Version:        3.1.4
+Version:        3.2.0
 Release:        0
 License:        GPL-2.0
 Summary:        YaST2 - Manage Update-alternatives switching
@@ -57,3 +57,4 @@ rake install DESTDIR=%{buildroot}
 %{yast_dir}/lib/y2_alternatives/control
 %{yast_desktopdir}/alternatives.desktop
 %doc COPYING
+%doc README.md
