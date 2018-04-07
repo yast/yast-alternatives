@@ -1,2 +1,6 @@
 .tags
 y2signal.log
+coverage/
+doc/
+/.yardoc
+/*.pot
