@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Nov 23 19:02:13 UTC 2018 - Stasiek Michalski <hellcp@mailbox.org>
+
+- Provide icon with module (boo#1109310)
+- 4.1.0
+
+-------------------------------------------------------------------
 Fri Apr  6 18:50:12 UTC 2018 - mfilka@suse.com
 
 - bnc#1087957 - version bump
