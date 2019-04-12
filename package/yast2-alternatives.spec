@@ -21,7 +21,7 @@ Release:        0
 License:        GPL-2.0
 Summary:        YaST2 - Manage Update-alternatives switching
 Url:            https://github.com/yast/yast-alternatives
-Group:          System/Yast
+Group:          System/YaST
 Source0:        %{name}-%{version}.tar.bz2
 BuildRequires:  yast2
 BuildRequires:  yast2-devtools
