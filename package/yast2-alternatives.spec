@@ -12,7 +12,7 @@
 # license that conforms to the Open Source Definition (Version 1.9)
 # published by the Open Source Initiative.
 
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
+# Please submit bugfixes or comments via https://bugs.opensuse.org/
 #
 
 Name:           yast2-alternatives
@@ -22,7 +22,9 @@ License:        GPL-2.0
 Summary:        YaST2 - Manage Update-alternatives switching
 Url:            https://github.com/yast/yast-alternatives
 Group:          System/Yast
+
 Source0:        %{name}-%{version}.tar.bz2
+
 BuildRequires:  yast2
 BuildRequires:  yast2-devtools
 BuildRequires:  yast2-ruby-bindings
@@ -30,32 +32,27 @@ BuildRequires:  yast2-ruby-bindings
 BuildRequires:  rubygem(yast-rake)
 # For test
 BuildRequires:  rubygem(rspec)
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 %description
 A YaST2 module to manage update alternatives switching
+
 %prep
-%setup -n %{name}-%{version}
+%setup -q
 
 %build
 
 %check
-rake test:unit
+%yast_check
 
 %install
-rake install DESTDIR=%{buildroot}
-
-%post
-
-%postun
+%yast_install
+%yast_metainfo
 
 %files
-%defattr(-,root,root)
-%{yast_dir}/clients/*.rb
-%{yast_dir}/lib/y2_alternatives/
-%{yast_dir}/lib/y2_alternatives/dialog
-%{yast_dir}/lib/y2_alternatives/control
-%{yast_desktopdir}/alternatives.desktop
+%{yast_clientdir}
+%{yast_libdir}
+%{yast_desktopdir}
+%{yast_metainfodir}
 %{yast_icondir}
 %doc COPYING
 %doc README.md
