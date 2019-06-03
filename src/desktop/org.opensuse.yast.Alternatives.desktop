@@ -12,6 +12,7 @@ X-SuSE-YaST-RootOnly=true
 Icon=yast-alternatives
 Exec=/sbin/yast2 alternatives
 
-Name=Alternatives
-GenericName=Manage update-alternatives switching
+Name=YaST Alternatives
+GenericName=Alternatives
+Comment=Manage update-alternatives switching
 StartupNotify=true
