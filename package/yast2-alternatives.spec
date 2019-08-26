@@ -16,7 +16,7 @@
 #
 
 Name:           yast2-alternatives
-Version:        4.2.1
+Version:        4.2.2
 Release:        0
 License:        GPL-2.0
 Summary:        YaST2 - Manage Update-alternatives switching
@@ -29,9 +29,9 @@ BuildRequires:  yast2
 BuildRequires:  yast2-devtools >= 4.2.2
 BuildRequires:  yast2-ruby-bindings
 # For install
-BuildRequires:  rubygem(yast-rake)
+BuildRequires:  rubygem(%{rb_default_ruby_abi}:yast-rake)
 # For test
-BuildRequires:  rubygem(rspec)
+BuildRequires:  rubygem(%{rb_default_ruby_abi}:rspec)
 BuildRequires:  update-desktop-files
 
 %description
