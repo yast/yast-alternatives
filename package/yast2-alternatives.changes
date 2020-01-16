@@ -1,7 +1,8 @@
 -------------------------------------------------------------------
 Thu Jan 16 12:12:09 UTC 2020 - Dominique Leuenberger <dimstar@opensuse.org>
 
-- Clean spec file using spec-cleaner (main goal: use %license)
+- Clean spec file using spec-cleaner (main goal: use %license,
+  boo#1082318).
 - 4.2.3
 
 -------------------------------------------------------------------
