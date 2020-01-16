@@ -1,7 +1,7 @@
 #
 # spec file for package yast2-alternatives
 #
-# Copyright (c) 2016 SUSE LINUX Products GmbH, Nuernberg, Germany.
+# Copyright (c) 2020 SUSE LLC
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -15,24 +15,23 @@
 # Please submit bugfixes or comments via https://bugs.opensuse.org/
 #
 
+
 Name:           yast2-alternatives
-Version:        4.2.2
+Version:        4.2.3
 Release:        0
-License:        GPL-2.0
 Summary:        YaST2 - Manage Update-alternatives switching
-Url:            https://github.com/yast/yast-alternatives
-Group:          System/Yast
-
+License:        GPL-2.0-only
+Group:          System/YaST
+URL:            https://github.com/yast/yast-alternatives
 Source0:        %{name}-%{version}.tar.bz2
-
+BuildRequires:  update-desktop-files
 BuildRequires:  yast2
 BuildRequires:  yast2-devtools >= 4.2.2
 BuildRequires:  yast2-ruby-bindings
-# For install
-BuildRequires:  rubygem(%{rb_default_ruby_abi}:yast-rake)
 # For test
 BuildRequires:  rubygem(%{rb_default_ruby_abi}:rspec)
-BuildRequires:  update-desktop-files
+# For install
+BuildRequires:  rubygem(%{rb_default_ruby_abi}:yast-rake)
 
 %description
 A YaST2 module to manage update alternatives switching
@@ -55,5 +54,7 @@ A YaST2 module to manage update alternatives switching
 %{yast_desktopdir}
 %{yast_metainfodir}
 %{yast_icondir}
-%doc COPYING
+%license COPYING
 %doc README.md
+
+%changelog
