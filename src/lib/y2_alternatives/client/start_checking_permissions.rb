@@ -16,6 +16,7 @@
 #  To contact SUSE about this file by physical or electronic mail,
 #  you may find current contact information at www.suse.com
 
+require "yast"
 require "y2_alternatives/dialog/list_alternatives"
 
 Yast.import "Confirm"
@@ -24,8 +25,38 @@ module Y2Alternatives
   module Client
     # Checks if user is root and create a ListAlternatives dialog
     class StartCheckingPermissions
+      include Yast::I18n
+
       def main
+        textdomain "alternatives"
+
+        if Yast::WFM.Args.include?("help")
+          print_help
+          return true
+        elsif !Yast::WFM.Args.empty?
+          print_help
+          return false
+        end
+
         Dialog::ListAlternatives.run if Yast::Confirm.MustBeRoot
+      end
+
+    private
+
+      def print_help
+        # TRANSLATORS: %s stands for CLI program to use instead of yast module
+        msg = format(
+          _("This module does not support command line. Use '%s' instead."),
+          "update-alternatives"
+        )
+
+        cmdline_description = {
+          "id"   => "alternatives",
+          "help" => msg
+          }
+
+        Yast.import "CommandLine"
+        Yast::CommandLine.Run(cmdline_description)
       end
     end
   end
