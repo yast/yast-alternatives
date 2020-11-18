@@ -4,3 +4,4 @@ coverage/
 doc/
 /.yardoc
 /*.pot
+/package/*.tar.bz2
