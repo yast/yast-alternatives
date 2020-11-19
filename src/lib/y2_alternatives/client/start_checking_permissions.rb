@@ -53,7 +53,7 @@ module Y2Alternatives
         cmdline_description = {
           "id"   => "alternatives",
           "help" => msg
-          }
+        }
 
         Yast.import "CommandLine"
         Yast::CommandLine.Run(cmdline_description)
