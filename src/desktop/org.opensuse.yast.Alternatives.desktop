@@ -10,7 +10,7 @@ X-SuSE-YaST-Group=Misc
 X-SuSE-YaST-RootOnly=true
 
 Icon=yast-alternatives
-Exec=/sbin/yast2 alternatives
+Exec=/usr/bin/xdg-su -c "/sbin/yast2 alternatives"
 
 Name=YaST Alternatives
 GenericName=Alternatives
