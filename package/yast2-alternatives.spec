@@ -17,14 +17,13 @@
 
 
 Name:           yast2-alternatives
-Version:        5.0.0
+Version:        5.0.1
 Release:        0
 Summary:        YaST2 - Manage Update-alternatives switching
 License:        GPL-2.0-only
 Group:          System/YaST
 URL:            https://github.com/yast/yast-alternatives
 Source0:        %{name}-%{version}.tar.bz2
-BuildRequires:  update-desktop-files
 BuildRequires:  yast2
 BuildRequires:  yast2-devtools >= 4.2.2
 BuildRequires:  yast2-ruby-bindings
